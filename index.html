@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talentsmith – Best Race for Every Class in WoW Forever (Racials, Nov 2026)</title>
+<meta name="description" content="Every WoW Forever race and racial ability with the latest launch values (Oct 26–30 changes), class availability for Horde and Alliance, and the best race for every class.">
+<meta property="og:title" content="Talentsmith – WoW Forever races, racials and talents">
+<meta property="og:description" content="All 10 WoW Forever races, current racial values and the best race for every class – fast, clean, no clutter.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/og.jpg">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: header + class picker (the main tool) + race explorer grid + changes log. */
+:root{
+  --bg:#f1efeb; --surface:#fbfaf8; --surface-2:#e8e4de; --line:#d5cfc6;
+  --ink:#1d1a17; --muted:#6a625a; --accent:#7a5a2b; --accent-soft:#efe4d1;
+  --horde:#a3342b; --alliance:#2c5aa0; --good:#2e7a48;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#141619; --surface:#1c1f23; --surface-2:#252930; --line:#343941;
+  --ink:#ebe6df; --muted:#9b948b; --accent:#d2aa68; --accent-soft:#33291b;
+  --horde:#e2665c; --alliance:#6e9be0; --good:#5cc483; color-scheme:dark }}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-left)) 40px max(16px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:28px}
+a{color:var(--accent)}
+header .eyebrow{font:600 12px/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(30px,6vw,46px)/1 var(--f-display);margin:6px 0 8px;letter-spacing:.01em;text-wrap:balance}
+h2{font:700 24px/1.1 var(--f-display);margin:0 0 10px;text-transform:uppercase;letter-spacing:.03em}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.stamp{display:inline-block;margin-top:10px;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+section{display:flex;flex-direction:column;gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button,.chip{font:600 14px/1 var(--f-body);background:var(--surface);color:var(--muted);border:0;padding:9px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.pick{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface);min-width:0}
+.pick h3{margin:0 0 2px;font:700 20px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.rank{font:600 11px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pick p{margin:6px 0 0}
+.fac{font:700 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:4px;color:#fff;vertical-align:middle;margin-left:6px}
+.fac.horde{background:var(--horde)} .fac.alliance{background:var(--alliance)}
+.races{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:12px}
+.race{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.race h3{margin:0;font:700 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.racial{border-top:1px dashed var(--line);padding-top:8px}
+.racial b{font-weight:600}
+.type{font:600 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 6px;border-radius:3px;margin-left:6px}
+.racial p{margin:3px 0 0;font-size:14px}
+.chg{color:var(--good);font-size:13px}
+.unc{color:var(--muted);font-style:italic}
+.cls{display:flex;flex-wrap:wrap;gap:4px}
+.cls span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--muted)}
+.cls span.new{border-color:var(--accent);color:var(--accent)}
+.log li{margin:4px 0}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.empty{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Talentsmith · for World of Warcraft: Forever</div>
+    <h1>Best Race for Every Class</h1>
+    <p class="lede">All 10 races, every racial ability with its current launch value, and our pick for each class on both factions. Launch: November 4, 2026.</p>
+    <span class="stamp">Values checked against Blizzard's notes up to Oct 27 and the Oct 30 hotfix data</span>
+  </header>
+
+  <section id="picker" aria-labelledby="pickH">
+    <h2 id="pickH">Pick your class</h2>
+    <div class="panel controls">
+      <div class="seg" role="group" aria-label="Faction">
+        <button type="button" data-fac="horde" aria-pressed="true">Horde</button>
+        <button type="button" data-fac="alliance" aria-pressed="false">Alliance</button>
+      </div>
+      <div class="chips" id="classChips" role="group" aria-label="Class"></div>
+    </div>
+    <div class="picks" id="picks"></div>
+  </section>
+
+  <section id="races" aria-labelledby="raceH">
+    <h2 id="raceH">All races & racials</h2>
+    <div class="races" id="raceGrid"></div>
+  </section>
+
+  <section id="changes" aria-labelledby="chgH">
+    <h2 id="chgH">Latest racial changes</h2>
+    <div class="panel">
+      <ul class="log">
+        <li><b>Oct 27:</b> Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</li>
+        <li><b>Oct 26:</b> Human Ruthlessness 2% → 1% crit, The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer affects mounts), Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste; Leyline Reading 50% (100% while Attuned); Skysight 15% (30% while Charged).</li>
+        <li><b>Oct 15:</b> Weapon specializations replaced. Shatter Curse 15% → 5% and no immunity. War Stomp 90 sec. Troll Regeneration 20%. Touch of the Grave 20%/30% proc chance.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps the forge burning and new tools coming.</p>
+    <p>Fan-made and not affiliated with Blizzard Entertainment. Racial values come from Blizzard's WoW Forever beta development notes and launch hotfix data; picks are our opinion. Something out of date? Values are re-checked after every patch.</p>
+  </footer>
+</div>
+
+<script>
+const H="horde", A="alliance";
+const RACES=[
+ {id:"orc",name:"Orc",fac:H,cls:["Warrior","Hunter","Rogue","Shaman","Warlock","Mage*"],r:[
+  ["Blood Fury","Active","+10% Attack Power and Spell Power for 15 sec. 2 min cooldown.","Oct 27: cooldown 3 → 2 min"],
+  ["Shatter Curse","Active","Removes Curses and Banes on you, then 5% less magic damage taken for 8 sec. No immunity to reapplication.","Cooldown not confirmed"],
+  ["Hardiness","Passive","Stun durations reduced by 20%."],
+  ["Command","Passive","Hunter and Warlock pets deal 5% more damage. No effect for other classes.","Oct 26: restored, replaces Savage"]]},
+ {id:"tauren",name:"Tauren",fac:H,cls:["Warrior","Hunter","Shaman","Druid"],r:[
+  ["War Stomp","Active","Stuns up to 5 enemies within 8 yd for 2 sec. 90 sec cooldown."],
+  ["Cultivation","Active","Grows bonus herbs when gathering. Every 15 min."],
+  ["Plainsrunning","Passive","Movement speed builds while you keep moving: +2% per stack, up to 60%. Stopping or taking damage weakens it. No effect while mounted.","Oct 26: was 1% up to 30%"],
+  ["Endurance","Passive","+5% maximum health.","Oct 26: crit damage bonus removed"]]},
+ {id:"troll",name:"Troll",fac:H,cls:["Warrior","Hunter","Rogue","Priest","Shaman","Mage","Warlock*"],r:[
+  ["Berserking","Active","+10% attack and casting speed for 15 sec. 3 min cooldown.","Oct 27: duration 10 → 15 sec"],
+  ["Rapid Regeneration","Active","Restores 50% of maximum health over 6 sec. Moving, acting or taking damage cancels it. 3 min cooldown."],
+  ["Regeneration","Passive","+20% health regeneration; 20% of it continues in combat."],
+  ["Beast Slaying","Passive","+5% damage against Beasts."]]},
+ {id:"undead",name:"Undead",fac:H,cls:["Warrior","Rogue","Priest","Mage","Warlock","Paladin*"],r:[
+  ["Will of the Forsaken","Active","Removes Charm, Fear and Sleep. No immunity afterwards; not usable under Scatter Shot. 90 sec cooldown."],
+  ["Cannibalize","Active","Feed on a corpse to regenerate 35% of health and mana over time."],
+  ["Touch of the Grave","Passive","Direct damage can drain the target for Shadow damage equal to 5% of your max health, healing you the same. 20% chance (Warrior, Paladin, Rogue), 30% (Priest, Mage, Warlock). 15 sec internal cooldown.","Oct 27: internal cooldown 25 → 15 sec"],
+  ["Underwater Breathing","Passive","Much longer underwater breath."]]},
+ {id:"windshaper",name:"Windshaper Skyborne",fac:H,cls:["Warrior","Hunter","Rogue","Shaman","Druid"],r:[
+  ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
+  ["Skysight","Active","+15% movement speed for 15 sec, castable while moving. At an elemental convergence also grants Charged (1 hour, kept through death, removed on entering a raid): Skysight gives 30%.","Oct 26/27 change"],
+  ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
+  ["Elemental Insight","Passive","+5% damage against Elementals."]]},
+ {id:"human",name:"Human",fac:A,cls:["Warrior","Paladin","Rogue","Priest","Mage","Warlock","Hunter*"],r:[
+  ["Will to Survive","Active","Instantly removes all stuns. 3 min cooldown."],
+  ["Perception","Active","Greatly increased stealth detection for 20 sec."],
+  ["Ruthlessness","Passive","+1% critical strike chance with all spells and attacks.","Oct 26: 2% → 1%"],
+  ["The Human Spirit","Passive","+10% Spirit.","Oct 26: 5% → 10%"]]},
+ {id:"dwarf",name:"Dwarf",fac:A,cls:["Warrior","Paladin","Hunter","Rogue","Priest","Shaman*"],r:[
+  ["Stoneform","Active","Removes and blocks Bleed, Poison and Disease; 10% less physical damage taken for 8 sec. 3 min cooldown."],
+  ["Find Treasure","Active","Treasure tracking that works alongside other tracking; extra items from most chests."],
+  ["Artisan's Precision","Passive","+1% hit chance with spells and attacks.","Oct 26: replaces Earth's Wrath"],
+  ["Big Game Hunter","Passive","+5% damage against Beasts."]]},
+ {id:"nightelf",name:"Night Elf",fac:A,cls:["Warrior","Hunter","Rogue","Priest","Druid"],r:[
+  ["Elune's Light","Active","+10% critical strike chance for 15 sec.","Cooldown not confirmed"],
+  ["Shadowmeld","Active","Stealth while standing still."],
+  ["Quickness","Passive","+1% dodge and +2% movement speed that stacks with other speed bonuses."],
+  ["Wisp Spirit","Passive","+75% movement speed while dead."]]},
+ {id:"gnome",name:"Gnome",fac:A,cls:["Warrior","Rogue","Mage","Warlock","Priest*"],r:[
+  ["Escape Artist","Active","Brief immunity to roots and snares."],
+  ["Eureka!","Active","For 8 sec, non-periodic abilities cost 10% less and deal 10% more damage (Priests: 10% more healing, includes Power Word: Shield)."],
+  ["Expansive Mind","Passive","+5% maximum Mana, Rage or Energy."],
+  ["Engineering Specialization","Passive","More reliable engineering devices."]]},
+ {id:"highorder",name:"High Order Skyborne",fac:A,cls:["Warrior","Hunter","Rogue","Druid","Mage"],r:[
+  ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
+  ["Leyline Reading","Active","+50% health and mana regeneration for 15 sec; 100% while Attuned (1 hour buff from a ley line, kept through death, removed on entering a raid). Not usable during Innervate.","Oct 26: 100% → 50% base"],
+  ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
+  ["Elemental Insight","Passive","+5% damage against Elementals."]]}
+];
+const CLASSES=["Warrior","Paladin","Hunter","Rogue","Priest","Shaman","Mage","Warlock","Druid"];
+/* Picks: [raceId, reason]. Opinion, based on current values. */
+const PICKS={
+ horde:{
+  Warrior:[["orc","Blood Fury every 2 min plus 20% shorter stuns: the best all-round damage and PvP kit."],["tauren","Tanks: War Stomp on packs and 5% more health."],["troll","Berserking's 15 sec of +10% attack speed is strong burst for Fury."]],
+  Paladin:[["undead","The only Horde Paladin. Fear break, Cannibalize restores mana too, and Touch of the Grave procs from Holy Shock."]],
+  Hunter:[["orc","Command gives +5% pet damage all the time, plus Blood Fury every 2 min."],["windshaper","Pet-less or Marksmanship: a permanent 2% haste."],["troll","Leveling: Beast Slaying shines on the beasts you kill on the way up."]],
+  Rogue:[["orc","Blood Fury every 2 min and shorter stuns – the safe all-rounder."],["troll","Berserking now lasts 15 sec: great for Combat burst."],["undead","PvP: Will of the Forsaken breaks Fear, Charm and Sleep."]],
+  Priest:[["troll","Berserking speeds up both healing and Smite; Priest-only Shadowguard and Hex of Weakness."],["undead","Dark Sacrifice turns health into mana; Fear break for PvP."]],
+  Shaman:[["orc","Blood Fury boosts both Attack Power and Spell Power – fits every spec."],["troll","Berserking for Elemental and Restoration casters."],["tauren","Tanking or PvP: War Stomp and 5% more health."]],
+  Mage:[["troll","Berserking is the strongest caster burst on the Horde."],["undead","PvP: Fear break, and Touch of the Grave procs 30% for casters."],["orc","New in Forever: Blood Fury boosts Spell Power too."]],
+  Warlock:[["orc","Command +5% pet damage and Blood Fury: the clear PvE pick."],["undead","PvP: Fear break and a 30% Touch of the Grave."],["troll","New in Forever: Berserking for burst."]],
+  Druid:[["tauren","War Stomp, 5% more health and up to 60% run speed on foot."],["windshaper","2% haste for every form."]]
+ },
+ alliance:{
+  Warrior:[["human","1% crit and a stun break every 3 min."],["dwarf","Tanks: Stoneform's 10% physical damage reduction and 1% hit."],["gnome","Eureka! for burst and 5% more Rage."]],
+  Paladin:[["human","The Human Spirit's 10% Spirit is ideal for Holy; stun break for PvP."],["dwarf","Retribution and Protection: 1% hit and Stoneform."]],
+  Hunter:[["dwarf","1% hit, +5% vs Beasts and Stoneform."],["nightelf","Elune's Light crit burst and Shadowmeld."],["highorder","Pet-less or Marksmanship: 2% haste."]],
+  Rogue:[["human","1% crit and a stun break."],["gnome","Eureka! (+10% damage, cheaper attacks) and 5% more Energy."],["nightelf","Shadowmeld and Elune's Light for openers."]],
+  Priest:[["human","10% Spirit plus Priest-only Divine Grace and Feedback."],["dwarf","Desperate Prayer, Stoneform and 1% hit."],["gnome","Contingency Plan saves allies; Eureka! heals 10% more."]],
+  Shaman:[["dwarf","The only Alliance Shaman (new in Forever): 1% hit and Stoneform."]],
+  Mage:[["gnome","Eureka!, 5% more mana and Escape Artist."],["human","1% crit and 10% Spirit."],["highorder","2% haste and Leyline Reading for mana."]],
+  Warlock:[["gnome","Eureka!, 5% more mana and Escape Artist."],["human","1% crit and a stun break."]],
+  Druid:[["nightelf","Shadowmeld, Elune's Light crit and dodge."],["highorder","2% haste and Leyline Reading regeneration."]]
+ }
+};
+const byId=Object.fromEntries(RACES.map(r=>[r.id,r]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let fac=H, cls="Warrior";
+try{ const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class"); }catch(e){}
+
+function renderChips(){
+  document.getElementById("classChips").innerHTML=CLASSES.map(c=>`<button type="button" class="chip" data-cls="${c}" aria-pressed="${c===cls}">${c}</button>`).join("");
+}
+function renderPicks(){
+  const list=PICKS[fac][cls]||[];
+  const labels=["Best pick","Also great","Situational"];
+  document.getElementById("picks").innerHTML=list.length?list.map(([id,why],i)=>{
+    const r=byId[id];
+    return `<article class="pick"><div class="rank">${labels[i]||"Option"}</div><h3>${esc(r.name)}</h3><p>${esc(why)}</p></article>`;
+  }).join(""):`<p class="empty">No ${fac==="horde"?"Horde":"Alliance"} race can play ${cls}.</p>`;
+}
+function renderRaces(){
+  document.getElementById("raceGrid").innerHTML=RACES.map(r=>`<article class="race" id="${r.id}">
+    <h3>${esc(r.name)}<span class="fac ${r.fac}">${r.fac}</span></h3>
+    <div class="cls">${r.cls.map(c=>c.endsWith("*")?`<span class="new" title="New in Forever">${esc(c.slice(0,-1))} · new</span>`:`<span>${esc(c)}</span>`).join("")}</div>
+    ${r.r.map(([n,t,d,note])=>`<div class="racial"><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div>`).join("")}
+  </article>`).join("");
+}
+function sync(){
+  document.querySelectorAll("[data-fac]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fac===fac));
+  document.querySelectorAll("[data-cls]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.cls===cls));
+  renderPicks();
+  try{ history.replaceState(null,"",`?faction=${fac}&class=${cls}`); }catch(e){}
+}
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-fac]"); if(f){fac=f.dataset.fac;sync();return;}
+  const c=e.target.closest("[data-cls]"); if(c){cls=c.dataset.cls;sync();}
+});
+renderChips(); renderRaces(); sync();
+</script>
+</body>
+</html>

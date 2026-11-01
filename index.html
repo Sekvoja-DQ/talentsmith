@@ -152,6 +152,17 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .pick .why li{grid-template-columns:28px auto 1fr}.pick .why li .ri{width:28px;height:28px;border-radius:5px;grid-row:span 2;border:1px solid #5b4a2c}
 .pick .why .tip{grid-column:2/-1}.pick .why li>span:nth-of-type(2){grid-column:3}
 .legal{font-size:12px;opacity:.8}
+.cls-btn{position:relative;overflow:hidden;isolation:isolate;text-shadow:0 1px 3px #000,0 0 8px rgba(0,0,0,.7)}
+.cls-btn>*{position:relative;z-index:1}
+.cls-btn::before{content:"";position:absolute;inset:-20% -10% 0;z-index:0;pointer-events:none;opacity:.55;transition:opacity .2s}
+.classes[data-fac="horde"] .cls-btn::before{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.045 0.011' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 0.22  0 0 0 0 0.05  0 0 0 3 -1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23f%29'/%3E%3C/svg%3E") 0 0/110px 150px repeat,radial-gradient(ellipse 90% 70% at 50% 112%,rgba(255,80,30,.85),rgba(220,50,35,.35) 50%,transparent 78%);
+  -webkit-mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%);mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%);animation:rise 4s linear infinite}
+.classes[data-fac="alliance"] .cls-btn::before{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.010 0.016' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.68  0 0 0 0 1  0 0 0 2.6 -0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23s%29'/%3E%3C/svg%3E") 0 0/200px 200px repeat,radial-gradient(ellipse 95% 75% at 50% 105%,rgba(80,140,240,.65),rgba(76,130,219,.2) 55%,transparent 82%);
+  -webkit-mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%);mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%);animation:drift 12s linear infinite}
+.cls-btn::before{opacity:.8}.cls-btn:hover::before{opacity:.95}.cls-btn[aria-pressed="true"]::before{opacity:1}
+@keyframes rise{to{background-position:0 -150px,0 0}}
+@keyframes drift{to{background-position:200px -40px,0 0}}
+@media (prefers-reduced-motion:reduce){.cls-btn::before{animation:none}}
 </style>
 </head>
 <body>
@@ -180,7 +191,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
       <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><span class="dot"></span>Horde</button>
       <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><span class="dot"></span>Alliance</button>
     </div>
-    <div class="classes" id="classBtns" role="group" aria-label="Class"></div>
+    <div class="classes" id="classBtns" data-fac="horde" role="group" aria-label="Class"></div>
     <div class="step-lbl">Spec / role</div>
     <div class="builds" id="buildBtns" role="group" aria-label="Spec or role"></div>
     <div class="step-lbl">Content</div>
@@ -395,6 +406,7 @@ let fac=H, cls="Paladin", bid=null, ctx="lvl", show="all";
 try{const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class"); bid=q.get("spec"); if(CTX.some(c=>c[0]===q.get("for"))) ctx=q.get("for");}catch(e){}
 const playable=(f,c)=>RACES.some(r=>r.fac===f&&r.cls.some(x=>x.replace("*","")===c));
 function renderClasses(){
+  document.getElementById("classBtns").dataset.fac=fac;
   document.getElementById("classBtns").innerHTML=CLASSES.map(c=>{
     const ok=playable(fac,c);
     return `<button type="button" class="cls-btn" style="--c:${CLASS_COLOR[c]}" data-cls="${c}" aria-pressed="${c===cls}" ${ok?"":"disabled title=\"No "+(fac===H?"Horde":"Alliance")+" race can play "+c+"\""}>${img(IC.cls[c],"wico")}${c}</button>`;

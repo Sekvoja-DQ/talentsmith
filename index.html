@@ -128,6 +128,21 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .calc-card:hover{box-shadow:0 0 24px rgba(255,122,47,.25)}
 .calc-go{font:700 14px/1 var(--f-display);letter-spacing:.06em;color:var(--gold);white-space:nowrap}
 .calc-next{color:var(--muted);font-size:14px;margin:10px 2px 0}
+.step-lbl{font:700 12px/1 var(--f-display);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:4px 2px 8px}
+.builds,.ctx{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.ctx .chip{padding:10px 16px}
+.pick .score{display:flex;align-items:center;gap:10px;margin:2px 0 10px;font:700 14px/1 var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums}
+.pick .score i{flex:1;height:6px;border-radius:3px;background:var(--edge);overflow:hidden;position:relative}
+.pick .score i::after{content:"";position:absolute;inset:0;width:var(--w);background:linear-gradient(90deg,var(--gold),var(--ember))}
+.pick .why{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.pick .why li{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:15px;color:#d8cfbf}
+.pick .why b{color:var(--ink)}
+.pick .why .tip{grid-column:2;color:var(--muted);font-size:14px}
+.pips{display:inline-flex;gap:3px;padding-top:6px}.pips span{width:7px;height:7px;transform:rotate(45deg);background:var(--edge)}.pips span.on{background:var(--gold)}
+.pick details{margin-top:10px}.pick summary{cursor:pointer;color:var(--gold);font-size:14px}
+.pick details ul{margin-top:8px}
+.pick .po{font:700 10px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ember);margin-left:6px}
+.how{color:var(--muted);font-size:14px;margin:14px 2px 0}
 </style>
 </head>
 <body>
@@ -145,19 +160,24 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
       <a class="btn ghost" href="calculator.html">Talent calculator</a>
       <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support on Ko-fi</a>
     </div>
-    <p class="stamp">Values checked against Blizzard's notes up to <b>Oct 27</b> and the <b>Oct 30</b> hotfix data</p>
+    <p class="stamp">Values checked against Blizzard's notes and the <b>Oct 30</b> hotfix data (via foreverchanges.pro)</p>
   </div>
 </header>
 
 <main class="gut">
   <section id="picker" class="wrap" aria-labelledby="pickH">
-    <div class="sec-head"><span class="gem"></span><h2 id="pickH">Best race for your class</h2></div>
+    <div class="sec-head"><span class="gem"></span><h2 id="pickH">Best race for your spec</h2></div>
     <div class="factions" role="group" aria-label="Faction">
       <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><span class="dot"></span>Horde</button>
       <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><span class="dot"></span>Alliance</button>
     </div>
     <div class="classes" id="classBtns" role="group" aria-label="Class"></div>
+    <div class="step-lbl">Spec / role</div>
+    <div class="builds" id="buildBtns" role="group" aria-label="Spec or role"></div>
+    <div class="step-lbl">Content</div>
+    <div class="ctx" id="ctxBtns" role="group" aria-label="Content"></div>
     <div class="picks" id="picks" aria-live="polite"></div>
+    <p class="how">Each racial is scored 0–5 for the spec and content you picked, and the race total is the sum. Scores are our judgement from the current values; open "All racials" to see every one and how to use it.</p>
   </section>
 
   <section id="calc" class="wrap" aria-labelledby="calcH">
@@ -182,6 +202,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <section id="changes" class="wrap" aria-labelledby="chgH">
     <div class="sec-head"><span class="gem"></span><h2 id="chgH">Latest racial changes</h2></div>
     <ol class="log">
+      <li><time>Oct 30</time><p>Hotfix data: Skyborne Skysight lasts 30 sec and Charged / Attuned 15 min – Blizzard's Oct 26 post said 15 sec and 1 hour. We show both until it's settled.</p></li>
       <li><time>Oct 27</time><p>Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</p></li>
       <li><time>Oct 26</time><p>Human Ruthlessness 2% → 1% crit; The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer on mounts); Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste.</p></li>
       <li><time>Oct 15</time><p>Weapon specializations replaced. Shatter Curse 15% → 5% with no immunity. War Stomp 90 sec. Troll Regeneration 20%. Touch of the Grave 20% / 30% proc chance.</p></li>
@@ -222,7 +243,7 @@ const RACES=[
   ["Underwater Breathing","Passive","Much longer underwater breath."]]},
  {id:"windshaper",name:"Windshaper Skyborne",fac:H,cls:["Warrior","Hunter","Rogue","Shaman","Druid"],r:[
   ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
-  ["Skysight","Active","+15% movement speed for 15 sec, castable while moving. At an elemental convergence also grants Charged (1 hour, kept through death, removed on entering a raid): Skysight gives 30%.","Oct 26/27 change"],
+  ["Skysight","Active","+15% movement speed, castable while moving. At an elemental convergence you also become Charged, which doubles it. Blizzard's Oct 26 post: 15 sec, Charged 1 hour. Oct 30 hotfix data: 30 sec, Charged 15 min. Charged is kept through death and removed on entering a raid.","Post and hotfix data disagree"],
   ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
   ["Elemental Insight","Passive","+5% damage against Elementals."]]},
  {id:"human",name:"Human",fac:A,cls:["Warrior","Paladin","Rogue","Priest","Mage","Warlock","Hunter*"],r:[
@@ -247,36 +268,100 @@ const RACES=[
   ["Engineering Specialization","Passive","More reliable engineering devices."]]},
  {id:"highorder",name:"High Order Skyborne",fac:A,cls:["Warrior","Hunter","Rogue","Druid","Mage"],r:[
   ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
-  ["Leyline Reading","Active","+50% health and mana regeneration for 15 sec; 100% while Attuned (1 hour buff from a ley line, kept through death, removed on entering a raid). Not usable during Innervate.","Oct 26: 100% → 50% base"],
+  ["Leyline Reading","Active","+50% health and mana regeneration for 15 sec. Reading a ley line also makes you Attuned, which doubles it. Attuned lasts 1 hour per Blizzard's Oct 26 post, 15 min in the Oct 30 hotfix data; kept through death, removed on entering a raid. Not usable during Innervate.","Oct 26: 100% → 50% base; Attuned length not confirmed"],
   ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
   ["Elemental Insight","Passive","+5% damage against Elementals."]]}
 ];
 const CLASSES=["Warrior","Paladin","Hunter","Rogue","Priest","Shaman","Mage","Warlock","Druid"];
-/* Picks: [raceId, reason]. Opinion, based on current values. */
-const PICKS={
- horde:{
-  Warrior:[["orc","Blood Fury every 2 min plus 20% shorter stuns: the best all-round damage and PvP kit."],["tauren","Tanks: War Stomp on packs and 5% more health."],["troll","Berserking's 15 sec of +10% attack speed is strong burst for Fury."]],
-  Paladin:[["undead","The only Horde Paladin. Fear break, Cannibalize restores mana too, and Touch of the Grave procs from Holy Shock."]],
-  Hunter:[["orc","Command gives +5% pet damage all the time, plus Blood Fury every 2 min."],["windshaper","Pet-less or Marksmanship: a permanent 2% haste."],["troll","Leveling: Beast Slaying shines on the beasts you kill on the way up."]],
-  Rogue:[["orc","Blood Fury every 2 min and shorter stuns – the safe all-rounder."],["troll","Berserking now lasts 15 sec: great for Combat burst."],["undead","PvP: Will of the Forsaken breaks Fear, Charm and Sleep."]],
-  Priest:[["troll","Berserking speeds up both healing and Smite; Priest-only Shadowguard and Hex of Weakness."],["undead","Dark Sacrifice turns health into mana; Fear break for PvP."]],
-  Shaman:[["orc","Blood Fury boosts both Attack Power and Spell Power – fits every spec."],["troll","Berserking for Elemental and Restoration casters."],["tauren","Tanking or PvP: War Stomp and 5% more health."]],
-  Mage:[["troll","Berserking is the strongest caster burst on the Horde."],["undead","PvP: Fear break, and Touch of the Grave procs 30% for casters."],["orc","New in Forever: Blood Fury boosts Spell Power too."]],
-  Warlock:[["orc","Command +5% pet damage and Blood Fury: the clear PvE pick."],["undead","PvP: Fear break and a 30% Touch of the Grave."],["troll","New in Forever: Berserking for burst."]],
-  Druid:[["tauren","War Stomp, 5% more health and up to 60% run speed on foot."],["windshaper","2% haste for every form."]]
- },
- alliance:{
-  Warrior:[["human","1% crit and a stun break every 3 min."],["dwarf","Tanks: Stoneform's 10% physical damage reduction and 1% hit."],["gnome","Eureka! for burst and 5% more Rage."]],
-  Paladin:[["human","The Human Spirit's 10% Spirit is ideal for Holy; stun break for PvP."],["dwarf","Retribution and Protection: 1% hit and Stoneform."]],
-  Hunter:[["dwarf","1% hit, +5% vs Beasts and Stoneform."],["nightelf","Elune's Light crit burst and Shadowmeld."],["highorder","Pet-less or Marksmanship: 2% haste."]],
-  Rogue:[["human","1% crit and a stun break."],["gnome","Eureka! (+10% damage, cheaper attacks) and 5% more Energy."],["nightelf","Shadowmeld and Elune's Light for openers."]],
-  Priest:[["human","10% Spirit plus Priest-only Divine Grace and Feedback."],["dwarf","Desperate Prayer, Stoneform and 1% hit."],["gnome","Contingency Plan saves allies; Eureka! heals 10% more."]],
-  Shaman:[["dwarf","The only Alliance Shaman (new in Forever): 1% hit and Stoneform."]],
-  Mage:[["gnome","Eureka!, 5% more mana and Escape Artist."],["human","1% crit and 10% Spirit."],["highorder","2% haste and Leyline Reading for mana."]],
-  Warlock:[["gnome","Eureka!, 5% more mana and Escape Artist."],["human","1% crit and a stun break."]],
-  Druid:[["nightelf","Shadowmeld, Elune's Light crit and dodge."],["highorder","2% haste and Leyline Reading regeneration."]]
- }
+/* ---------- Builds: every class split into the roles people actually play ---------- */
+/* role: tank | melee | ranged | caster | healer. mana: uses mana. pet: plays with a pet. dots: damage mostly periodic. direct: mostly direct spell damage. */
+const BUILDS={
+ Warrior:[{id:"dps",name:"Arms / Fury DPS",role:"melee"},{id:"tank",name:"Protection tank",role:"tank"}],
+ Paladin:[{id:"holy",name:"Holy healer",role:"healer",mana:1},{id:"shock",name:"Shockadin",role:"melee",mana:1,direct:1,hybrid:1},{id:"prot",name:"Protection tank",role:"tank",mana:1},{id:"ret",name:"Retribution",role:"melee",mana:1}]
+ ,Hunter:[{id:"pet",name:"With pet (BM / MM)",role:"ranged",mana:1,pet:1},{id:"petless",name:"Petless Survival",role:"ranged",mana:1}],
+ Rogue:[{id:"dps",name:"DPS (any spec)",role:"melee"}],
+ Priest:[{id:"shadow",name:"Shadow DPS",role:"caster",mana:1,dots:1},{id:"smite",name:"Holy DPS (Smite)",role:"caster",mana:1,direct:1},{id:"disc",name:"Discipline healer",role:"healer",mana:1,shield:1},{id:"holy",name:"Holy healer",role:"healer",mana:1}],
+ Shaman:[{id:"ele",name:"Elemental",role:"caster",mana:1,direct:1},{id:"enh",name:"Enhancement",role:"melee",mana:1},{id:"resto",name:"Restoration healer",role:"healer",mana:1},{id:"tank",name:"Shaman tank",role:"tank",mana:1}],
+ Mage:[{id:"dps",name:"DPS (any spec)",role:"caster",mana:1,direct:1}],
+ Warlock:[{id:"pet",name:"With demon",role:"caster",mana:1,pet:1,dots:1},{id:"petless",name:"Petless",role:"caster",mana:1,direct:1}],
+ Druid:[{id:"bear",name:"Bear tank",role:"tank",mana:1},{id:"cat",name:"Cat DPS",role:"melee",mana:1},{id:"balance",name:"Balance",role:"caster",mana:1,direct:1},{id:"resto",name:"Restoration healer",role:"healer",mana:1}]
 };
+const CTX=[["lvl","Leveling"],["pve","Dungeons & raids"],["pvp","PvP"]];
+/* Priest race-only spells (Blizzard Priest deep dive; cooldowns not published) */
+const PRIEST_SPELLS={
+ troll:[["Hex of Weakness","Priest only","Target's melee attack power −43 and healing received −20% for 2 min."],["Shadowguard","Priest only","3 charges for 10 min: things that hit you take 34 Shadow damage."]],
+ undead:[["Dark Sacrifice","Priest only","Turns 532 health into 440 mana over 15 sec."],["Touch of Weakness","Priest only","The next melee hit on you deals 20 Shadow damage back and lowers the attacker's attack power by 43."]],
+ human:[["Divine Grace","Priest only","Instant 220–257 heal on an ally below 50% health; removes Weakened Soul. Not on yourself."],["Feedback","Priest only","For 15 sec, spells cast on you burn the caster's mana and deal Shadow damage."]],
+ dwarf:[["Chastise","Priest only","50–57 Holy damage and a root of up to 2 sec. Humanoids only."],["Desperate Prayer","Priest only","Instant 220–257 self-heal."]],
+ nightelf:[["Elune's Grace","Priest only","For 15 sec or 3 misses, melee and ranged attacks are 50% less likely to hit you."],["Starshards","Priest only","216 Arcane damage over 6 sec."]],
+ gnome:[["Confounding Flash","Priest only","Confuses up to 5 enemies within 8 yd for 3 sec; damage breaks it."],["Contingency Plan","Priest only","15 sec ward on an ally: below 35% health they get a 155 absorb and 300 healing over 15 sec."]]
+};
+/* ---------- Scoring: each racial gets 0–5 for this build and content, plus a how-to tip ---------- */
+const isDps=b=>b.role==="melee"||b.role==="ranged"||b.role==="caster";
+const pick=(ctx,l,p,v)=>({lvl:l,pve:p,pvp:v})[ctx];
+const RULES={
+ "Blood Fury":(b,c)=>[b.role==="healer"?pick(c,2,1,1):b.role==="tank"?pick(c,3,2,2):pick(c,3,4,4),
+   pick(c,"Use it on every tough pull – it's back every 2 min.","Pre-pop it with trinkets right as the pull starts, then use it on cooldown.","Hold it for a stun or a kill window.")],
+ "Shatter Curse":(b,c)=>[pick(c,1,1,2),pick(c,"Cleanses curses from caster mobs.","Clears boss curses on yourself.","Strips Warlock curses and banes off you.")],
+ "Hardiness":(b,c)=>[pick(c,0,1,4),"Passive: every stun on you is 20% shorter."],
+ "Command":(b,c)=>[b.pet?pick(c,4,4,3):0,b.pet?"Passive – keep the pet out.":"Only works on Hunter and Warlock pets."],
+ "War Stomp":(b,c)=>[b.role==="tank"?pick(c,3,2,4):pick(c,2,1,4),pick(c,"Stun a pack to break away or finish a cast.","Interrupts trash casters; useful tank emergency button.","2 sec AoE stun: peel melee off you or land a hard cast.")],
+ "Cultivation":()=>[0,"Herbalism bonus – gold, not combat."],
+ "Plainsrunning":(b,c)=>[pick(c,3,0,3),pick(c,"Free run speed between quests before you have a mount.","Little use in instances.","Chase or kite on foot; damage weakens it.")],
+ "Endurance":(b,c)=>[b.role==="tank"?pick(c,1,3,2):pick(c,1,1,2),"Passive: 5% more health."],
+ "Berserking":(b,c)=>[b.role==="healer"?pick(c,1,3,2):b.role==="tank"?pick(c,2,2,2):pick(c,2,3,3),
+   pick(c,"Speeds up kills on hard pulls; 3 min cooldown.","Pre-pop 1–2 sec before the pull or save it for the burn phase.",b.role==="healer"?"Fast heals when your team is being trained.":"Pair with your burst cooldowns for a kill.")],
+ "Rapid Regeneration":(b,c)=>[pick(c,b.mana?3:4,0,0),pick(c,"Use between pulls instead of eating: 50% health in 6 sec.","Cancelled by acting – too slow mid-fight.","Cancelled by damage, so rarely usable.")],
+ "Regeneration":(b,c)=>[pick(c,b.mana?2:3,0,1),"Passive: faster health regen, some of it in combat."],
+ "Beast Slaying":(b,c)=>[pick(c,3,1,1),pick(c,"Many leveling mobs are beasts.","Few beast bosses.","Hunter pets are beasts.")],
+ "Will of the Forsaken":(b,c)=>[b.role==="tank"?pick(c,1,2,5):pick(c,1,1,5),pick(c,"Rarely needed while questing.","Breaks boss fears – handy for tanks.","Breaks Fear, Charm and Sleep. 90 sec cooldown.")],
+ "Cannibalize":(b,c)=>[pick(c,b.mana?4:3,0,0),pick(c,"Eat a humanoid or undead corpse: restores health"+(b.mana?" and mana":"")+" without food.","Not useful in instances.","Not useful in PvP.")],
+ "Touch of the Grave":(b,c,cls)=>{const hi=["Priest","Mage","Warlock"].includes(cls);
+   if(b.role==="healer") return [pick(c,2,0,1),"Only procs from direct damage, so it helps while you level by dealing damage."];
+   const base=b.role==="tank"?pick(c,3,2,2):pick(c,hi?4:3,1,3); return [Math.min(5,base+(b.direct&&c!=="pve"?1:0)),
+   `${hi?"30%":"20%"} proc on direct damage: 5% of your max health as damage and healing, every 15 sec at most.`];},
+ "Underwater Breathing":()=>[0,"Convenience only."],
+ "Walk on Air":(b,c)=>[pick(c,1,0,2),"Glide off ledges and gaps."],
+ "Skysight":(b,c)=>[pick(c,3,1,3),pick(c,"+15% speed while moving; 30% with Charged.","Charged is removed on entering a raid.","Speed to chase or escape.")],
+ "Wind Blessed":(b,c)=>[b.role==="tank"?pick(c,1,3,1):pick(c,2,4,2),"Passive 2% haste – always on, so on average worth more than a 3 min cooldown."],
+ "Elemental Insight":(b,c)=>[pick(c,1,1,0),"Passive: +5% damage against Elementals."],
+ "Will to Survive":(b,c)=>[pick(c,0,1,5),"Breaks all stuns. 3 min cooldown."],
+ "Perception":(b,c)=>[pick(c,0,0,2),"Spots stealthed Rogues and Druids."],
+ "Ruthlessness":(b,c)=>[b.role==="healer"?pick(c,1,b.mana&&b.id==="holy"?3:2,1):b.role==="tank"?pick(c,1,1,1):pick(c,2,3,2),"Passive 1% crit on everything."],
+ "The Human Spirit":(b,c,cls)=>[!b.mana?pick(c,2,0,0):b.role==="healer"?pick(c,3,4,2):b.role==="caster"?pick(c,cls==="Priest"?4:3,3,2):pick(c,2,2,1),"10% more Spirit: faster mana and health regen."],
+ "Stoneform":(b,c)=>[b.role==="tank"?pick(c,1,3,4):pick(c,1,1,4),pick(c,"Clears poisons and diseases from mobs.","Tank cooldown: 10% less physical damage, clears bleeds.","Clears Rogue poisons and Warrior bleeds.")],
+ "Find Treasure":(b,c)=>[pick(c,1,0,0),"Finds extra chests while leveling."],
+ "Artisan's Precision":(b,c)=>[b.role==="healer"?0:b.role==="tank"?pick(c,1,3,2):pick(c,1,4,2),b.role==="healer"?"Heals don't miss.":"1% hit: raid bosses need hit to stop misses."],
+ "Big Game Hunter":(b,c)=>[pick(c,3,1,1),"Passive: +5% damage against Beasts."],
+ "Elune's Light":(b,c)=>[b.role==="tank"?pick(c,1,1,1):b.role==="healer"?pick(c,1,2,2):pick(c,2,3,3),"+10% crit for 15 sec. Cooldown not confirmed."],
+ "Shadowmeld":(b,c)=>[pick(c,2,0,3),pick(c,"Hide to drink or skip mobs.","No use in instances.","Drop out of sight to reset or ambush.")],
+ "Quickness":(b,c)=>[b.role==="tank"?pick(c,1,2,2):pick(c,1,0,2),"1% dodge and 2% run speed."],
+ "Wisp Spirit":(b,c)=>[pick(c,2,1,0),"Faster corpse runs."],
+ "Escape Artist":(b,c)=>[pick(c,1,0,5),"Breaks roots and snares: escape Frost Nova or Hamstring."],
+ "Eureka!":(b,c,cls)=>{if(b.role==="healer") return [cls==="Priest"?pick(c,1,b.shield?4:3,3):0,cls==="Priest"?"10% more healing for 8 sec, Power Word: Shield included.":"Only boosts Priest healing."];
+   return [b.dots?pick(c,2,2,2):pick(c,2,3,3),"8 sec of cheaper, 10% stronger direct abilities – DoTs don't count."];},
+ "Expansive Mind":(b,c)=>[pick(c,b.mana?2:1,2,2),"5% bigger mana, rage or energy pool."],
+ "Engineering Specialization":(b,c)=>[pick(c,0,0,1),"Only matters if you take Engineering."],
+ "Leyline Reading":(b,c)=>[b.mana?pick(c,4,1,1):pick(c,2,0,1),pick(c,"Cut drinking time: +50% regen, 100% while Attuned.","Attuned is removed in raids; still fine in dungeons.","Little time to use it.")],
+ /* Priest race-only spells */
+ "Hex of Weakness":(b,c)=>[pick(c,1,1,3),"Cuts a melee's damage and the healing they receive."],
+ "Shadowguard":(b,c)=>[pick(c,3,1,2),"Free damage while mobs hit you."],
+ "Dark Sacrifice":(b,c)=>[b.role==="healer"?pick(c,2,3,1):pick(c,2,2,1),"Trade health for mana in long fights."],
+ "Touch of Weakness":(b,c)=>[pick(c,2,0,2),"Weakens the next melee to hit you."],
+ "Divine Grace":(b,c)=>[b.role==="healer"?pick(c,1,3,3):pick(c,1,1,2),"Emergency instant heal on an ally."],
+ "Feedback":(b,c)=>[pick(c,0,0,3),"Punishes casters who target you."],
+ "Chastise":(b,c)=>[pick(c,1,0,3),"Short root on humanoids."],
+ "Desperate Prayer":(b,c)=>[pick(c,3,2,4),"Instant self-heal."],
+ "Elune's Grace":(b,c)=>[pick(c,2,1,4),"Melee and ranged attacks miss you far more."],
+ "Starshards":(b,c)=>[b.role==="healer"?pick(c,2,0,1):pick(c,3,2,2),"Extra damage over time."],
+ "Confounding Flash":(b,c)=>[pick(c,2,1,4),"AoE confuse to peel or escape."],
+ "Contingency Plan":(b,c)=>[b.role==="healer"?pick(c,1,3,3):pick(c,1,1,2),"Pre-shield an ally before damage lands."]
+};
+function racialsFor(race,cls){return race.r.concat(cls==="Priest"?(PRIEST_SPELLS[race.id]||[]):[]);}
+function scoreRace(race,cls,b,ctx){
+  const rows=racialsFor(race,cls).map(x=>{const f=RULES[x[0]]; const [s,tip]=f?f(b,ctx,cls):[0,""]; return {name:x[0],type:x[1],s,tip};});
+  return {race,rows,total:rows.reduce((a,r)=>a+r.s,0)};}
+
 const byId=Object.fromEntries(RACES.map(r=>[r.id,r]));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -294,8 +379,8 @@ const ICON={
  Druid:'<path d="M5 19C5 10 11 5 20 5c0 9-5 15-14 15M5 19l8-8"/>'
 };
 const svg=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[c]}</svg>`;
-let fac=H, cls="Paladin", show="all";
-try{const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class");}catch(e){}
+let fac=H, cls="Paladin", bid=null, ctx="lvl", show="all";
+try{const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class"); bid=q.get("spec"); if(CTX.some(c=>c[0]===q.get("for"))) ctx=q.get("for");}catch(e){}
 const playable=(f,c)=>RACES.some(r=>r.fac===f&&r.cls.some(x=>x.replace("*","")===c));
 function renderClasses(){
   document.getElementById("classBtns").innerHTML=CLASSES.map(c=>{
@@ -303,9 +388,22 @@ function renderClasses(){
     return `<button type="button" class="cls-btn" style="--c:${CLASS_COLOR[c]}" data-cls="${c}" aria-pressed="${c===cls}" ${ok?"":"disabled title=\"No "+(fac===H?"Horde":"Alliance")+" race can play "+c+"\""}><span class="ico">${svg(c)}</span>${c}</button>`;
   }).join("");
 }
+function renderBuilds(){
+  if(!BUILDS[cls].some(b=>b.id===bid)) bid=BUILDS[cls][0].id;
+  document.getElementById("buildBtns").innerHTML=BUILDS[cls].map(b=>`<button type="button" class="chip" data-build="${b.id}" aria-pressed="${b.id===bid}">${esc(b.name)}</button>`).join("");
+  document.getElementById("ctxBtns").innerHTML=CTX.map(([k,n])=>`<button type="button" class="chip" data-ctx="${k}" aria-pressed="${k===ctx}">${n}</button>`).join("");
+}
+const pips=s=>`<span class="pips" aria-label="${s} of 5">${[1,2,3,4,5].map(i=>`<span class="${i<=s?"on":""}"></span>`).join("")}</span>`;
 function renderPicks(){
-  const list=PICKS[fac][cls]||[], labels=["Best pick","Also great","Situational"];
-  document.getElementById("picks").innerHTML=list.length?list.map(([id,why],i)=>`<article class="pick r${Math.min(i,2)}"><span class="medal" aria-hidden="true"></span><div class="rank">${labels[i]||"Option"}</div><h3>${esc(byId[id].name)}</h3><p>${esc(why)}</p></article>`).join("")
+  const b=BUILDS[cls].find(x=>x.id===bid), labels=["Best pick","Runner-up","Third"];
+  const list=RACES.filter(r=>r.fac===fac&&r.cls.some(x=>x.replace("*","")===cls)).map(r=>scoreRace(r,cls,b,ctx)).sort((a,z)=>z.total-a.total);
+  const top=list.length?list[0].total:1;
+  document.getElementById("picks").innerHTML=list.length?list.map((x,i)=>{const rows=[...x.rows].sort((a,z)=>z.s-a.s), key=rows.filter(r=>r.s>=3).slice(0,3);
+    const tied=i>0&&x.total===list[i-1].total;
+    return `<article class="pick r${Math.min(i,2)}"><span class="medal" aria-hidden="true"></span><div class="rank">${tied?"Tied":labels[i]||"Option"}</div><h3>${esc(x.race.name)}</h3>
+    <div class="score"><i style="--w:${Math.round(x.total/Math.max(top,1)*100)}%"></i>${x.total} pts</div>
+    <ul class="why">${(key.length?key:rows.slice(0,1)).map(r=>`<li>${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul>
+    <details><summary>All racials</summary><ul class="why">${rows.map(r=>`<li>${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul></details></article>`;}).join("")
     :`<p class="empty">No ${fac===H?"Horde":"Alliance"} race can play ${cls}.</p>`;
 }
 function renderRaces(){
@@ -318,12 +416,14 @@ function renderRaces(){
 function sync(){
   if(!playable(fac,cls)) cls=CLASSES.find(c=>playable(fac,c));
   document.querySelectorAll(".fac-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fac===fac));
-  renderClasses(); renderPicks();
-  try{history.replaceState(null,"",`?faction=${fac}&class=${cls}`+location.hash);}catch(e){}
+  renderClasses(); renderBuilds(); renderPicks();
+  try{history.replaceState(null,"",`?faction=${fac}&class=${cls}&spec=${bid}&for=${ctx}`+location.hash);}catch(e){}
 }
 document.addEventListener("click",e=>{
   const f=e.target.closest(".fac-btn"); if(f){fac=f.dataset.fac;sync();return;}
-  const c=e.target.closest(".cls-btn"); if(c&&!c.disabled){cls=c.dataset.cls;sync();return;}
+  const c=e.target.closest(".cls-btn"); if(c&&!c.disabled){cls=c.dataset.cls;bid=null;sync();return;}
+  const bb=e.target.closest("[data-build]"); if(bb){bid=bb.dataset.build;sync();return;}
+  const cx=e.target.closest("[data-ctx]"); if(cx){ctx=cx.dataset.ctx;sync();return;}
   const s=e.target.closest("[data-show]"); if(s){show=s.dataset.show;document.querySelectorAll("[data-show]").forEach(b=>b.setAttribute("aria-pressed",b===s));renderRaces();}
 });
 renderRaces(); sync();

@@ -97,11 +97,11 @@ main{display:flex;flex-direction:column;gap:56px;padding-bottom:48px}
 .tag-fac{font:700 11px/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--fc)}
 .cls-row{display:flex;flex-wrap:wrap;gap:6px}
 .mini{--c:var(--gold);display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--ink);padding:3px 8px 3px 5px;border:1px solid color-mix(in srgb,var(--c) 45%,var(--edge));border-radius:999px;background:color-mix(in srgb,var(--c) 8%,transparent)}
-.mini svg{width:14px;height:14px;color:var(--c)}
+.mini img{width:18px;height:18px;border-radius:4px}
 .mini.new::after{content:"new";font:700 10px/1 var(--f-display);letter-spacing:.08em;color:var(--ember);margin-left:2px}
-.racial{display:grid;grid-template-columns:26px 1fr;gap:10px;padding-top:10px;border-top:1px solid var(--edge)}
-.r-ico{width:18px;height:18px;margin:4px;transform:rotate(45deg);border:1.5px solid var(--gold);border-radius:3px}
-.r-ico.active{background:linear-gradient(135deg,var(--gold-soft),var(--ember));border-color:var(--gold-soft);box-shadow:0 0 10px rgba(255,122,47,.5)}
+.racial{display:grid;grid-template-columns:36px 1fr;gap:10px;padding-top:10px;border-top:1px solid var(--edge)}
+.r-ico{width:36px;height:36px;border-radius:6px;border:1px solid #5b4a2c;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.r-ico.active{border-color:var(--gold);box-shadow:0 0 10px rgba(255,122,47,.35)}
 .racial b{font-weight:700}
 .type{font:700 10px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:8px}
 .racial p{margin:3px 0 0;font-size:15.5px;color:#d8cfbf}
@@ -143,6 +143,15 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .pick details ul{margin-top:8px}
 .pick .po{font:700 10px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ember);margin-left:6px}
 .how{color:var(--muted);font-size:14px;margin:14px 2px 0}
+.wico{width:44px;height:44px;border-radius:8px;border:1.5px solid color-mix(in srgb,var(--c) 75%,#000);box-shadow:0 0 12px color-mix(in srgb,var(--c) 25%,transparent)}
+.race-face{width:46px;height:46px;border-radius:8px;border:2px solid var(--fc);flex:none}
+.race header{align-items:center}.race header .nm{display:flex;align-items:center;gap:12px}
+.pick .face{position:absolute;left:14px;top:16px;width:40px;height:40px;border-radius:8px;border:2px solid var(--edge)}
+.pick.r0 .face{border-color:var(--gold);box-shadow:0 0 14px rgba(255,122,47,.5)}.pick.r1 .face{border-color:#c4c8d2}.pick.r2 .face{border-color:#c08a5c}
+.pick .medal{display:none}
+.pick .why li{grid-template-columns:28px auto 1fr}.pick .why li .ri{width:28px;height:28px;border-radius:5px;grid-row:span 2;border:1px solid #5b4a2c}
+.pick .why .tip{grid-column:2/-1}.pick .why li>span:nth-of-type(2){grid-column:3}
+.legal{font-size:12px;opacity:.8}
 </style>
 </head>
 <body>
@@ -215,6 +224,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
     <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a>
     <p>Tips keep the forge burning and new tools coming – next up: talent calculators for every class.</p>
     <p>Fan-made and not affiliated with Blizzard Entertainment. Racial values come from Blizzard's WoW Forever development notes and launch hotfix data; picks are our opinion.</p>
+    <p class="legal">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons and portraits © Blizzard Entertainment, Inc.</p>
   </div>
 </footer>
 
@@ -378,6 +388,8 @@ const ICON={
  Warlock:'<path d="M12 22c-4 0-7-3-7-7 0-4 4-6 4-11 3 2 5 5 5 8 1-1 2-3 2-4 2 2 3 4 3 7 0 4-3 7-7 7z"/>',
  Druid:'<path d="M5 19C5 10 11 5 20 5c0 9-5 15-14 15M5 19l8-8"/>'
 };
+const IC={"racial":{"Blood Fury":"r-blood-fury","Shatter Curse":"r-shatter-curse","Hardiness":"r-hardiness","Command":"r-command","War Stomp":"r-war-stomp","Cultivation":"r-cultivation","Plainsrunning":"r-plainsrunning","Endurance":"r-endurance","Berserking":"r-berserking","Rapid Regeneration":"r-rapid-regeneration","Regeneration":"r-regeneration","Beast Slaying":"r-beast-slaying","Will of the Forsaken":"r-will-of-the-forsaken","Cannibalize":"r-cannibalize","Touch of the Grave":"r-touch-of-the-grave","Underwater Breathing":"r-underwater-breathing","Walk on Air":"r-walk-on-air","Skysight":"r-skysight","Wind Blessed":"r-wind-blessed","Leyline Reading":"r-leyline-reading","Will to Survive":"r-will-to-survive","Perception":"r-perception","Ruthlessness":"r-ruthlessness","The Human Spirit":"r-the-human-spirit","Stoneform":"r-stoneform","Find Treasure":"r-find-treasure","Artisan's Precision":"r-artisan-s-precision","Big Game Hunter":"r-big-game-hunter","Elune's Light":"r-elune-s-light","Shadowmeld":"r-shadowmeld","Quickness":"r-quickness","Wisp Spirit":"r-wisp-spirit","Escape Artist":"r-escape-artist","Eureka!":"r-eureka","Expansive Mind":"r-expansive-mind","Engineering Specialization":"r-engineering-specialization","Hex of Weakness":"r-hex-of-weakness","Shadowguard":"r-shadowguard","Dark Sacrifice":"r-dark-sacrifice","Touch of Weakness":"r-touch-of-weakness","Divine Grace":"r-divine-grace","Feedback":"r-feedback","Chastise":"r-chastise","Desperate Prayer":"r-desperate-prayer","Elune's Grace":"r-elune-s-grace","Starshards":"r-starshards","Confounding Flash":"r-confounding-flash","Contingency Plan":"r-contingency-plan","Elemental Insight":"r-elemental-insight"},"cls":{"Warrior":"class-warrior","Paladin":"class-paladin","Hunter":"class-hunter","Rogue":"class-rogue","Priest":"class-priest","Shaman":"class-shaman","Mage":"class-mage","Warlock":"class-warlock","Druid":"class-druid"},"race":{"human":"race-human","dwarf":"race-dwarf","gnome":"race-gnome","nightelf":"race-nightelf","tauren":"race-tauren","undead":"race-undead","troll":"race-troll","orc":"race-orc","windshaper":"race-windshaper","highorder":"race-highorder"}};
+const img=(n,cl,alt="")=>n?`<img class="${cl}" src="img/icons/${n}.webp" alt="${alt}" width="64" height="64" loading="lazy">`:"";
 const svg=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[c]}</svg>`;
 let fac=H, cls="Paladin", bid=null, ctx="lvl", show="all";
 try{const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class"); bid=q.get("spec"); if(CTX.some(c=>c[0]===q.get("for"))) ctx=q.get("for");}catch(e){}
@@ -385,7 +397,7 @@ const playable=(f,c)=>RACES.some(r=>r.fac===f&&r.cls.some(x=>x.replace("*","")==
 function renderClasses(){
   document.getElementById("classBtns").innerHTML=CLASSES.map(c=>{
     const ok=playable(fac,c);
-    return `<button type="button" class="cls-btn" style="--c:${CLASS_COLOR[c]}" data-cls="${c}" aria-pressed="${c===cls}" ${ok?"":"disabled title=\"No "+(fac===H?"Horde":"Alliance")+" race can play "+c+"\""}><span class="ico">${svg(c)}</span>${c}</button>`;
+    return `<button type="button" class="cls-btn" style="--c:${CLASS_COLOR[c]}" data-cls="${c}" aria-pressed="${c===cls}" ${ok?"":"disabled title=\"No "+(fac===H?"Horde":"Alliance")+" race can play "+c+"\""}>${img(IC.cls[c],"wico")}${c}</button>`;
   }).join("");
 }
 function renderBuilds(){
@@ -400,17 +412,17 @@ function renderPicks(){
   const top=list.length?list[0].total:1;
   document.getElementById("picks").innerHTML=list.length?list.map((x,i)=>{const rows=[...x.rows].sort((a,z)=>z.s-a.s), key=rows.filter(r=>r.s>=3).slice(0,3);
     const tied=i>0&&x.total===list[i-1].total;
-    return `<article class="pick r${Math.min(i,2)}"><span class="medal" aria-hidden="true"></span><div class="rank">${tied?"Tied":labels[i]||"Option"}</div><h3>${esc(x.race.name)}</h3>
+    return `<article class="pick r${Math.min(i,2)}">${img(IC.race[x.race.id],"face")}<div class="rank">${tied?"Tied":labels[i]||"Option"}</div><h3>${esc(x.race.name)}</h3>
     <div class="score"><i style="--w:${Math.round(x.total/Math.max(top,1)*100)}%"></i>${x.total} pts</div>
-    <ul class="why">${(key.length?key:rows.slice(0,1)).map(r=>`<li>${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul>
-    <details><summary>All racials</summary><ul class="why">${rows.map(r=>`<li>${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul></details></article>`;}).join("")
+    <ul class="why">${(key.length?key:rows.slice(0,1)).map(r=>`<li>${img(IC.racial[r.name],"ri")}${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul>
+    <details><summary>All racials</summary><ul class="why">${rows.map(r=>`<li>${img(IC.racial[r.name],"ri")}${pips(r.s)}<span><b>${esc(r.name)}</b>${r.type==="Priest only"?'<span class="po">Priest</span>':""}</span><span class="tip">${esc(r.tip)}</span></li>`).join("")}</ul></details></article>`;}).join("")
     :`<p class="empty">No ${fac===H?"Horde":"Alliance"} race can play ${cls}.</p>`;
 }
 function renderRaces(){
   document.getElementById("raceGrid").innerHTML=RACES.filter(r=>show==="all"||r.fac===show).map(r=>`<article class="race" id="${r.id}" style="--fc:var(--${r.fac})">
-    <header><h3>${esc(r.name)}</h3><span class="tag-fac">${r.fac}</span></header>
-    <div class="cls-row">${r.cls.map(x=>{const c=x.replace("*","");return `<span class="mini${x.endsWith("*")?" new":""}" style="--c:${CLASS_COLOR[c]}" title="${x.endsWith("*")?"New in Forever":""}">${svg(c)}${esc(c)}</span>`}).join("")}</div>
-    ${r.r.map(([n,t,d,note])=>`<div class="racial"><span class="r-ico ${t==="Active"?"active":""}" aria-hidden="true"></span><div><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div></div>`).join("")}
+    <header><span class="nm">${img(IC.race[r.id],"race-face")}<h3>${esc(r.name)}</h3></span><span class="tag-fac">${r.fac}</span></header>
+    <div class="cls-row">${r.cls.map(x=>{const c=x.replace("*","");return `<span class="mini${x.endsWith("*")?" new":""}" style="--c:${CLASS_COLOR[c]}" title="${x.endsWith("*")?"New in Forever":""}">${img(IC.cls[c],"")}${esc(c)}</span>`}).join("")}</div>
+    ${r.r.map(([n,t,d,note])=>`<div class="racial">${img(IC.racial[n],"r-ico"+(t==="Active"?" active":""))}<div><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div></div>`).join("")}
   </article>`).join("");
 }
 function sync(){

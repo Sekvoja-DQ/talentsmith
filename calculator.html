@@ -50,20 +50,22 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .tree-h h2{margin:0;font:800 18px/1 var(--f-display);color:var(--gold-soft)}
 .tree-h span{font:700 15px/1 var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums}
 .tree-h button{font-size:12px;background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline}
-.grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,64px);gap:6px}
-.grid svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-.node{position:relative;justify-self:center;align-self:center;width:46px;height:46px;transform:rotate(45deg);border-radius:6px;border:1.5px solid #4a5163;background:#1a1f2b;cursor:pointer;padding:0;display:grid;place-items:center;transition:box-shadow .15s,border-color .15s}
-.node .lbl{transform:rotate(-45deg);font:700 10px/1.05 var(--f-body);color:var(--muted);text-align:center;width:56px;pointer-events:none}
-.node .rk{position:absolute;right:-12px;bottom:-12px;transform:rotate(-45deg);font:700 11px/1 var(--f-body);background:var(--night);border:1px solid #4a5163;border-radius:4px;padding:2px 4px;color:var(--muted);font-variant-numeric:tabular-nums}
+.grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,80px);gap:4px}
+.node{position:relative;justify-self:center;align-self:start;margin-top:4px;width:44px;height:44px;border-radius:7px;border:2px solid #4a5163;background:#1a1f2b center/cover no-repeat;cursor:pointer;padding:0;transition:box-shadow .15s,border-color .15s,filter .15s}
+.node .lbl{position:absolute;top:48px;background:#1b2130;border-radius:3px;padding:1px 2px;left:50%;transform:translateX(-50%);font:600 10.5px/1.1 var(--f-body);color:var(--muted);text-align:center;width:76px;pointer-events:none}
+.node .rk{position:absolute;right:-9px;bottom:-7px;font:700 11px/1 var(--f-body);background:var(--night);border:1px solid #4a5163;border-radius:4px;padding:2px 4px;color:var(--muted);font-variant-numeric:tabular-nums}
 .node.open{border-color:var(--green)}
 .node.open .lbl{color:var(--ink)}
-.node.some{border-color:var(--gold);background:radial-gradient(circle,rgba(233,180,76,.25),#1a1f2b 70%)}
-.node.some .rk{color:var(--gold);border-color:var(--gold)}
-.node.max{border-color:var(--gold-soft);background:radial-gradient(circle,rgba(255,122,47,.45),#2a1d12 75%);box-shadow:0 0 14px rgba(255,122,47,.45)}
-.node.max .lbl,.node.max .rk{color:var(--gold-soft)}
-.node.locked{opacity:.45}
+.node.some{border-color:var(--green);box-shadow:0 0 10px rgba(111,210,140,.35)}
+.node.some .rk{color:var(--green);border-color:var(--green)}
+.node.some .lbl{color:var(--ink)}
+.node.max{border-color:var(--gold);box-shadow:0 0 14px rgba(255,122,47,.55)}
+.node.max .lbl,.node.max .rk{color:var(--gold-soft)}.node.max .rk{border-color:var(--gold)}
+.node.locked{filter:grayscale(1) brightness(.55)}
+.node.locked .lbl{color:#7d766a}
 .node.sel{outline:2px solid var(--gold-soft);outline-offset:3px}
-.node .hf{position:absolute;left:-9px;bottom:-9px;transform:rotate(-45deg);width:9px;height:9px;border-radius:50%;background:var(--ember);box-shadow:0 0 6px var(--ember)}
+.node .hf{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--ember);box-shadow:0 0 6px var(--ember);border:1px solid #2a1d12}
+.grid svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .detail{margin-top:16px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:start}
 .detail h3{margin:0;font:800 20px/1.1 var(--f-display);color:var(--gold-soft)}
 .detail .meta{font-size:14px;color:var(--muted);margin-top:4px}
@@ -118,7 +120,8 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 </div>
 <footer class="gut"><div class="wrap">
   <p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps the forge burning and new calculators coming.</p>
-  <p>Fan-made, not affiliated with Blizzard Entertainment. Talent positions come from the Oct 30 client data; descriptions are summarized in our own words, and "details pending" means the exact numbers aren't published yet.</p>
+  <p>Fan-made, not affiliated with Blizzard Entertainment. Talent positions come from the Oct 30 client data; descriptions are summarized in our own words, and "details pending" means the exact numbers aren't published yet. Icons for new Forever talents are the closest classic icon.</p>
+  <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -183,6 +186,7 @@ const TREES=[
  ["Unsealed Wrath",1,7,2,"Repentance","Not in the official notes (replaces Twist of Light).","Melee attacks store your active Seal for 15 sec, up to 3 times. Attacking with a different Seal spends the stored stacks.",true]
 ]}];
 const MAXP=51;
+const TICON={"Spiritual Focus":"paladin-spiritual-focus","Divine Strength":"paladin-divine-strength","Healing Light":"paladin-healing-light","Reverence":"paladin-reverence","Improved Seals":"paladin-improved-seals","Purifying Power":"paladin-purifying-power","Divine Favor":"paladin-divine-favor","Illumination":"paladin-illumination","Holy Conduit":"paladin-holy-conduit","Divine Precision":"paladin-divine-precision","Infusion of Light":"paladin-infusion-of-light","Oath of Light":"paladin-oath-of-light","Consecrated Ground":"paladin-consecrated-ground","Holy Shock":"paladin-holy-shock","Boundless Light":"paladin-boundless-light","Holy Power":"paladin-holy-power","Light's Vigil":"paladin-light-s-vigil","Redoubt":"paladin-redoubt","Precision":"paladin-precision","Guardian's Favor":"paladin-guardian-s-favor","Sacred Duty":"paladin-sacred-duty","Templar's Bulwark":"paladin-templar-s-bulwark","Improved Hammer of Justice":"paladin-improved-hammer-of-justice","Shield Specialization":"paladin-shield-specialization","Toughness":"paladin-toughness","Swift Judgement":"paladin-swift-judgement","Improved Righteous Fury":"paladin-improved-righteous-fury","Anticipation":"paladin-anticipation","Stoicism":"paladin-stoicism","Holy Shield":"paladin-holy-shield","Reckoning":"paladin-reckoning","Iron Creed":"paladin-iron-creed","Shieldsworn":"paladin-shieldsworn","Deflection":"paladin-deflection","Benediction":"paladin-benediction","Improved Judgement":"paladin-improved-judgement","Conviction":"paladin-conviction","Sanctified Judgement":"paladin-sanctified-judgement","Vindication":"paladin-vindication","Unyielding Faith":"paladin-unyielding-faith","Seal of Command":"paladin-seal-of-command","Pursuit of Justice":"paladin-pursuit-of-justice","Eye for an Eye":"paladin-eye-for-an-eye","Sacred Arbiter":"paladin-sacred-arbiter","Two-Handed Weapon Specialization":"paladin-two-handed-weapon-specialization","Turn Evil":"paladin-turn-evil","Repentance":"paladin-repentance","Vengeance":"paladin-vengeance","Champion of the Light":"paladin-champion-of-the-light","Unsealed Wrath":"paladin-unsealed-wrath","Divine Intellect":"paladin-divine-intellect"};
 let pts=TREES.map(t=>t.t.map(()=>0)), mode="hot", sel=null;
 const byName=TREES.map(t=>Object.fromEntries(t.t.map((x,i)=>[x[0],i])));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -205,7 +209,7 @@ function nodeState(ti,i){const x=TREES[ti].t[i],p=pts[ti][i];
   return canAdd(ti,i)||(total()>=MAXP&&pointsAbove(ti,x[2])>=(x[2]-1)*5)?"open":"locked";}
 function render(){
   document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts <button type="button" data-clear="${ti}">clear</button></span></div>
-    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]}" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed in the Oct 30 hotfix"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
+    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${TICON[x[0]]}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed in the Oct 30 hotfix"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
   requestAnimationFrame(drawLinks);
   const t=total(); document.querySelector("#spent b").textContent=t;
   document.querySelector("#lvl b").textContent=t?t+9:10;

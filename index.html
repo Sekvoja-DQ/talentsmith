@@ -2,117 +2,200 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talentsmith – Best Race for Every Class in WoW Forever (Racials, Nov 2026)</title>
-<meta name="description" content="Every WoW Forever race and racial ability with the latest launch values (Oct 26–30 changes), class availability for Horde and Alliance, and the best race for every class.">
+<meta name="description" content="Every WoW Forever race and racial ability with the latest launch values, class availability for Horde and Alliance, and the best race for every class.">
 <meta property="og:title" content="Talentsmith – WoW Forever races, racials and talents">
-<meta property="og:description" content="All 10 WoW Forever races, current racial values and the best race for every class – fast, clean, no clutter.">
+<meta property="og:description" content="All 10 WoW Forever races, current racial values and the best race for every class – updated after every patch.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="img/og.jpg">
+<meta name="theme-color" content="#0b0e15">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Alegreya+Sans:wght@400;500;700&display=swap">
 <style>
-/* Layout: header + class picker (the main tool) + race explorer grid + changes log. */
+/* Forge: deep night sky, stone, gold and ember. One deliberate dark look, matching the logo art. */
 :root{
-  --bg:#f1efeb; --surface:#fbfaf8; --surface-2:#e8e4de; --line:#d5cfc6;
-  --ink:#1d1a17; --muted:#6a625a; --accent:#7a5a2b; --accent-soft:#efe4d1;
-  --horde:#a3342b; --alliance:#2c5aa0; --good:#2e7a48;
-  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
-  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+  --night:#0b0e15; --deep:#11151f; --plate:#171c28; --plate-2:#1f2533; --stone:#3b352f; --edge:#2c3242;
+  --gold:#e9b44c; --gold-soft:#f6d68e; --ember:#ff7a2f; --ink:#ede4d3; --muted:#a39886;
+  --horde:#d2483c; --alliance:#4c82db;
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-body:"Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#141619; --surface:#1c1f23; --surface-2:#252930; --line:#343941;
-  --ink:#ebe6df; --muted:#9b948b; --accent:#d2aa68; --accent-soft:#33291b;
-  --horde:#e2665c; --alliance:#6e9be0; --good:#5cc483; color-scheme:dark }}
 *{box-sizing:border-box}
-html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
-.wrap{max-width:1100px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-left)) 40px max(16px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:28px}
-a{color:var(--accent)}
-header .eyebrow{font:600 12px/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-h1{font:700 clamp(30px,6vw,46px)/1 var(--f-display);margin:6px 0 8px;letter-spacing:.01em;text-wrap:balance}
-h2{font:700 24px/1.1 var(--f-display);margin:0 0 10px;text-transform:uppercase;letter-spacing:.03em}
-.lede{margin:0;color:var(--muted);max-width:62ch}
-.stamp{display:inline-block;margin-top:10px;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
-section{display:flex;flex-direction:column;gap:12px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button,.chip{font:600 14px/1 var(--f-body);background:var(--surface);color:var(--muted);border:0;padding:9px 13px;cursor:pointer}
-.seg button+button{border-left:1px solid var(--line)}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);border-radius:999px}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
-.pick{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface);min-width:0}
-.pick h3{margin:0 0 2px;font:700 20px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
-.rank{font:600 11px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.pick p{margin:6px 0 0}
-.fac{font:700 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:4px;color:#fff;vertical-align:middle;margin-left:6px}
-.fac.horde{background:var(--horde)} .fac.alliance{background:var(--alliance)}
-.races{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:12px}
-.race{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
-.race h3{margin:0;font:700 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
-.racial{border-top:1px dashed var(--line);padding-top:8px}
-.racial b{font-weight:600}
-.type{font:600 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 6px;border-radius:3px;margin-left:6px}
-.racial p{margin:3px 0 0;font-size:14px}
-.chg{color:var(--good);font-size:13px}
-.unc{color:var(--muted);font-style:italic}
-.cls{display:flex;flex-wrap:wrap;gap:4px}
-.cls span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--muted)}
-.cls span.new{border-color:var(--accent);color:var(--accent)}
-.log li{margin:4px 0}
-footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
-.empty{color:var(--muted)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--night);color:var(--ink);font:17px/1.55 var(--f-body);
+  background-image:radial-gradient(1200px 600px at 50% -10%,rgba(255,122,47,.10),transparent 60%),radial-gradient(900px 500px at 50% 110%,rgba(76,130,219,.08),transparent 60%)}
+a{color:var(--gold)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.gut{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.wrap{max-width:1120px;margin:0 auto}
+
+/* Hero */
+.hero{position:relative;text-align:center;padding-bottom:28px}
+.hero picture img{display:block;width:100%;max-width:1254px;margin:0 auto;height:auto;aspect-ratio:1254/617;object-fit:cover;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.hero-text{margin-top:-8px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.kicker{margin:0;font:700 13px/1 var(--f-display);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.lede{margin:0;max-width:56ch;color:var(--muted);font-size:19px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--f-display);letter-spacing:.06em;text-decoration:none;padding:14px 22px;border-radius:6px;border:1px solid var(--gold);transition:transform .15s,box-shadow .15s}
+.btn.primary{background:linear-gradient(180deg,var(--gold-soft),var(--gold) 55%,#b9822e);color:#24170a;box-shadow:0 0 24px rgba(233,180,76,.35)}
+.btn.ghost{color:var(--gold);background:rgba(233,180,76,.06)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(255,122,47,.35)}
+.btn:focus-visible,button:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+.stamp{margin:0;font-size:14px;color:var(--muted)}
+.stamp b{color:var(--ember);font-weight:700}
+
+/* Sections */
+main{display:flex;flex-direction:column;gap:56px;padding-bottom:48px}
+.sec-head{display:flex;align-items:center;gap:14px;margin:0 0 18px}
+.sec-head h2{margin:0;font:800 clamp(22px,4vw,30px)/1.1 var(--f-display);letter-spacing:.04em;color:var(--gold-soft);text-wrap:balance}
+.sec-head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.gem{width:12px;height:12px;transform:rotate(45deg);background:linear-gradient(135deg,var(--gold-soft),var(--ember));box-shadow:0 0 12px var(--ember);flex:none}
+.sub{margin:-8px 0 18px;color:var(--muted)}
+
+/* Picker */
+.factions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.fac-btn{font:700 17px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--plate);border:1px solid var(--edge);border-radius:8px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.fac-btn .dot{width:10px;height:10px;transform:rotate(45deg)}
+.fac-btn[data-fac="horde"] .dot{background:var(--horde)} .fac-btn[data-fac="alliance"] .dot{background:var(--alliance)}
+.fac-btn[aria-pressed="true"][data-fac="horde"]{color:#fff;border-color:var(--horde);background:linear-gradient(180deg,rgba(210,72,60,.35),rgba(210,72,60,.08));box-shadow:0 0 22px rgba(210,72,60,.25)}
+.fac-btn[aria-pressed="true"][data-fac="alliance"]{color:#fff;border-color:var(--alliance);background:linear-gradient(180deg,rgba(76,130,219,.35),rgba(76,130,219,.08));box-shadow:0 0 22px rgba(76,130,219,.25)}
+.classes{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;margin-bottom:22px}
+.cls-btn{--c:var(--gold);display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;background:var(--plate);border:1px solid var(--edge);border-radius:8px;color:var(--ink);font:600 15px/1 var(--f-body);cursor:pointer;transition:border-color .15s,background .15s}
+.cls-btn .ico{width:42px;height:42px;display:grid;place-items:center;border-radius:6px;transform:rotate(45deg);border:1.5px solid color-mix(in srgb,var(--c) 70%,transparent);background:radial-gradient(circle,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%)}
+.cls-btn .ico svg{transform:rotate(-45deg);width:24px;height:24px;color:var(--c)}
+.cls-btn:hover{border-color:color-mix(in srgb,var(--c) 60%,var(--edge))}
+.cls-btn[aria-pressed="true"]{border-color:var(--c);background:linear-gradient(180deg,color-mix(in srgb,var(--c) 18%,var(--plate)),var(--plate));box-shadow:0 0 18px color-mix(in srgb,var(--c) 30%,transparent)}
+.cls-btn[disabled]{opacity:.35;cursor:not-allowed}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.pick{position:relative;background:linear-gradient(180deg,var(--plate-2),var(--plate));border:1px solid var(--edge);border-radius:10px;padding:18px 18px 18px 64px;min-width:0}
+.pick .medal{position:absolute;left:18px;top:20px;width:30px;height:30px;transform:rotate(45deg);border-radius:4px}
+.pick.r0{border-color:var(--gold);box-shadow:0 0 0 1px rgba(233,180,76,.25),0 10px 30px rgba(0,0,0,.35)}
+.pick.r0 .medal{background:linear-gradient(135deg,var(--gold-soft),var(--ember));box-shadow:0 0 16px var(--ember)}
+.pick.r1 .medal{background:linear-gradient(135deg,#e6e6ea,#8d93a2)}
+.pick.r2 .medal{background:linear-gradient(135deg,#d9a273,#7d4c2a)}
+.pick .rank{font:700 12px/1 var(--f-display);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.pick.r0 .rank{color:var(--gold)}
+.pick h3{margin:6px 0 6px;font:800 22px/1.1 var(--f-display);letter-spacing:.02em}
+.pick p{margin:0;color:#d8cfbf}
+.empty{color:var(--muted);font-style:italic}
+
+/* Races */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{font:600 15px/1 var(--f-body);color:var(--muted);background:var(--plate);border:1px solid var(--edge);border-radius:999px;padding:9px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{color:#24170a;background:var(--gold);border-color:var(--gold)}
+.races{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.race{background:linear-gradient(180deg,var(--plate-2),var(--plate) 40%);border:1px solid var(--edge);border-top:3px solid var(--fc);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.race header{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.race h3{margin:0;font:800 21px/1.1 var(--f-display)}
+.tag-fac{font:700 11px/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--fc)}
+.cls-row{display:flex;flex-wrap:wrap;gap:6px}
+.mini{--c:var(--gold);display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--ink);padding:3px 8px 3px 5px;border:1px solid color-mix(in srgb,var(--c) 45%,var(--edge));border-radius:999px;background:color-mix(in srgb,var(--c) 8%,transparent)}
+.mini svg{width:14px;height:14px;color:var(--c)}
+.mini.new::after{content:"new";font:700 10px/1 var(--f-display);letter-spacing:.08em;color:var(--ember);margin-left:2px}
+.racial{display:grid;grid-template-columns:26px 1fr;gap:10px;padding-top:10px;border-top:1px solid var(--edge)}
+.r-ico{width:18px;height:18px;margin:4px;transform:rotate(45deg);border:1.5px solid var(--gold);border-radius:3px}
+.r-ico.active{background:linear-gradient(135deg,var(--gold-soft),var(--ember));border-color:var(--gold-soft);box-shadow:0 0 10px rgba(255,122,47,.5)}
+.racial b{font-weight:700}
+.type{font:700 10px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:8px}
+.racial p{margin:3px 0 0;font-size:15.5px;color:#d8cfbf}
+.chg{color:var(--ember)!important;font-size:14px!important}
+.unc{color:var(--muted)!important;font-style:italic;font-size:14px!important}
+
+/* Changes */
+.log{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px solid var(--stone);display:flex;flex-direction:column;gap:18px}
+.log li{position:relative}
+.log li::before{content:"";position:absolute;left:-30px;top:5px;width:12px;height:12px;transform:rotate(45deg);background:var(--night);border:2px solid var(--gold)}
+.log li:first-child::before{background:var(--ember);border-color:var(--gold-soft);box-shadow:0 0 12px var(--ember)}
+.log time{font:700 14px/1 var(--f-display);letter-spacing:.08em;color:var(--gold)}
+.log p{margin:6px 0 0;color:#d8cfbf;max-width:75ch}
+
+footer{border-top:1px solid var(--edge);padding-block:28px 40px;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+@media (max-width:640px){
+  .hero picture img{aspect-ratio:2/3}
+  .lede{font-size:17px}
+  .classes{grid-template-columns:repeat(3,1fr)}
+}
+.calc-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:18px 20px;border:1px solid var(--gold);border-radius:12px;background:linear-gradient(135deg,rgba(255,122,47,.14),rgba(233,180,76,.05));color:var(--ink);text-decoration:none}
+.calc-card b{color:var(--gold-soft)}
+.calc-card:hover{box-shadow:0 0 24px rgba(255,122,47,.25)}
+.calc-go{font:700 14px/1 var(--f-display);letter-spacing:.06em;color:var(--gold);white-space:nowrap}
+.calc-next{color:var(--muted);font-size:14px;margin:10px 2px 0}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="eyebrow">Talentsmith · for World of Warcraft: Forever</div>
-    <h1>Best Race for Every Class</h1>
-    <p class="lede">All 10 races, every racial ability with its current launch value, and our pick for each class on both factions. Launch: November 4, 2026.</p>
-    <span class="stamp">Values checked against Blizzard's notes up to Oct 27 and the Oct 30 hotfix data</span>
-  </header>
-
-  <section id="picker" aria-labelledby="pickH">
-    <h2 id="pickH">Pick your class</h2>
-    <div class="panel controls">
-      <div class="seg" role="group" aria-label="Faction">
-        <button type="button" data-fac="horde" aria-pressed="true">Horde</button>
-        <button type="button" data-fac="alliance" aria-pressed="false">Alliance</button>
-      </div>
-      <div class="chips" id="classChips" role="group" aria-label="Class"></div>
+<header class="hero">
+  <picture>
+    <source media="(max-width:640px)" srcset="img/hero-tall.webp">
+    <img src="img/hero-wide.webp" alt="Talentsmith logo: an anvil forging a glowing talent tree inside a stone ring" width="1254" height="617" fetchpriority="high">
+  </picture>
+  <div class="hero-text gut">
+    <h1 class="sr-only">Talentsmith – best race for every class in WoW Forever</h1>
+    <p class="kicker">Free tools for World of Warcraft: Forever</p>
+    <p class="lede">Find the best race for your class, with every racial ability at its current launch value. Re-forged after every patch.</p>
+    <div class="cta">
+      <a class="btn primary" href="#picker">Find your race</a>
+      <a class="btn ghost" href="calculator.html">Talent calculator</a>
+      <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support on Ko-fi</a>
     </div>
-    <div class="picks" id="picks"></div>
+    <p class="stamp">Values checked against Blizzard's notes up to <b>Oct 27</b> and the <b>Oct 30</b> hotfix data</p>
+  </div>
+</header>
+
+<main class="gut">
+  <section id="picker" class="wrap" aria-labelledby="pickH">
+    <div class="sec-head"><span class="gem"></span><h2 id="pickH">Best race for your class</h2></div>
+    <div class="factions" role="group" aria-label="Faction">
+      <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><span class="dot"></span>Horde</button>
+      <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><span class="dot"></span>Alliance</button>
+    </div>
+    <div class="classes" id="classBtns" role="group" aria-label="Class"></div>
+    <div class="picks" id="picks" aria-live="polite"></div>
   </section>
 
-  <section id="races" aria-labelledby="raceH">
-    <h2 id="raceH">All races & racials</h2>
+  <section id="calc" class="wrap" aria-labelledby="calcH">
+    <div class="sec-head"><span class="gem"></span><h2 id="calcH">Talent calculator</h2></div>
+    <a class="calc-card" href="calculator.html">
+      <span><b>Paladin – live now.</b> All three trees with the Oct 30 hotfix, a switch to compare against Blizzard's official notes, required level and shareable build links.</span>
+      <span class="calc-go">Open calculator →</span>
+    </a>
+    <p class="calc-next">More classes are added as their trees are confirmed.</p>
+  </section>
+
+  <section id="races" class="wrap" aria-labelledby="raceH">
+    <div class="sec-head"><span class="gem"></span><h2 id="raceH">Every race &amp; racial</h2></div>
+    <div class="filters" role="group" aria-label="Show races">
+      <button type="button" class="chip" data-show="all" aria-pressed="true">All races</button>
+      <button type="button" class="chip" data-show="horde" aria-pressed="false">Horde</button>
+      <button type="button" class="chip" data-show="alliance" aria-pressed="false">Alliance</button>
+    </div>
     <div class="races" id="raceGrid"></div>
   </section>
 
-  <section id="changes" aria-labelledby="chgH">
-    <h2 id="chgH">Latest racial changes</h2>
-    <div class="panel">
-      <ul class="log">
-        <li><b>Oct 27:</b> Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</li>
-        <li><b>Oct 26:</b> Human Ruthlessness 2% → 1% crit, The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer affects mounts), Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste; Leyline Reading 50% (100% while Attuned); Skysight 15% (30% while Charged).</li>
-        <li><b>Oct 15:</b> Weapon specializations replaced. Shatter Curse 15% → 5% and no immunity. War Stomp 90 sec. Troll Regeneration 20%. Touch of the Grave 20%/30% proc chance.</li>
-      </ul>
-    </div>
+  <section id="changes" class="wrap" aria-labelledby="chgH">
+    <div class="sec-head"><span class="gem"></span><h2 id="chgH">Latest racial changes</h2></div>
+    <ol class="log">
+      <li><time>Oct 27</time><p>Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</p></li>
+      <li><time>Oct 26</time><p>Human Ruthlessness 2% → 1% crit; The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer on mounts); Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste.</p></li>
+      <li><time>Oct 15</time><p>Weapon specializations replaced. Shatter Curse 15% → 5% with no immunity. War Stomp 90 sec. Troll Regeneration 20%. Touch of the Grave 20% / 30% proc chance.</p></li>
+    </ol>
   </section>
+</main>
 
-  <footer>
-    <p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps the forge burning and new tools coming.</p>
-    <p>Fan-made and not affiliated with Blizzard Entertainment. Racial values come from Blizzard's WoW Forever beta development notes and launch hotfix data; picks are our opinion. Something out of date? Values are re-checked after every patch.</p>
-  </footer>
-</div>
+<footer class="gut">
+  <div class="wrap">
+    <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a>
+    <p>Tips keep the forge burning and new tools coming – next up: talent calculators for every class.</p>
+    <p>Fan-made and not affiliated with Blizzard Entertainment. Racial values come from Blizzard's WoW Forever development notes and launch hotfix data; picks are our opinion.</p>
+  </div>
+</footer>
 
 <script>
 const H="horde", A="alliance";
@@ -196,38 +279,54 @@ const PICKS={
 };
 const byId=Object.fromEntries(RACES.map(r=>[r.id,r]));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let fac=H, cls="Warrior";
-try{ const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class"); }catch(e){}
 
-function renderChips(){
-  document.getElementById("classChips").innerHTML=CLASSES.map(c=>`<button type="button" class="chip" data-cls="${c}" aria-pressed="${c===cls}">${c}</button>`).join("");
+const CLASS_COLOR={Warrior:"#C69B6D",Paladin:"#F48CBA",Hunter:"#AAD372",Rogue:"#FFF468",Priest:"#F2F2F2",Shaman:"#2a8cf0",Mage:"#3FC7EB",Warlock:"#8788EE",Druid:"#FF7C0A"};
+/* Original line icons (not game art) */
+const ICON={
+ Warrior:'<path d="M4 20 14 10M20 20 10 10M14 10l5-6M10 10 5 4M3 17l4 4M21 17l-4 4"/>',
+ Paladin:'<path d="M13 3l8 8-3 3-8-8zM11.5 9.5 3 18l3 3 8.5-8.5"/>',
+ Hunter:'<path d="M7 3c8 3 8 15 0 18M7 3v18M4 12h16M17 9l3 3-3 3"/>',
+ Rogue:'<path d="M14 3l7 0-0 7-9 9-4-4zM8 15l-4 4 1 1 4-4M6 13l5 5"/>',
+ Priest:'<circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+ Shaman:'<path d="M13 2 5 14h6l-2 8 8-12h-6z"/>',
+ Mage:'<path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/>',
+ Warlock:'<path d="M12 22c-4 0-7-3-7-7 0-4 4-6 4-11 3 2 5 5 5 8 1-1 2-3 2-4 2 2 3 4 3 7 0 4-3 7-7 7z"/>',
+ Druid:'<path d="M5 19C5 10 11 5 20 5c0 9-5 15-14 15M5 19l8-8"/>'
+};
+const svg=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[c]}</svg>`;
+let fac=H, cls="Paladin", show="all";
+try{const q=new URLSearchParams(location.search); if(q.get("faction")===A) fac=A; if(CLASSES.includes(q.get("class"))) cls=q.get("class");}catch(e){}
+const playable=(f,c)=>RACES.some(r=>r.fac===f&&r.cls.some(x=>x.replace("*","")===c));
+function renderClasses(){
+  document.getElementById("classBtns").innerHTML=CLASSES.map(c=>{
+    const ok=playable(fac,c);
+    return `<button type="button" class="cls-btn" style="--c:${CLASS_COLOR[c]}" data-cls="${c}" aria-pressed="${c===cls}" ${ok?"":"disabled title=\"No "+(fac===H?"Horde":"Alliance")+" race can play "+c+"\""}><span class="ico">${svg(c)}</span>${c}</button>`;
+  }).join("");
 }
 function renderPicks(){
-  const list=PICKS[fac][cls]||[];
-  const labels=["Best pick","Also great","Situational"];
-  document.getElementById("picks").innerHTML=list.length?list.map(([id,why],i)=>{
-    const r=byId[id];
-    return `<article class="pick"><div class="rank">${labels[i]||"Option"}</div><h3>${esc(r.name)}</h3><p>${esc(why)}</p></article>`;
-  }).join(""):`<p class="empty">No ${fac==="horde"?"Horde":"Alliance"} race can play ${cls}.</p>`;
+  const list=PICKS[fac][cls]||[], labels=["Best pick","Also great","Situational"];
+  document.getElementById("picks").innerHTML=list.length?list.map(([id,why],i)=>`<article class="pick r${Math.min(i,2)}"><span class="medal" aria-hidden="true"></span><div class="rank">${labels[i]||"Option"}</div><h3>${esc(byId[id].name)}</h3><p>${esc(why)}</p></article>`).join("")
+    :`<p class="empty">No ${fac===H?"Horde":"Alliance"} race can play ${cls}.</p>`;
 }
 function renderRaces(){
-  document.getElementById("raceGrid").innerHTML=RACES.map(r=>`<article class="race" id="${r.id}">
-    <h3>${esc(r.name)}<span class="fac ${r.fac}">${r.fac}</span></h3>
-    <div class="cls">${r.cls.map(c=>c.endsWith("*")?`<span class="new" title="New in Forever">${esc(c.slice(0,-1))} · new</span>`:`<span>${esc(c)}</span>`).join("")}</div>
-    ${r.r.map(([n,t,d,note])=>`<div class="racial"><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div>`).join("")}
+  document.getElementById("raceGrid").innerHTML=RACES.filter(r=>show==="all"||r.fac===show).map(r=>`<article class="race" id="${r.id}" style="--fc:var(--${r.fac})">
+    <header><h3>${esc(r.name)}</h3><span class="tag-fac">${r.fac}</span></header>
+    <div class="cls-row">${r.cls.map(x=>{const c=x.replace("*","");return `<span class="mini${x.endsWith("*")?" new":""}" style="--c:${CLASS_COLOR[c]}" title="${x.endsWith("*")?"New in Forever":""}">${svg(c)}${esc(c)}</span>`}).join("")}</div>
+    ${r.r.map(([n,t,d,note])=>`<div class="racial"><span class="r-ico ${t==="Active"?"active":""}" aria-hidden="true"></span><div><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div></div>`).join("")}
   </article>`).join("");
 }
 function sync(){
-  document.querySelectorAll("[data-fac]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fac===fac));
-  document.querySelectorAll("[data-cls]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.cls===cls));
-  renderPicks();
-  try{ history.replaceState(null,"",`?faction=${fac}&class=${cls}`); }catch(e){}
+  if(!playable(fac,cls)) cls=CLASSES.find(c=>playable(fac,c));
+  document.querySelectorAll(".fac-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fac===fac));
+  renderClasses(); renderPicks();
+  try{history.replaceState(null,"",`?faction=${fac}&class=${cls}`+location.hash);}catch(e){}
 }
 document.addEventListener("click",e=>{
-  const f=e.target.closest("[data-fac]"); if(f){fac=f.dataset.fac;sync();return;}
-  const c=e.target.closest("[data-cls]"); if(c){cls=c.dataset.cls;sync();}
+  const f=e.target.closest(".fac-btn"); if(f){fac=f.dataset.fac;sync();return;}
+  const c=e.target.closest(".cls-btn"); if(c&&!c.disabled){cls=c.dataset.cls;sync();return;}
+  const s=e.target.closest("[data-show]"); if(s){show=s.dataset.show;document.querySelectorAll("[data-show]").forEach(b=>b.setAttribute("aria-pressed",b===s));renderRaces();}
 });
-renderChips(); renderRaces(); sync();
+renderRaces(); sync();
 </script>
 </body>
 </html>

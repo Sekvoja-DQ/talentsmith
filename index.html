@@ -156,13 +156,10 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .cls-btn>*{position:relative;z-index:1}
 .cls-btn::before{content:"";position:absolute;inset:-20% -10% 0;z-index:0;pointer-events:none;opacity:.55;transition:opacity .2s}
 .classes[data-fac="horde"] .cls-btn::before{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.045 0.011' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 0.22  0 0 0 0 0.05  0 0 0 3 -1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23f%29'/%3E%3C/svg%3E") 0 0/110px 150px repeat,radial-gradient(ellipse 90% 70% at 50% 112%,rgba(255,80,30,.85),rgba(220,50,35,.35) 50%,transparent 78%);
-  -webkit-mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%);mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%);animation:rise 4s linear infinite}
+  -webkit-mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%);mask:linear-gradient(to top,#000 0%,rgba(0,0,0,.7) 40%,transparent 92%)}
 .classes[data-fac="alliance"] .cls-btn::before{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.010 0.016' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.68  0 0 0 0 1  0 0 0 2.6 -0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23s%29'/%3E%3C/svg%3E") 0 0/200px 200px repeat,radial-gradient(ellipse 95% 75% at 50% 105%,rgba(80,140,240,.65),rgba(76,130,219,.2) 55%,transparent 82%);
-  -webkit-mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%);mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%);animation:drift 12s linear infinite}
-.cls-btn::before{opacity:.8}.cls-btn:hover::before{opacity:.95}.cls-btn[aria-pressed="true"]::before{opacity:1}
-@keyframes rise{to{background-position:0 -150px,0 0}}
-@keyframes drift{to{background-position:200px -40px,0 0}}
-@media (prefers-reduced-motion:reduce){.cls-btn::before{animation:none}}
+  -webkit-mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%);mask:radial-gradient(ellipse 90% 95% at 50% 70%,#000 35%,transparent 90%)}
+.cls-btn::before{opacity:.56}.cls-btn:hover::before{opacity:.66}.cls-btn[aria-pressed="true"]::before{opacity:.7}
 </style>
 </head>
 <body>
@@ -202,11 +199,15 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 
   <section id="calc" class="wrap" aria-labelledby="calcH">
     <div class="sec-head"><span class="gem"></span><h2 id="calcH">Talent calculator</h2></div>
-    <a class="calc-card" href="calculator.html">
-      <span><b>Paladin – live now.</b> All three trees with the Oct 30 hotfix, a switch to compare against Blizzard's official notes, required level and shareable build links.</span>
-      <span class="calc-go">Open calculator →</span>
+    <a class="calc-card" href="calculator.html?c=paladin">
+      <span><b>Paladin</b> – all three trees with the Oct 30 hotfix, a switch to compare against Blizzard's official notes, required level and shareable build links.</span>
+      <span class="calc-go">Open Paladin →</span>
     </a>
-    <p class="calc-next">More classes are added as their trees are confirmed.</p>
+    <a class="calc-card" href="calculator.html?c=rogue" style="margin-top:10px">
+      <span><b>Rogue – new.</b> Mutilate, Venom, Puncturing Wounds, Hack and Slash, Hemorrhage and Thousand Cuts, at max-rank values.</span>
+      <span class="calc-go">Open Rogue →</span>
+    </a>
+    <p class="calc-next">Next up: Hunter. More classes are added as their trees are confirmed.</p>
   </section>
 
   <section id="races" class="wrap" aria-labelledby="raceH">
@@ -222,6 +223,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <section id="changes" class="wrap" aria-labelledby="chgH">
     <div class="sec-head"><span class="gem"></span><h2 id="chgH">Latest racial changes</h2></div>
     <ol class="log">
+      <li><time>Nov 1</time><p>Rogue talent calculator added. No new racial or class changes since the Oct 30 hotfix (checked Nov 1).</p></li>
       <li><time>Oct 30</time><p>Hotfix data: Skyborne Skysight lasts 30 sec and Charged / Attuned 15 min – Blizzard's Oct 26 post said 15 sec and 1 hour. We show both until it's settled.</p></li>
       <li><time>Oct 27</time><p>Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</p></li>
       <li><time>Oct 26</time><p>Human Ruthlessness 2% → 1% crit; The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer on mounts); Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste.</p></li>

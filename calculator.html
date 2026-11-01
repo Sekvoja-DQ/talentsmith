@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Talentsmith – WoW Forever Paladin Talent Calculator (Official vs Hotfix)</title>
-<meta name="description" content="WoW Forever Paladin talent calculator with the latest Oct 30 hotfix tree, an Official vs Hotfix switch, level requirements and shareable build links.">
+<title>Talentsmith – WoW Forever Talent Calculator (Paladin, Rogue)</title>
+<meta name="description" content="WoW Forever talent calculator for Paladin and Rogue: the Oct 30 trees, an Official vs Hotfix switch, level requirements and shareable build links.">
 <meta property="og:title" content="Talentsmith – WoW Forever Talent Calculator">
 <meta property="og:image" content="img/og.jpg">
 <meta name="theme-color" content="#0b0e15">
@@ -45,7 +45,7 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .note{font-size:14px;color:var(--muted);margin:10px 2px 0}
 .note b{color:var(--ember)}
 .trees{display:grid;grid-template-columns:repeat(3,minmax(300px,1fr));gap:14px;margin-top:16px;overflow-x:auto;padding-bottom:6px}
-.tree{background:linear-gradient(180deg,var(--plate-2),var(--plate));border:1px solid var(--edge);border-radius:10px;padding:12px 12px 16px;min-width:300px}
+.tree{background:linear-gradient(180deg,rgba(11,14,21,.45),rgba(11,14,21,.72)),var(--bg,none) center top/cover no-repeat,var(--plate);border:1px solid var(--edge);border-radius:10px;padding:12px 12px 16px;min-width:300px}
 .tree-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .tree-h h2{margin:0;font:800 18px/1 var(--f-display);color:var(--gold-soft)}
 .tree-h span{font:700 15px/1 var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums}
@@ -76,6 +76,11 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .pm{display:flex;gap:6px}
 .pm button{width:40px;height:40px;border-radius:8px;border:1px solid var(--gold);background:rgba(233,180,76,.08);color:var(--gold);font:700 20px/1 var(--f-body);cursor:pointer}
 .pm button:disabled{opacity:.35;cursor:not-allowed}
+.cls{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.cls a{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border:1px solid var(--edge);border-radius:999px;background:var(--plate);color:var(--muted);text-decoration:none;font:700 14px/1 var(--f-display);letter-spacing:.04em}
+.cls a img{width:26px;height:26px;border-radius:50%}
+.cls a[aria-current="page"]{border-color:var(--gold);color:var(--gold-soft);background:rgba(233,180,76,.1)}
+.cls a.soon{opacity:.45;pointer-events:none}
 .help{color:var(--muted);font-size:14px;margin:12px 2px 0}
 footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;color:var(--muted);font-size:14px;text-align:center}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#24170a;font-weight:700;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
@@ -93,8 +98,9 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
     <nav><a href="./#picker">Race picker</a><a href="./#races">Racials</a><a href="https://ko-fi.com/talentsmith" rel="noopener">Ko-fi</a></nav>
   </header>
 
-  <h1>Paladin Talent Calculator</h1>
-  <p class="lede">The WoW Forever Paladin trees as of the Oct 30 hotfix. Switch between Blizzard's last official notes and the newer hotfix values to see what changed. More classes are being added.</p>
+  <h1 id="h1">Paladin Talent Calculator</h1>
+  <nav class="cls" id="cls" aria-label="Class"></nav>
+  <p class="lede" id="lede">The WoW Forever Paladin trees as of the Oct 30 hotfix. Switch between Blizzard's last official notes and the newer hotfix values to see what changed. More classes are being added.</p>
 
   <div class="bar" role="region" aria-label="Build summary">
     <div class="seg" role="group" aria-label="Values">
@@ -109,7 +115,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <button type="button" class="btn" id="reset">Reset</button>
     </div>
   </div>
-  <p class="note"><span style="color:var(--ember)">●</span> marks talents that are new or changed in the Oct 30 hotfix. Blizzard posted no notes for that hotfix; the values come from game data via <a href="https://foreverchanges.pro/patch-notes#class-paladin" rel="noopener">foreverchanges.pro</a>, so treat them as <b>unofficial</b>.</p>
+  <p class="note" id="note"><span style="color:var(--ember)">●</span> marks talents that are new or changed in the Oct 30 hotfix. Blizzard posted no notes for that hotfix; the values come from game data via <a href="https://foreverchanges.pro/patch-notes#class-paladin" rel="noopener">foreverchanges.pro</a>, so treat them as <b>unofficial</b>.</p>
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
@@ -120,14 +126,14 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 </div>
 <footer class="gut"><div class="wrap">
   <p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps the forge burning and new calculators coming.</p>
-  <p>Fan-made, not affiliated with Blizzard Entertainment. Talent positions come from the Oct 30 client data; descriptions are summarized in our own words, and "details pending" means the exact numbers aren't published yet. Talent icons match the game data (cross-checked with foreverchanges.pro).</p>
-  <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p>
+  <p>Fan-made, not affiliated with Blizzard Entertainment. Paladin positions come from the Oct 30 client data; Rogue tiers, ranks and requirements come from the Oct 30 talent data, with positions inside a row approximate; descriptions are summarized in our own words, and "details pending" means the exact numbers aren't published yet. Talent icons match the game data (cross-checked with foreverchanges.pro).</p>
+  <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons and talent backgrounds © Blizzard Entertainment, Inc.</p>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 /* [name, max, row, col, requires, official text, hotfix text (null = same as official), changedInHotfix] */
-const TREES=[
+const PALADIN=[
 {name:"Holy",t:[
  ["Spiritual Focus",5,1,2,null,"Reduces how much taking damage delays your Holy spells. Up to 70% less at 5 ranks.",null,true],
  ["Divine Strength",5,1,3,null,"Increases your Strength.",null,false],
@@ -185,10 +191,88 @@ const TREES=[
  ["Champion of the Light",5,6,3,null,"Gain spell damage equal to up to 60% of your Intellect (3 ranks).","Gain spell damage equal to up to 60% of your Intellect, and Hammer of Wrath casts up to 1 sec faster. Now 5 ranks.",true],
  ["Unsealed Wrath",1,7,2,"Repentance","Not in the official notes (replaces Twist of Light).","Melee attacks store your active Seal for 15 sec, up to 3 times. Attacking with a different Seal spends the stored stacks.",true]
 ]}];
+const ROGUE=[
+{name:"Assassination",t:[
+ ["Improved Gouge",3,1,1,null,"Gouge lasts up to 1.5 sec longer.",null,false],
+ ["Remorseless Attacks",2,1,2,null,"After you kill an enemy that gives experience or honor, your next Sinister Strike, Backstab, Ambush, Mutilate or Ghostly Strike gets up to +40% crit chance (20 sec).",null,false],
+ ["Malice",5,1,3,null,"Up to +5% crit chance with all attacks and poisons.",null,false],
+ ["Ruthlessness",3,2,1,null,"Finishing moves have up to a 60% chance to put a combo point on the target.",null,false],
+ ["Murder",2,2,2,null,"Up to 4% more damage to Humanoids and Giants.",null,false],
+ ["Improved Slice and Dice",3,2,3,null,"Slice and Dice lasts up to 45% longer.",null,false],
+ ["Relentless Strikes",1,3,1,null,"Each combo point spent on a finishing move gives a 20% chance to get 25 Energy back.",null,false],
+ ["Improved Expose Armor",2,3,2,null,"Expose Armor costs up to 10 less Energy and, at 5 combo points, gives up to 2 combo points back.",null,false],
+ ["Lethality",5,3,3,"Malice","Up to +20% critical damage bonus on Sinister Strike, Gouge, Backstab, Mutilate, Ghostly Strike and Hemorrhage.",null,false],
+ ["Vile Poisons",5,4,1,null,"Poisons deal up to 20% more damage and get up to +40% chance to resist dispels. Moved to column 1.",null,false],
+ ["Cold Blood",1,4,2,null,"Your next Sinister Strike, Backstab, Ambush, Eviscerate or Mutilate is a guaranteed crit. 3 min cooldown. Spent when Mutilate crits.",null,false],
+ ["Improved Poisons",5,4,3,null,"Up to +10% chance to apply poisons, and up to a 50% chance an application doesn't use a charge.",null,false],
+ ["Vigor",2,5,1,null,"Up to +10 maximum Energy.",null,false],
+ ["Mutilate",1,5,2,null,"Dagger attack with both weapons: 75% weapon damage plus a flat bonus per weapon (17 in Blizzard's Rogue overview and the Oct 30 data; an older beta tooltip showed 13). 20% more damage to poisoned targets. 2 combo points.",null,false],
+ ["Improved Kidney Shot",2,5,3,null,"Targets stunned by your Kidney Shot take up to 10% more damage from your attacks and poisons.",null,false],
+ ["Seal Fate",5,6,3,null,"Crits from combo-point abilities have up to a 100% chance to add an extra combo point. No longer needs Cold Blood.",null,false],
+ ["Venom",1,7,2,"Mutilate","Finishing move: poisons deal 30% more damage and apply 10% more often. Lasts 9–21 sec depending on combo points. 25 Energy.",null,false]
+]},
+{name:"Combat",t:[
+ ["Improved Eviscerate",3,1,1,null,"Eviscerate deals up to 20% more damage.",null,false],
+ ["Improved Sinister Strike",2,1,2,null,"Sinister Strike costs up to 5 less Energy.",null,false],
+ ["Lightning Reflexes",5,1,3,null,"Up to +5% dodge.",null,false],
+ ["Puncturing Wounds",3,2,1,null,"Backstab up to +30% crit chance, Mutilate up to +15%, and Backstab has up to a 45% chance to add an extra combo point.",null,false],
+ ["Deflection",3,2,2,null,"Up to +6% parry.",null,false],
+ ["Precision",3,2,3,null,"Up to +3% hit chance.",null,false],
+ ["Endurance",2,3,1,null,"Sprint and Evasion cooldowns up to 60% shorter.",null,false],
+ ["Riposte",1,3,2,"Deflection","After you parry: a strike for 150% weapon damage that disarms the target for 6 sec.",null,false],
+ ["Improved Sprint",2,3,3,null,"Sprint has up to a 100% chance to remove movement-slowing effects.",null,false],
+ ["Improved Kick",2,4,1,null,"Kick has up to a 100% chance to silence for 2 sec.",null,false],
+ ["Flawless Execution",1,4,2,null,"Eviscerate costs 10 less Energy.",null,false],
+ ["Dual Wield Specialization",5,4,3,"Precision","Off-hand damage up to +25%.",null,false],
+ ["Blade Flurry",1,5,1,null,"For 15 sec: +20% melee attack speed and your hits also strike a nearby enemy. 2 min cooldown.",null,false],
+ ["Hack and Slash",5,5,3,null,"By weapon type, up to: Axe/Sword 5% chance for an extra attack, Dagger/Fist +5% crit, Mace ignores 15% armor.",null,false],
+ ["Weapon Expertise",2,6,1,"Blade Flurry","Your attacks are up to 2% less likely to be dodged or parried.",null,false],
+ ["Aggression",3,6,3,null,"Sinister Strike, Backstab and Eviscerate deal up to 6% more damage.",null,false],
+ ["Adrenaline Rush",1,7,2,null,"Doubles Energy regeneration for 15 sec. 5 min cooldown.",null,false]
+]},
+{name:"Subtlety",t:[
+ ["Camouflage",5,1,1,null,"Stealth slows you up to 15% less and its cooldown is up to 6 sec shorter.",null,false],
+ ["Master of Deception",3,1,2,null,"Enemies detect you in Stealth as if you were up to 3 levels higher.",null,false],
+ ["Opportunity",2,1,3,null,"Backstab, Garrote, Ambush and Mutilate deal up to 10% more damage.",null,false],
+ ["Setup",3,2,1,null,"Up to a 100% chance to gain a combo point when you dodge an attack or fully resist a spell.",null,false],
+ ["Elusiveness",2,2,2,null,"Vanish and Blind cooldowns up to 90 sec shorter.",null,false],
+ ["Dirty Tricks",2,2,3,null,"Sap and Blind cost up to 50% less Energy.",null,false],
+ ["Improved Ambush",3,2,4,null,"Ambush up to +45% crit chance. Moved up from row 3.",null,false],
+ ["Initiative",3,3,1,null,"Ambush, Garrote and Cheap Shot have up to a 100% chance to add an extra combo point.",null,false],
+ ["Ghostly Strike",1,3,2,null,"125% weapon damage (180% with a main-hand dagger) and +15% dodge for 7 sec. 1 combo point, 40 Energy, 20 sec cooldown.",null,false],
+ ["Improved Distract",2,3,3,null,"Distract radius up to +5 yd; distracted enemies spot you in Stealth as if they were up to 2 levels lower.",null,false],
+ ["Heightened Senses",2,4,1,null,"See stealth as if up to 3 levels higher, and up to 4% less likely to be hit by spells and ranged attacks.",null,false],
+ ["Premeditation",1,4,2,null,"Adds 2 combo points to a target from Stealth; use them within 20 sec. 2 min cooldown. No longer needs Preparation.",null,false],
+ ["Serrated Blades",3,4,3,null,"Attacks ignore up to 9% of target armor and Rupture deals up to 30% more damage.",null,false],
+ ["Dirty Deeds",2,5,1,null,"Cheap Shot and Garrote cost up to 20 less Energy, and Garrote works from the front. Moved to column 1.",null,false],
+ ["Preparation",1,5,2,null,"Finishes the cooldown of your other Rogue abilities. 10 min cooldown.",null,false],
+ ["Hemorrhage",1,5,3,"Serrated Blades","100% weapon damage (145% with a dagger); the target takes 15% more Rupture damage from you for 15 sec. 1 combo point, 35 Energy.",null,false],
+ ["Quietus",5,6,1,"Dirty Deeds","Sinister Strike, Ghostly Strike and Hemorrhage deal up to 10% more damage to targets under 35% health.",null,false],
+ ["Cutthroat",5,6,3,null,"Backstab has up to a 15% chance to let your next Ambush within 10 sec be used without Stealth.",null,false],
+ ["Thousand Cuts",1,7,2,"Preparation","Each Rupture tick makes your next Backstab or Hemorrhage within 10 sec cost 3 less Energy, stacking up to 5 times.",null,false]
+]}];
+const CLASSES={
+ paladin:{name:"Paladin",trees:PALADIN,
+  lede:"The WoW Forever Paladin trees as of the Oct 30 hotfix. Switch between Blizzard's last official notes and the newer hotfix values to see what changed.",
+  note:'<span style="color:var(--ember)">●</span> marks talents that are new or changed in the Oct 30 hotfix. Blizzard posted no notes for that hotfix; the values come from game data via <a href="https://foreverchanges.pro/patch-notes#class-paladin" rel="noopener">foreverchanges.pro</a>, so treat them as <b>unofficial</b>.'},
+ rogue:{name:"Rogue",trees:ROGUE,
+  lede:"The WoW Forever Rogue trees (Oct 30 build): Mutilate and Venom in Assassination, Puncturing Wounds and Hack and Slash in Combat, Hemorrhage and Thousand Cuts in Subtlety. Values shown at max rank.",
+  note:'The Oct 30 hotfix changed no Rogue talents, so Official and Hotfix show the same values. Tiers, ranks and arrows are confirmed from the talent data (<a href="https://foreverchanges.pro/talents/rogue" rel="noopener">foreverchanges.pro</a>, cross-checked with talentsforever.com); <b>the left-to-right order inside a row is approximate</b> where no source gives it.'}};
+const SOON=["Hunter","Priest","Shaman","Warlock","Warrior","Mage","Druid"];
+let cls="paladin",TREES=PALADIN;
 const MAXP=51;
 const TICON={"Spiritual Focus":"paladin-spiritual-focus","Divine Strength":"paladin-divine-strength","Healing Light":"paladin-healing-light","Reverence":"paladin-reverence","Improved Seals":"paladin-improved-seals","Purifying Power":"paladin-purifying-power","Divine Favor":"paladin-divine-favor","Illumination":"paladin-illumination","Holy Conduit":"paladin-holy-conduit","Divine Precision":"paladin-divine-precision","Infusion of Light":"paladin-infusion-of-light","Oath of Light":"paladin-oath-of-light","Consecrated Ground":"paladin-consecrated-ground","Holy Shock":"paladin-holy-shock","Boundless Light":"paladin-boundless-light","Holy Power":"paladin-holy-power","Light's Vigil":"paladin-light-s-vigil","Redoubt":"paladin-redoubt","Precision":"paladin-precision","Guardian's Favor":"paladin-guardian-s-favor","Sacred Duty":"paladin-sacred-duty","Templar's Bulwark":"paladin-templar-s-bulwark","Improved Hammer of Justice":"paladin-improved-hammer-of-justice","Shield Specialization":"paladin-shield-specialization","Toughness":"paladin-toughness","Swift Judgement":"paladin-swift-judgement","Improved Righteous Fury":"paladin-improved-righteous-fury","Anticipation":"paladin-anticipation","Stoicism":"paladin-stoicism","Holy Shield":"paladin-holy-shield","Reckoning":"paladin-reckoning","Iron Creed":"paladin-iron-creed","Shieldsworn":"paladin-shieldsworn","Deflection":"paladin-deflection","Benediction":"paladin-benediction","Improved Judgement":"paladin-improved-judgement","Conviction":"paladin-conviction","Sanctified Judgement":"paladin-sanctified-judgement","Vindication":"paladin-vindication","Unyielding Faith":"paladin-unyielding-faith","Seal of Command":"paladin-seal-of-command","Pursuit of Justice":"paladin-pursuit-of-justice","Eye for an Eye":"paladin-eye-for-an-eye","Sacred Arbiter":"paladin-sacred-arbiter","Two-Handed Weapon Specialization":"paladin-two-handed-weapon-specialization","Turn Evil":"paladin-turn-evil","Repentance":"paladin-repentance","Vengeance":"paladin-vengeance","Champion of the Light":"paladin-champion-of-the-light","Unsealed Wrath":"paladin-unsealed-wrath","Divine Intellect":"paladin-divine-intellect"};
-let pts=TREES.map(t=>t.t.map(()=>0)), mode="hot", sel=null;
-const byName=TREES.map(t=>Object.fromEntries(t.t.map((x,i)=>[x[0],i])));
+let pts, mode="hot", sel=null, byName;
+const BGMAP={retribution:"combat",elemental:"elementalcombat",affliction:"curses",demonology:"summoning",feral:"feralcombat"};
+const treeBg=n=>{const k=n.toLowerCase().replace(/[^a-z]/g,"");return cls+(BGMAP[k]||k);};
+const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const icon=n=>(cls==="paladin"&&TICON[n])||cls+"-"+slug(n);
+function setClass(c){cls=CLASSES[c]?c:"paladin";TREES=CLASSES[cls].trees;pts=TREES.map(t=>t.t.map(()=>0));sel=null;
+  byName=TREES.map(t=>Object.fromEntries(t.t.map((x,i)=>[x[0],i])));
+  const C=CLASSES[cls];document.getElementById("h1").textContent=C.name+" Talent Calculator";
+  document.getElementById("lede").textContent=C.lede;document.getElementById("note").innerHTML=C.note;
+  document.title="Talentsmith – WoW Forever "+C.name+" Talent Calculator";
+  document.getElementById("cls").innerHTML=Object.entries(CLASSES).map(([k,v])=>`<a href="?c=${k}" data-cls="${k}" ${k===cls?'aria-current="page"':""}><img src="img/icons/class-${k}.webp" alt="">${v.name}</a>`).join("")+SOON.map(n=>`<a class="soon" aria-disabled="true" title="Coming soon"><img src="img/icons/class-${n.toLowerCase()}.webp" alt="">${n}</a>`).join("");}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const treeSum=ti=>pts[ti].reduce((a,b)=>a+b,0);
 const total=()=>pts.reduce((a,p)=>a+p.reduce((x,y)=>x+y,0),0);
@@ -208,8 +292,8 @@ function nodeState(ti,i){const x=TREES[ti].t[i],p=pts[ti][i];
   if(p>=x[1]) return "max"; if(p>0) return "some";
   return canAdd(ti,i)||(total()>=MAXP&&pointsAbove(ti,x[2])>=(x[2]-1)*5)?"open":"locked";}
 function render(){
-  document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts <button type="button" data-clear="${ti}">clear</button></span></div>
-    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${TICON[x[0]]}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed in the Oct 30 hotfix"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
+  document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree" style="--bg:url(img/trees/${treeBg(tr.name)}.webp)"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts <button type="button" data-clear="${ti}">clear</button></span></div>
+    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${icon(x[0])}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed in the Oct 30 hotfix"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
   requestAnimationFrame(drawLinks);
   const t=total(); document.querySelector("#spent b").textContent=t;
   document.querySelector("#lvl b").textContent=t?t+9:10;
@@ -231,12 +315,13 @@ function renderDetail(){const d=document.getElementById("detail");
     ${x[6]&&mode==="hot"?`<p class="meta">Official: ${esc(x[5])}</p>`:""}${x[6]&&mode==="off"?`<p class="meta">Hotfix: ${esc(x[6])}</p>`:""}`;}
 /* share: one digit per talent, trees joined with "-" */
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
-function saveURL(){try{history.replaceState(null,"","?b="+code()+"&v="+mode);}catch(e){}}
-function load(){try{const q=new URLSearchParams(location.search);if(q.get("v")==="off") mode="off";
+function saveURL(){try{history.replaceState(null,"","?c="+cls+"&b="+code()+"&v="+mode);}catch(e){}}
+function load(){try{const q=new URLSearchParams(location.search);setClass(q.get("c")||"paladin");if(q.get("v")==="off") mode="off";
   const b=(q.get("b")||"").split("-"); b.forEach((s,ti)=>{if(!TREES[ti]) return;[...s].forEach((c,i)=>{if(i<TREES[ti].t.length) pts[ti][i]=Math.min(+c||0,TREES[ti].t[i][1]);});});
   if(total()>MAXP) pts=TREES.map(t=>t.t.map(()=>0));}catch(e){}}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800);}
 document.addEventListener("click",e=>{
+  const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); render(); window.scrollTo({top:0});} return;}
   const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; if(canAdd(ti,i)) pts[ti][i]++; render(); return;}
   if(e.target.id==="plus"&&sel){if(canAdd(...sel)) pts[sel[0]][sel[1]]++; render(); return;}
   if(e.target.id==="minus"&&sel){if(canRemove(...sel)) pts[sel[0]][sel[1]]--; render(); return;}
@@ -248,7 +333,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; if(canRemove(ti,i)) pts[ti][i]--; render();});
 function fallback(url){const w=document.getElementById("copyWrap"),b=document.getElementById("copyBox");b.value=url;w.hidden=false;b.select();}
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
-load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();
+setClass("paladin"); load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();
 </script>
 </body>
 </html>

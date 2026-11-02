@@ -53,5 +53,14 @@ module.exports=[
 [2,"Heart of the Wild",5],[2,"Naturalist",5],[2,"Natural Shapeshifter",3],[2,"Gift of Nature",5],[2,"Nature's Focus",2]]],
 ["druid","resto-raid","Restoration healer","Endgame","Swiftmend, Bloom, Nature's Swiftness and Wild Growth; Balance for Genesis and longer HoTs.",[
 [2,"Heart of the Wild",5],[2,"Reflection",3],[2,"Naturalist",5],[2,"Gift of Nature",5],[2,"Bloom",1],[2,"Improved Rejuvenation",3],[2,"Swiftmend",1],[2,"Tranquil Spirit",2],[2,"Nature's Swiftness",1],[2,"Living Spirit",3],[2,"Improved Regrowth",5],[2,"Wild Growth",1],
-[0,"Genesis",5],[0,"Moonglow",3],[0,"Nature's Majesty",2],[0,"Nature's Splendor",1],[0,"Improved Wrath",4],[0,"Insect Swarm",1]]]
+[0,"Genesis",5],[0,"Moonglow",3],[0,"Nature's Majesty",2],[0,"Nature's Splendor",1],[0,"Improved Wrath",4],[0,"Insect Swarm",1]]],
+["priest","smite-leveling","Smite (Holy) leveling","Leveling","Holy Specialization, Divine Fury and Searing Light speed up and strengthen Smite and Holy Fire; Discipline adds Power in Light, Mental Strength and Inner Focus. Opinion build, not benchmarked.",[
+[1,"Holy Specialization",5],[1,"Divine Fury",5],[1,"Spell Warding",5],[1,"Searing Light",2],[1,"Holy Reach",2],[1,"Improved Healing",3],[1,"Litany of Light",2],[1,"Spirit of Redemption",1],[1,"Spiritual Guidance",5],
+[0,"Power in Light",5],[0,"Twin Disciplines",5],[0,"Mental Strength",5],[0,"Meditation",3],[0,"Inner Focus",1],[0,"Mental Agility",2]]],
+["paladin","shockadin-leveling","Shockadin (Holy/Retribution)","Leveling","Holy Shock, Illumination and Divine Strength with a Retribution splash for Seal of Command and Sanctified Judgement. Opinion build, not benchmarked.",[
+[0,"Divine Strength",5],[0,"Reverence",2],[0,"Improved Seals",5],[0,"Illumination",5],[0,"Holy Conduit",2],[0,"Divine Favor",1],[0,"Divine Precision",2],[0,"Infusion of Light",2],[0,"Oath of Light",1],[0,"Holy Shock",1],[0,"Consecrated Ground",2],[0,"Boundless Light",2],
+[2,"Benediction",5],[2,"Conviction",3],[2,"Improved Judgement",2],[2,"Vindication",3],[2,"Seal of Command",1],[2,"Sanctified Judgement",3],[2,"Pursuit of Justice",1],[2,"Sacred Arbiter",1],[2,"Eye for an Eye",2]]],
+["druid","bear-tank","Bear tank","Endgame","Feral Instinct, Thick Hide, Lacerate and Natural Reaction for threat and survival; Restoration for Heart of the Wild, Naturalist and Gift of Nature. Opinion build, not benchmarked.",[
+[1,"Ferocity",5],[1,"Feral Instinct",3],[1,"Thick Hide",3],[1,"Feral Swiftness",2],[1,"Savage Fury",2],[1,"Feral Charge",1],[1,"Sharpened Claws",2],[1,"Lacerate",1],[1,"Blood Frenzy",2],[1,"Predatory Discipline",1],[1,"Leader of the Pack",1],[1,"Natural Instinct",2],[1,"Natural Reaction",5],[1,"Primal Bite",1],
+[2,"Heart of the Wild",5],[2,"Naturalist",5],[2,"Natural Shapeshifter",3],[2,"Gift of Nature",5],[2,"Subtlety",2]]]
 ];

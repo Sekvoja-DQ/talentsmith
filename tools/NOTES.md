@@ -6,7 +6,7 @@ Goal: useful free tools that grow search traffic; income via Ko-fi (ko-fi.com/ta
 ## Status (keep a dated log at the bottom)
 - Talent calculator for all 9 classes (`calculator.html`), Official vs Oct 30 hotfix switch, share links `?c=<class>&b=<digits per tree joined by ->&v=hot|off`.
 - Best-race picker + all racials (`index.html`): Faction → Class → Spec → Content (leveling / dungeons & raids / PvP); each racial scored 0–5 by `RULES`.
-- Class guides `classes/<class>.html`, 18 starter builds `builds/<class>-<id>.html`, hotfix tracker `changes.html`, `sitemap.xml`, `robots.txt` – all GENERATED.
+- Class guides `classes/<class>.html`, 21 starter builds `builds/<class>-<id>.html`, hotfix tracker `changes.html`, `sitemap.xml`, `robots.txt` – all GENERATED.
 
 ## How pages are generated
 - `node tools/gen-pages.js` reads talent data from `calculator.html` and race data/scores from `index.html`, builds from `tools/builds.js`, and writes classes/, builds/, changes.html, sitemap.xml, robots.txt.
@@ -33,10 +33,11 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 ## Roadmap
 1. Custom domain (owner is buying one; avoid "WoW" in it) – then CNAME + regenerate with SITE.
 2. "What changed vs Classic" page for talents/racials (talentsforever.com/export/<class>.json is CC BY 4.0).
-3. More builds for the most-searched specs (Shockadin, petless Survival, Smite Priest, Shaman tank, bear tank).
+3. More builds (done: Shockadin, Smite Priest, bear tank; still open: petless Survival, Shaman tank, Elemental, Balance, Prot Paladin/Warrior).
 4. Pre-raid BiS table per spec (short, hand-checked).
 5. Analytics (GoatCounter, needs owner sign-up) → popular builds; class tier list labelled as opinion.
 6. Legacy perks calculator if traffic justifies it.
 
 ## Log
 - 2026-11-02: all 9 calculators, class guides, 18 builds, hotfix tracker, sitemap, generator moved into tools/.
+- 2026-11-03: Merged update bundle. No talent changes found after the Oct 30 hotfix (foreverchanges.pro not reachable from the cloud session; WebSearch only). Added 3 builds (Smite priest, Shockadin, bear tank) → 21 builds, 34 pages. Playwright: no JS errors, no 404s, no horizontal scroll at 390px (images lazy-load).

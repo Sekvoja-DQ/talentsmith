@@ -127,6 +127,9 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .calc-card b{color:var(--gold-soft)}
 .calc-card:hover{box-shadow:0 0 24px rgba(255,122,47,.25)}
 .calc-go{font:700 14px/1 var(--f-display);letter-spacing:.06em;color:var(--gold);white-space:nowrap}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:10px}
+.calc-grid .calc-card{flex-wrap:nowrap;align-items:flex-start;justify-content:flex-start;gap:12px;padding:14px 16px}
+.calc-grid .calc-card img{width:36px;height:36px;border-radius:6px;flex:none}
 .calc-next{color:var(--muted);font-size:14px;margin:10px 2px 0}
 .step-lbl{font:700 12px/1 var(--f-display);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:4px 2px 8px}
 .builds,.ctx{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
@@ -199,15 +202,18 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 
   <section id="calc" class="wrap" aria-labelledby="calcH">
     <div class="sec-head"><span class="gem"></span><h2 id="calcH">Talent calculator</h2></div>
-    <a class="calc-card" href="calculator.html?c=paladin">
-      <span><b>Paladin</b> – all three trees with the Oct 30 hotfix, a switch to compare against Blizzard's official notes, required level and shareable build links.</span>
-      <span class="calc-go">Open Paladin →</span>
-    </a>
-    <a class="calc-card" href="calculator.html?c=rogue" style="margin-top:10px">
-      <span><b>Rogue – new.</b> Mutilate, Venom, Puncturing Wounds, Hack and Slash, Hemorrhage and Thousand Cuts, at max-rank values.</span>
-      <span class="calc-go">Open Rogue →</span>
-    </a>
-    <p class="calc-next">Next up: Hunter. More classes are added as their trees are confirmed.</p>
+    <p class="sub">All nine classes, each with the Oct 30 hotfix values, a switch to Blizzard's official notes, required level and shareable build links.</p>
+    <div class="calc-grid">
+      <a class="calc-card" href="calculator.html?c=paladin"><img src="img/icons/class-paladin.webp" alt="" width="36" height="36" loading="lazy"><span><b>Paladin</b> – Holy Shock, Oath of Light, Shieldsworn and Unsealed Wrath, with the Oct 30 hotfix switch.</span></a>
+      <a class="calc-card" href="calculator.html?c=warrior"><img src="img/icons/class-warrior.webp" alt="" width="36" height="36" loading="lazy"><span><b>Warrior</b> – Weaponmaster, Bloodthirst, Gore Drinker, Vanguard and Bastion.</span></a>
+      <a class="calc-card" href="calculator.html?c=hunter"><img src="img/icons/class-hunter.webp" alt="" width="36" height="36" loading="lazy"><span><b>Hunter</b> – Summon Hawk, Lone Wolf, Sniper Shot and petless Survival talents.</span></a>
+      <a class="calc-card" href="calculator.html?c=rogue"><img src="img/icons/class-rogue.webp" alt="" width="36" height="36" loading="lazy"><span><b>Rogue</b> – Mutilate, Venom, Hack and Slash, Hemorrhage and Thousand Cuts.</span></a>
+      <a class="calc-card" href="calculator.html?c=priest"><img src="img/icons/class-priest.webp" alt="" width="36" height="36" loading="lazy"><span><b>Priest</b> – Penance, Holy Binding, Prayer of Mending and Dark Inspiration.</span></a>
+      <a class="calc-card" href="calculator.html?c=shaman"><img src="img/icons/class-shaman.webp" alt="" width="36" height="36" loading="lazy"><span><b>Shaman</b> – Lava Burst, Maelstrom Weapon, Rage of the Farseer and Riptide.</span></a>
+      <a class="calc-card" href="calculator.html?c=mage"><img src="img/icons/class-mage.webp" alt="" width="36" height="36" loading="lazy"><span><b>Mage</b> – Arcane Blast, Heating Up, Ice Lance and the Oct 30 Frost changes.</span></a>
+      <a class="calc-card" href="calculator.html?c=warlock"><img src="img/icons/class-warlock.webp" alt="" width="36" height="36" loading="lazy"><span><b>Warlock</b> – Wrack, Soul Link, Demonic Pact, Bane of Havoc and Incinerate.</span></a>
+      <a class="calc-card" href="calculator.html?c=druid"><img src="img/icons/class-druid.webp" alt="" width="36" height="36" loading="lazy"><span><b>Druid</b> – Lacerate, Primal Bite, Bloom and Wild Growth after the big Oct 30 reshuffle.</span></a>
+    </div>
   </section>
 
   <section id="races" class="wrap" aria-labelledby="raceH">
@@ -223,7 +229,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <section id="changes" class="wrap" aria-labelledby="chgH">
     <div class="sec-head"><span class="gem"></span><h2 id="chgH">Latest racial changes</h2></div>
     <ol class="log">
-      <li><time>Nov 1</time><p>Rogue talent calculator added. No new racial or class changes since the Oct 30 hotfix (checked Nov 1).</p></li>
+      <li><time>Nov 2</time><p>Talent calculators for all nine classes are live: Priest, Shaman, Warlock, Warrior, Mage and Druid join Paladin, Rogue and Hunter. No new racial changes since the Oct 30 hotfix.</p></li>
+      <li><time>Nov 1</time><p>Rogue and Hunter talent calculators added. No new racial or class changes since the Oct 30 hotfix (checked Nov 1, 23:00 CET).</p></li>
       <li><time>Oct 30</time><p>Hotfix data: Skyborne Skysight lasts 30 sec and Charged / Attuned 15 min – Blizzard's Oct 26 post said 15 sec and 1 hour. We show both until it's settled.</p></li>
       <li><time>Oct 27</time><p>Orc Blood Fury cooldown 3 min → 2 min. Troll Berserking 10 sec → 15 sec. Undead Touch of the Grave internal cooldown 25 sec → 15 sec. Skyborne Charged and Attuned now persist through death but are removed on entering a raid.</p></li>
       <li><time>Oct 26</time><p>Human Ruthlessness 2% → 1% crit; The Human Spirit 5% → 10% Spirit. Dwarf Earth's Wrath removed, Artisan's Precision (+1% hit) added. Tauren Plainsrunning 2% per stack up to 60% (no longer on mounts); Endurance now 5% health only. Orc Savage removed, Command restored (+5% Hunter and Warlock pet damage). Skyborne Wind Blessed 3% → 2% haste.</p></li>
@@ -235,7 +242,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 <footer class="gut">
   <div class="wrap">
     <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a>
-    <p>Tips keep the forge burning and new tools coming – next up: talent calculators for every class.</p>
+    <p>Tips keep the forge burning and new tools coming – next up: class pages and build guides.</p>
     <p>Fan-made and not affiliated with Blizzard Entertainment. Racial values come from Blizzard's WoW Forever development notes and launch hotfix data; picks are our opinion.</p>
     <p class="legal">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons and portraits © Blizzard Entertainment, Inc.</p>
   </div>

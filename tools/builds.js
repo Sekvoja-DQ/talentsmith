@@ -62,5 +62,14 @@ module.exports=[
 [2,"Benediction",5],[2,"Conviction",3],[2,"Improved Judgement",2],[2,"Vindication",3],[2,"Seal of Command",1],[2,"Sanctified Judgement",3],[2,"Pursuit of Justice",1],[2,"Sacred Arbiter",1],[2,"Eye for an Eye",2]]],
 ["druid","bear-tank","Bear tank","Endgame","Feral Instinct, Thick Hide, Lacerate and Natural Reaction for threat and survival; Restoration for Heart of the Wild, Naturalist and Gift of Nature. Opinion build, not benchmarked.",[
 [1,"Ferocity",5],[1,"Feral Instinct",3],[1,"Thick Hide",3],[1,"Feral Swiftness",2],[1,"Savage Fury",2],[1,"Feral Charge",1],[1,"Sharpened Claws",2],[1,"Lacerate",1],[1,"Blood Frenzy",2],[1,"Predatory Discipline",1],[1,"Leader of the Pack",1],[1,"Natural Instinct",2],[1,"Natural Reaction",5],[1,"Primal Bite",1],
-[2,"Heart of the Wild",5],[2,"Naturalist",5],[2,"Natural Shapeshifter",3],[2,"Gift of Nature",5],[2,"Subtlety",2]]]
+[2,"Heart of the Wild",5],[2,"Naturalist",5],[2,"Natural Shapeshifter",3],[2,"Gift of Nature",5],[2,"Subtlety",2]]],
+["warrior","prot-tank","Protection tank","Endgame","Shield Slam, Concussion Blow and Last Stand with high threat and armor; six Arms points for Heroic Strike and Rend.",[
+[2,"Shield Specialization",5],[2,"Iron Will",5],[2,"Anticipation",5],[2,"Improved Revenge",3],[2,"Improved Thunder Clap",3],[2,"Master of Defense",2],[2,"Defiance",3],[2,"Last Stand",1],[2,"Improved Sunder Armor",3],[2,"Vanguard",1],[2,"Improved Shield Bash",2],[2,"Improved Shield Wall",2],[2,"Concussion Blow",1],[2,"Focused Rage",3],[2,"Bastion",5],[2,"Shield Slam",1],
+[0,"Improved Heroic Strike",3],[0,"Improved Rend",3]]],
+["shaman","ele-raid","Elemental caster","Endgame","The whole Elemental tree for Lightning Overload, Lava Burst and Elemental Mastery; five points in Restoration for cheaper heals.",[
+[0,"Convection",5],[0,"Concussion",5],[0,"Reverberation",5],[0,"Elemental Devastation",3],[0,"Elemental Alacrity",3],[0,"Call of Flame",3],[0,"Elemental Focus",1],[0,"Elemental Warding",3],[0,"Eye of the Storm",3],[0,"Trial by Fire",2],[0,"Earthbound",1],[0,"Elemental Reach",2],[0,"Lava Burst",1],[0,"Lightning Overload",3],[0,"Elemental Fury",5],[0,"Elemental Mastery",1],
+[2,"Tidal Focus",5]]],
+["druid","balance-raid","Balance (Moonkin)","Endgame","Moonfury, Vengeance and Starfire for big Arcane and Nature crits, ending in Moonkin Form; Nature's Focus from Restoration.",[
+[0,"Improved Wrath",5],[0,"Genesis",5],[0,"Moonglow",3],[0,"Improved Moonfire",2],[0,"Nature's Majesty",2],[0,"Nature's Reach",2],[0,"Improved Entangling Roots",3],[0,"Nature's Splendor",1],[0,"Insect Swarm",1],[0,"Vengeance",5],[0,"Improved Starfire",5],[0,"Overgrowth",2],[0,"Nature's Grace",1],[0,"Eclipse",3],[0,"Moonfury",5],[0,"Moonkin Form",1],
+[2,"Nature's Focus",5]]],
 ];

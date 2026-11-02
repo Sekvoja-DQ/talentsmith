@@ -33,7 +33,7 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 ## Roadmap
 1. Custom domain (owner is buying one; avoid "WoW" in it) – then CNAME + regenerate with SITE.
 2. "What changed vs Classic" page for talents/racials (talentsforever.com/export/<class>.json is CC BY 4.0).
-3. More builds (done: Shockadin, Smite Priest, bear tank; still open: petless Survival, Shaman tank, Elemental, Balance, Prot Paladin/Warrior).
+3. More builds (done: Shockadin, Smite Priest, bear tank, Prot Warrior, Elemental, Balance; still open: petless Survival, Shaman tank, Prot Paladin).
 4. Pre-raid BiS table per spec (short, hand-checked).
 5. Analytics (GoatCounter, needs owner sign-up) → popular builds; class tier list labelled as opinion.
 6. Legacy perks calculator if traffic justifies it.
@@ -41,3 +41,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 ## Log
 - 2026-11-02: all 9 calculators, class guides, 18 builds, hotfix tracker, sitemap, generator moved into tools/.
 - 2026-11-03: Merged update bundle. No talent changes found after the Oct 30 hotfix (foreverchanges.pro not reachable from the cloud session; WebSearch only). Added 3 builds (Smite priest, Shockadin, bear tank) → 21 builds, 34 pages. Playwright: no JS errors, no 404s, no horizontal scroll at 390px (images lazy-load).
+- 2026-11-04: foreverchanges.pro and talentsforever.com not resolvable from the cloud session (need allowing in network settings) – roadmap item 2 blocked; WebSearch shows no talent changes after the Oct 30 hotfix. Added Prot Warrior, Elemental Shaman, Balance Druid builds → 24 builds, 37 pages. Playwright: clean, no horizontal scroll at 390px.

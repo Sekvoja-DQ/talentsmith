@@ -72,4 +72,7 @@ module.exports=[
 ["druid","balance-raid","Balance (Moonkin)","Endgame","Moonfury, Vengeance and Starfire for big Arcane and Nature crits, ending in Moonkin Form; Nature's Focus from Restoration.",[
 [0,"Improved Wrath",5],[0,"Genesis",5],[0,"Moonglow",3],[0,"Improved Moonfire",2],[0,"Nature's Majesty",2],[0,"Nature's Reach",2],[0,"Improved Entangling Roots",3],[0,"Nature's Splendor",1],[0,"Insect Swarm",1],[0,"Vengeance",5],[0,"Improved Starfire",5],[0,"Overgrowth",2],[0,"Nature's Grace",1],[0,"Eclipse",3],[0,"Moonfury",5],[0,"Moonkin Form",1],
 [2,"Nature's Focus",5]]],
+["paladin","prot-tank","Protection tank","Endgame","Redoubt, Anticipation, Reckoning and Holy Shield for block and threat, finishing with Shieldsworn; Holy points for Divine Strength and Improved Seals. Opinion build, not benchmarked.",[
+[1,"Redoubt",5],[1,"Precision",3],[1,"Guardian's Favor",2],[1,"Shield Specialization",2],[1,"Toughness",5],[1,"Improved Righteous Fury",3],[1,"Anticipation",5],[1,"Holy Shield",1],[1,"Reckoning",5],[1,"Stoicism",2],[1,"Iron Creed",3],[1,"Shieldsworn",1],
+[0,"Divine Strength",5],[0,"Improved Seals",5],[0,"Healing Light",3],[0,"Spiritual Focus",1]]],
 ];

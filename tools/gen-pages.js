@@ -63,10 +63,10 @@ function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype 
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}img/og.jpg"><meta name="theme-color" content="#0b0e15">
 <link rel="icon" type="image/png" href="${p}favicon.png">${FONTS}<style>${CSS}</style></head><body>
 <div class="gut"><div class="wrap"><header class="top"><a class="brand" href="${p}./"><img src="${p}img/avatar.webp" alt="">Talentsmith</a>
-<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}changes.html">Hotfixes</a><a href="${p}./#picker">Race picker</a><a href="https://ko-fi.com/talentsmith" rel="noopener">Ko-fi</a></nav></header>
+<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}changes.html">Launch changes</a><a href="${p}./#picker">Race picker</a><a href="https://ko-fi.com/talentsmith" rel="noopener">Ko-fi</a></nav></header>
 ${body}</div></div>
 <footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
-<p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our opinion, made from the Oct 30 hotfix talent data.</p>
+<p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our opinion, made from the launch talent trees in Blizzard's Nov 2 development notes.</p>
 <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer></body></html>`;}
 const ti=(c,n,p='../')=>`<span class="ti"><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;
 const calcUrl=(b,p='../')=>`${p}calculator.html?c=${b.c}&b=${b.code}&v=hot`;
@@ -85,7 +85,7 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
   const body=`<p class="crumb"><a href="../classes/">Classes</a> › <a href="../classes/${b.c}.html">${C.name}</a> › Build</p>
 <h1><img src="../img/icons/class-${b.c}.webp" alt="">${esc(C.name)} – ${esc(b.name)}</h1>
 <p><span class="tag ${b.kind==='Leveling'?'lv':''}">${b.kind}</span> <span class="split">Split <b>${b.split.join(' / ')}</b> (${trees.map(t=>t.name).join(' / ')})</span></p>
-<p class="lede">${esc(b.blurb)} Values from the Oct 30 hotfix data.</p>
+<p class="lede">${esc(b.blurb)} Values from the launch trees (Blizzard's Nov 2 notes).</p>
 <p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
 <h2>Talents in this build</h2><div class="grid">${picked}</div>
 <h2>Leveling order</h2><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
@@ -105,17 +105,17 @@ for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;
 <h2>Starter builds</h2><div class="grid">${bl}</div>
 <h2>Best race for each ${Cn} spec</h2><p class="lede">Top-scoring race from our racial scores: <span class="h">Horde</span> first, <span class="a">Alliance</span> below. Open the race picker for the full ranking and why.</p>
 <div class="tbl"><table><thead><tr><th>Spec</th>${ctx.CTX.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${specs}</tbody></table></div>
-<h2>${Cn} talents changed in the Oct 30 hotfix</h2>${ch?`<div class="tbl"><table><thead><tr><th>Talent</th><th>Tree</th><th>Now</th></tr></thead><tbody>${ch}</tbody></table></div>`:`<p class="lede">No ${Cn} talents changed in the Oct 30 hotfix.</p>`}`;
+<h2>${Cn} talents changed for launch</h2>${ch?`<div class="tbl"><table><thead><tr><th>Talent</th><th>Tree</th><th>Now</th></tr></thead><tbody>${ch}</tbody></table></div>`:`<p class="lede">No ${Cn} talents changed for launch.</p>`}`;
   const fn=`classes/${c}.html`;urls.push(fn);
-  fs.writeFileSync(R+fn,page(true,`${Cn} Guide – Best Race, Builds & Talents | WoW Forever | Talentsmith`,`WoW Forever ${Cn}: best race for every spec, starter talent builds with leveling order, and every talent changed in the Oct 30 hotfix.`,body,fn));
+  fs.writeFileSync(R+fn,page(true,`${Cn} Guide – Best Race, Builds & Talents | WoW Forever | Talentsmith`,`WoW Forever ${Cn}: best race for every spec, starter talent builds with leveling order, and every talent changed for launch.`,body,fn));
   cards.push(`<a class="card" style="text-decoration:none;color:var(--ink);display:flex;gap:12px;align-items:center" href="${c}.html"><img src="../img/icons/class-${c}.webp" alt="" width="40" height="40" style="border-radius:8px"><span><b style="color:var(--gold-soft);font-family:var(--f-display)">${Cn}</b><br><span style="color:var(--muted);font-size:15px">Best race · ${out.filter(b=>b.c===c).length} builds · hotfix changes</span></span></a>`);}
-fs.writeFileSync(R+'classes/index.html',page(true,'WoW Forever Class Guides – Best Race & Builds | Talentsmith','Every WoW Forever class: best race per spec, starter talent builds with level-by-level order, and the latest talent hotfixes.',`<h1>Class guides</h1><p class="lede">Pick a class for its best races, starter builds and hotfix changes.</p><div class="grid">${cards.join('')}</div>`,'classes/'));
+fs.writeFileSync(R+'classes/index.html',page(true,'WoW Forever Class Guides – Best Race & Builds | Talentsmith','Every WoW Forever class: best race per spec, starter talent builds with level-by-level order, and every talent changed for launch.',`<h1>Class guides</h1><p class="lede">Pick a class for its best races, starter builds and hotfix changes.</p><div class="grid">${cards.join('')}</div>`,'classes/'));
 // ---- changes page
-const sec=ORDER.map(c=>{const C=ctx.CLASSES[c];const rows=C.trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0],'')}</td><td class="n">${tr.name}</td><td><div class="new">${esc(x[6]||x[5])}</div>${x[6]?`<div class="old">Before: ${esc(x[5])}</div>`:''}</td></tr>`)).join('');
-  return `<h2 id="${c}"><a href="classes/${c}.html" style="color:inherit;text-decoration:none">${C.name}</a></h2>${rows?`<div class="tbl"><table><thead><tr><th>Talent</th><th>Tree</th><th>Change</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="lede">No talent changes in the Oct 30 hotfix.</p>`}`;}).join('');
+const sec=ORDER.map(c=>{const C=ctx.CLASSES[c];const rows=C.trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0],'')}</td><td class="n">${tr.name}</td><td><div class="new">${esc(x[6]||x[5])}</div>${x[6]?`<div class="old">Beta: ${esc(x[5])}</div>`:''}</td></tr>`)).join('');
+  return `<h2 id="${c}"><a href="classes/${c}.html" style="color:inherit;text-decoration:none">${C.name}</a></h2>${rows?`<div class="tbl"><table><thead><tr><th>Talent</th><th>Tree</th><th>Change</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="lede">No talent changes for launch.</p>`}`;}).join('');
 const log=idx.slice(idx.indexOf('<ol class="log">'),idx.indexOf('</ol>')+5).replace('<ol class="log">','<ol style="padding-left:20px;display:grid;gap:12px">').replace(/<time>/g,'<b style="color:var(--gold)">').replace(/<\/time>/g,'</b>');
-fs.writeFileSync(R+'changes.html',page(false,'WoW Forever Hotfix Tracker – Talent & Racial Changes | Talentsmith','Every WoW Forever talent and racial change from the latest hotfixes, class by class, with the old and new values side by side.',
-`<h1>Hotfix tracker</h1><p class="lede">Every talent changed in the Oct 30 hotfix, with the value before it, plus all racial changes since mid-October. Hotfix values come from game data (via foreverchanges.pro), so treat them as unofficial until Blizzard confirms.</p>
+fs.writeFileSync(R+'changes.html',page(false,'WoW Forever Launch Talent Changes & Hotfix Tracker | Talentsmith','Every WoW Forever talent changed for launch in Blizzard\'s Nov 2 notes and the Oct 30 hotfix, class by class, with beta and launch values side by side, plus racial changes.',
+`<h1>Launch talent changes</h1><p class="lede">Every talent that changed between the October beta and launch, with the beta value under it, plus all racial changes since mid-October. Values follow <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (updated Nov 2)</a>, which also confirm the Oct 30 hotfix changes first found in the game data by foreverchanges.pro. Blizzard says the Rogue, Shaman and Warrior changes were not yet in the beta files on Nov 3, so check those in game.</p>
 <p>${ORDER.map(c=>`<a href="#${c}">${ctx.CLASSES[c].name}</a>`).join(' · ')} · <a href="#racials">Racials</a></p>${sec}<h2 id="racials">Racial changes</h2>${log}`,'changes.html'));
 // ---- sitemap/robots
 const today='2026-11-02';

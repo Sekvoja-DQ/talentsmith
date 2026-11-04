@@ -36,13 +36,17 @@ a{color:var(--gold)}
 .wrap{max-width:1120px;margin:0 auto}
 
 /* Hero */
-.hero{position:relative;text-align:center;padding-bottom:28px}
+.hero{position:relative;text-align:center;padding-bottom:22px}
 .hero picture img{display:block;width:100%;max-width:1254px;margin:0 auto;height:auto;aspect-ratio:1254/617;object-fit:cover;
   -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
-.hero-text{margin-top:-8px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.hero-text{margin-top:-8px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .kicker{margin:0;font:700 13px/1 var(--f-display);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
 .lede{margin:0;max-width:56ch;color:var(--muted);font-size:19px}
-.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.cta{display:grid;grid-template-columns:repeat(2,minmax(0,200px));gap:10px;justify-content:center}
+.cta .btn{justify-content:center;white-space:nowrap}
+.cta .btn:last-child{grid-column:1/-1;justify-self:center;min-width:200px}
+.kofi-corner{position:absolute;z-index:3;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font:700 12px/1 var(--f-display);letter-spacing:.05em;color:var(--gold);text-decoration:none;padding:7px 11px;border:1px solid var(--gold);border-radius:5px;background:rgba(11,14,21,.72);backdrop-filter:blur(4px)}
+.kofi-corner:hover{background:rgba(233,180,76,.16)}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--f-display);letter-spacing:.06em;text-decoration:none;padding:14px 22px;border-radius:6px;border:1px solid var(--gold);transition:transform .15s,box-shadow .15s}
 .btn.primary{background:linear-gradient(180deg,var(--gold-soft),var(--gold) 55%,#b9822e);color:#24170a;box-shadow:0 0 24px rgba(233,180,76,.35)}
 .btn.ghost{color:var(--gold);background:rgba(233,180,76,.06)}
@@ -119,7 +123,11 @@ main{display:flex;flex-direction:column;gap:56px;padding-bottom:48px}
 footer{border-top:1px solid var(--edge);padding-block:28px 40px;color:var(--muted);font-size:15px}
 footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
 @media (max-width:640px){
-  .hero picture img{aspect-ratio:2/3}
+  .hero picture img{aspect-ratio:1/1.05;object-position:50% 52%}
+  .hero-text{margin-top:-14px}
+  .cta{grid-template-columns:repeat(2,minmax(0,1fr));width:100%;max-width:400px}
+  .cta .btn{padding:13px 8px;font-size:14px}
+  .cta .btn:last-child{min-width:0;padding-inline:22px}
   .lede{font-size:17px}
   .classes{grid-template-columns:repeat(3,1fr)}
 }
@@ -167,6 +175,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 </head>
 <body>
 <header class="hero">
+  <a class="kofi-corner" href="https://ko-fi.com/talentsmith" rel="noopener">Support on Ko-fi</a>
   <picture>
     <source media="(max-width:640px)" srcset="img/hero-tall.webp">
     <img src="img/hero-wide.webp" alt="Talentsmith logo: an anvil forging a glowing talent tree inside a stone ring" width="1254" height="617" fetchpriority="high">
@@ -179,7 +188,6 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
       <a class="btn primary" href="#picker">Find your race</a>
       <a class="btn ghost" href="calculator.html">Talent calculator</a>
       <a class="btn ghost" href="classes/">Class guides &amp; builds</a>
-      <a class="btn ghost" href="https://ko-fi.com/talentsmith" rel="noopener">Support on Ko-fi</a>
     </div>
     <p class="stamp">Values checked against Blizzard's development notes, updated <b>Nov 2</b> for launch</p>
   </div>

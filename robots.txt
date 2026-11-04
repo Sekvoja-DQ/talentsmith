@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://sekvoja-dq.github.io/talentsmith/sitemap.xml
+Sitemap: https://talentsmith.app/sitemap.xml

@@ -1,5 +1,5 @@
 const fs=require('fs'),vm=require('vm'),path=require('path');
-const SITE=process.env.SITE||'https://sekvoja-dq.github.io/talentsmith/';
+const SITE=process.env.SITE||'https://talentsmith.app/';
 const R=path.resolve(__dirname,'..')+'/';
 const calc=fs.readFileSync(R+'calculator.html','utf8'), idx=fs.readFileSync(R+'index.html','utf8');
 const ctx={};vm.createContext(ctx);

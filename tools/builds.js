@@ -39,6 +39,9 @@ module.exports=[
 ["shaman","enh-leveling","Enhancement leveling","Leveling","Flurry, the faster Stormstrike and Maelstrom Weapon; Elemental for melee crit and cheaper shocks.",[
 [1,"Thundering Strikes",5],[1,"Mental Dexterity",3],[1,"Improved Lightning Shield",2],[1,"Elemental Weapons",3],[1,"Shamanistic Focus",1],[1,"Anticipation",1],[1,"Flurry",5],[1,"Stormstrike",1],[1,"Mental Quickness",2],[1,"Spirit Weapons",1],[1,"Improved Stormstrike",1],[1,"Maelstrom Weapon",5],[1,"Rage of the Farseer",1],
 [0,"Concussion",5],[0,"Elemental Devastation",3],[0,"Call of Flame",2],[0,"Elemental Focus",1],[0,"Elemental Warding",3],[0,"Reverberation",1],[0,"Trial by Fire",2],[0,"Earthbound",1],[0,"Eye of the Storm",2]]],
+["shaman","tank-leveling","Enhancement tank","Leveling","Earth's Grasp, Toughness, Anticipation and Guardian Totems for survivability, Stormstrike and Maelstrom Weapon for threat; Elemental Convection and Concussion for cheaper, harder-hitting shocks.",[
+[1,"Earth's Grasp",2],[1,"Thundering Strikes",5],[1,"Ancestral Knowledge",5],[1,"Guardian Totems",2],[1,"Improved Lightning Shield",3],[1,"Anticipation",3],[1,"Shamanistic Focus",1],[1,"Elemental Weapons",3],[1,"Toughness",5],[1,"Stormstrike",1],[1,"Spirit Weapons",1],[1,"Improved Stormstrike",2],[1,"Mental Quickness",2],[1,"Maelstrom Weapon",5],[1,"Rage of the Farseer",1],
+[0,"Convection",5],[0,"Concussion",5]]],
 ["shaman","resto-raid","Restoration healer","Endgame","Tidal Mastery, Mana Tide, Nature's Swiftness and Riptide; Enhancement for Intellect, crit and stronger totems.",[
 [2,"Improved Healing Wave",5],[2,"Tidal Focus",5],[2,"Mindfulness",3],[2,"Ancestral Healing",3],[2,"Water Shield",1],[2,"Tidal Mastery",5],[2,"Mana Tide Totem",1],[2,"Healing Way",3],[2,"Nature's Swiftness",1],[2,"Purification",5],[2,"Riptide",1],
 [1,"Ancestral Knowledge",5],[1,"Thundering Strikes",5],[1,"Guardian Totems",2],[1,"Earth's Grasp",2],[1,"Shamanistic Focus",1],[1,"Toughness",3]]],

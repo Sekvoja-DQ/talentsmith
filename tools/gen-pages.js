@@ -63,9 +63,9 @@ function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype 
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}img/og.jpg"><meta name="theme-color" content="#0b0e15">
 <link rel="icon" type="image/png" href="${p}favicon.png">${FONTS}<style>${CSS}</style></head><body>
 <div class="gut"><div class="wrap"><header class="top"><a class="brand" href="${p}./"><img src="${p}img/avatar.webp" alt="">Talentsmith</a>
-<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}changes.html">Launch changes</a><a href="${p}./#picker">Race picker</a><a href="https://ko-fi.com/talentsmith" rel="noopener">Ko-fi</a></nav></header>
+<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}changes.html">Launch changes</a><a href="${p}./#picker">Race picker</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav></header>
 ${body}</div></div>
-<footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/talentsmith" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
+<footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/bigdforever" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
 <p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our opinion, made from the launch talent trees in Blizzard's Nov 2 development notes.</p>
 <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer></body></html>`;}
 const ti=(c,n,p='../')=>`<span class="ti"><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;

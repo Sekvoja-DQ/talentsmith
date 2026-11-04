@@ -172,6 +172,11 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .classes .cls-btn:hover{background:rgba(16,19,28,.38)}
 .classes .cls-btn[aria-pressed="true"]{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 26%,transparent),rgba(16,19,28,.45))}
 .classes .cls-btn[disabled]{background:rgba(16,19,28,.7)}
+.fac-btn{padding:8px 16px;gap:14px}
+.fac-btn .emb{height:48px;width:auto;flex:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6)) grayscale(.55) brightness(.75);transition:filter .2s,transform .2s}
+.fac-btn:hover .emb{filter:drop-shadow(0 2px 4px rgba(0,0,0,.6)) grayscale(.2) brightness(.9)}
+.fac-btn[aria-pressed="true"] .emb{filter:drop-shadow(0 0 10px rgba(255,255,255,.18)) drop-shadow(0 2px 4px rgba(0,0,0,.6));transform:scale(1.06)}
+@media (max-width:640px){.fac-btn{gap:10px;padding:8px 10px}.fac-btn .emb{height:42px}}
 </style>
 </head>
 <body>
@@ -198,8 +203,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <section id="picker" class="wrap" aria-labelledby="pickH">
     <div class="sec-head"><span class="gem"></span><h2 id="pickH">Best race for your spec</h2></div>
     <div class="factions" role="group" aria-label="Faction">
-      <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><span class="dot"></span>Horde</button>
-      <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><span class="dot"></span>Alliance</button>
+      <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><img class="emb" src="img/emblem-horde.webp" alt="" width="32" height="48">Horde</button>
+      <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><img class="emb" src="img/emblem-alliance.webp" alt="" width="38" height="48">Alliance</button>
     </div>
     <div class="classes" id="classBtns" data-fac="horde" role="group" aria-label="Class"></div>
     <div class="step-lbl">Spec / role</div>

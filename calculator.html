@@ -863,7 +863,10 @@ function renderOrder(){const body=document.getElementById("orderBody"),sub=docum
     const lv=o.from===o.to?`Lv ${o.from+10}`:`Lv ${o.from+10}–${o.to+10}`;
     return `<li><span class="lv">${lv}</span><img src="img/talents/${icon(x[0])}.webp" alt="" loading="lazy"><span class="nm">${esc(x[0])}</span><span class="rk">${r0===r1?r1:r0+"–"+r1}/${x[1]}</span></li>`;}).join("")}</ol>`;}
 const canHover=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
-const isTouch=()=>window.matchMedia&&matchMedia("(hover:none), (max-width:640px)").matches;
+let touchSeen=false;
+const isTouch=()=>touchSeen||(window.matchMedia&&matchMedia("(hover:none), (pointer:coarse), (max-width:640px)").matches);
+/* a finger tap marks the device as touch even if the browser reports a mouse (some tablets and phones in desktop mode) */
+for(const ev of ["touchstart","pointerdown"]) document.addEventListener(ev,e=>{if(ev==="touchstart"||e.pointerType==="touch"||e.pointerType==="pen") touchSeen=true;},{passive:true,capture:true});
 let pmOpen=false;
 function placePm(){document.querySelectorAll(".pmpop").forEach(e=>e.remove());
   if(!sel||!pmOpen||!isTouch()) return;

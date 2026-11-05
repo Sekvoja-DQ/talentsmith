@@ -157,7 +157,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
-  <p class="help">Tap a talent to add a point and see what this rank and the next one give; on a computer, hover for a quick tooltip and right-click to remove a point. Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p>
+  <p class="help">Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p>
 
   <section class="detail" id="detail" aria-live="polite"></section>
   <details class="order" id="order" open><summary>Leveling order<span id="orderSub"></span></summary><div id="orderBody"></div></details>
@@ -904,7 +904,9 @@ function toast(m){const t=document.getElementById("toast");t.textContent=m;t.cla
 document.addEventListener("click",e=>{
   const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); render(); window.scrollTo({top:0});} return;}
   const pb=e.target.closest("[data-pm]"); if(pb&&sel){if(pb.dataset.pm==="+") addPt(...sel); else remPt(...sel); render(); return;}
-  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; pmOpen=true; addPt(ti,i); render(); return;}
+  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i;
+    if(isTouch()){/* phones: first tap only shows the talent; points come from the + / − bar */ const same=pmOpen&&sel&&sel[0]===ti&&sel[1]===i; sel=[ti,i]; pmOpen=!same; render(); return;}
+    sel=[ti,i]; addPt(ti,i); render(); return;}
   if(pmOpen&&!e.target.closest(".detail")){pmOpen=false; placePm();}
   if(e.target.id==="plus"&&sel){addPt(...sel); render(); return;}
   if(e.target.id==="minus"&&sel){remPt(...sel); render(); return;}

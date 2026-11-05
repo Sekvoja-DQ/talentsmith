@@ -111,6 +111,22 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .toast.on{opacity:1}
 .copybox{width:100%;margin-top:8px;font:13px ui-monospace,Menlo,monospace;background:var(--deep);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:8px}
 @media (max-width:640px){.act{margin-left:0}.top nav{display:none}}
+/* mobile +/- controls next to the selected talent (two test versions) */
+.pmvar{display:none;align-items:center;gap:8px;margin:12px 2px 0;font-size:13px;color:var(--muted)}
+.pmvar .seg button{padding:8px 10px;font-size:12px}
+.pmpop{position:absolute;z-index:20;display:flex;align-items:center;gap:0;background:rgba(10,13,20,.96);border:1px solid var(--gold);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.6);overflow:hidden}
+.pmpop button{border:0;background:transparent;color:var(--gold);font:700 20px/1 var(--f-body);display:grid;place-items:center;cursor:pointer;padding:0;touch-action:manipulation}
+.pmpop button:disabled{opacity:.3}
+.pmpop button:active:not(:disabled){background:rgba(233,180,76,.2)}
+.pmpop .rk{font:700 13px/1 var(--f-body);color:var(--ink);font-variant-numeric:tabular-nums;padding:0 4px;min-width:34px;text-align:center}
+.pmpop.below{height:34px}
+.pmpop.below button{width:40px;height:34px}
+.pmpop.side{flex-direction:column;width:32px}
+.pmpop.side button{width:32px;height:31px}
+.pmpop.side button+button{border-top:1px solid rgba(233,180,76,.35)}
+.pmpop.below button+.rk,.pmpop.below .rk+button{border-left:1px solid rgba(233,180,76,.35)}
+.pmpop [data-pm="+"]{color:var(--green)}
+@media (hover:none),(max-width:640px){.pmvar{display:flex}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -142,6 +158,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   <p class="note" id="note"><span style="color:var(--ember)">●</span> marks talents that are new or changed for launch compared with the October beta. Values follow <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard's WoW Forever development notes</a> (updated Nov 2) and are checked against the launch game data (build 1.60.1.70790, Nov 4).</p>
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
+  <div class="pmvar" id="pmvar">Mobile +/− buttons: <span class="seg" role="group" aria-label="Plus and minus position"><button type="button" data-pmv="below">Below talent</button><button type="button" data-pmv="side">Right of talent</button></span></div>
   <div class="trees" id="trees"></div>
   <p class="help">Tap a talent to add a point and see what this rank and the next one give; on a computer, hover for a quick tooltip and right-click to remove a point. Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p>
 
@@ -827,7 +844,7 @@ function render(){
   document.querySelector("#lvl b").textContent=t?t+9:10;
   document.querySelector("#split b").textContent=pts.map((_,i)=>treeSum(i)).join(" / ");
   document.getElementById("spent").classList.toggle("warn",t>=MAXP);
-  renderDetail(); renderOrder(); saveURL(); if(hov){const n=document.querySelector(`.node[data-t="${hov[0]}"][data-i="${hov[1]}"]`); if(n) showTip(n); else hideTip();}}
+  renderDetail(); renderOrder(); placePm(); saveURL(); if(hov){const n=document.querySelector(`.node[data-t="${hov[0]}"][data-i="${hov[1]}"]`); if(n) showTip(n); else hideTip();}}
 function drawLinks(){document.querySelectorAll(".grid").forEach(g=>{const ti=+g.dataset.tree,s=g.querySelector("svg"),gb=g.getBoundingClientRect();
   s.innerHTML=TREES[ti].t.map((x,i)=>{if(!x[4]) return "";const r=byName[ti][x[4]];
     const a=g.querySelector(`[data-i="${r}"]`).getBoundingClientRect(),b=g.querySelector(`[data-i="${i}"]`).getBoundingClientRect();
@@ -849,6 +866,20 @@ function renderOrder(){const body=document.getElementById("orderBody"),sub=docum
     const lv=o.from===o.to?`Lv ${o.from+10}`:`Lv ${o.from+10}–${o.to+10}`;
     return `<li><span class="lv">${lv}</span><img src="img/talents/${icon(x[0])}.webp" alt="" loading="lazy"><span class="nm">${esc(x[0])}</span><span class="rk">${r0===r1?r1:r0+"–"+r1}/${x[1]}</span></li>`;}).join("")}</ol>`;}
 const canHover=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
+const isTouch=()=>window.matchMedia&&matchMedia("(hover:none), (max-width:640px)").matches;
+let pmv="below",pmOpen=false;try{pmv=localStorage.getItem("pmv")||new URLSearchParams(location.search).get("pm")||"below";}catch(e){}
+if(!["below","side"].includes(pmv)) pmv="below";
+function syncPmv(){document.querySelectorAll("[data-pmv]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.pmv===pmv));}
+function placePm(){document.querySelectorAll(".pmpop").forEach(e=>e.remove());
+  if(!sel||!pmOpen||!isTouch()) return;
+  const [ti,i]=sel,g=document.querySelector(`.grid[data-tree="${ti}"]`),n=g&&g.querySelector(`.node[data-i="${i}"]`); if(!n) return;
+  const x=TREES[ti].t[i],pop=document.createElement("div");pop.className="pmpop "+pmv;pop.setAttribute("role","group");pop.setAttribute("aria-label",x[0]+" points");
+  const plus=`<button type="button" data-pm="+" aria-label="Add a point" ${canAdd(ti,i)?"":"disabled"}>+</button>`,minus=`<button type="button" data-pm="-" aria-label="Remove a point" ${canRemove(ti,i)?"":"disabled"}>−</button>`;
+  pop.innerHTML=pmv==="side"?plus+minus:minus+`<span class="rk">${pts[ti][i]}/${x[1]}</span>`+plus;
+  g.appendChild(pop);
+  const L=n.offsetLeft,T=n.offsetTop,W=n.offsetWidth,H=n.offsetHeight,pw=pop.offsetWidth,ph=pop.offsetHeight,gw=g.clientWidth;
+  if(pmv==="side"){let left=L+W+5; if(left+pw>gw) left=L-pw-5; pop.style.left=left+"px"; pop.style.top=(T+(H-ph)/2)+"px";}
+  else{let left=L+W/2-pw/2; left=Math.max(0,Math.min(gw-pw,left)); pop.style.left=left+"px"; pop.style.top=(T+H+5)+"px";}}
 function showTip(n){const tip=document.getElementById("tip"),ti=+n.dataset.t,i=+n.dataset.i,x=TREES[ti].t[i],r=pts[ti][i];
   const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
   tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
@@ -875,7 +906,10 @@ function load(){try{const q=new URLSearchParams(location.search);setClass(q.get(
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800);}
 document.addEventListener("click",e=>{
   const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); render(); window.scrollTo({top:0});} return;}
-  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; addPt(ti,i); render(); return;}
+  const pb=e.target.closest("[data-pm]"); if(pb&&sel){if(pb.dataset.pm==="+") addPt(...sel); else remPt(...sel); render(); return;}
+  const pv=e.target.closest("[data-pmv]"); if(pv){pmv=pv.dataset.pmv;try{localStorage.setItem("pmv",pmv);}catch(err){} syncPmv(); render(); return;}
+  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; pmOpen=true; addPt(ti,i); render(); return;}
+  if(pmOpen&&!e.target.closest(".detail")){pmOpen=false; placePm();}
   if(e.target.id==="plus"&&sel){addPt(...sel); render(); return;}
   if(e.target.id==="minus"&&sel){remPt(...sel); render(); return;}
   const c=e.target.closest("[data-clear]"); if(c){const k=+c.dataset.clear;pts[k]=pts[k].map(()=>0);ord=ord.filter(o=>o[0]!==k);replayOrder(); render(); return;}
@@ -886,7 +920,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; remPt(ti,i); render();});
 function fallback(url){const w=document.getElementById("copyWrap"),b=document.getElementById("copyBox");b.value=url;w.hidden=false;b.select();}
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
-setClass("paladin"); load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();
+syncPmv(); setClass("paladin"); load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();
 </script>
 </body>
 </html>

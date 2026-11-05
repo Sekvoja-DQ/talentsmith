@@ -93,7 +93,7 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
 <h2>Leveling order</h2><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
 <div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>
 ${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}
-<p class="old" style="margin-top:14px">This is a starter build – our pick, not the only good one. Change anything in the calculator and share your own link.</p>`;
+<p class="old" style="margin-top:14px">This build matches the split and core talents that the major guide sites recommend at launch (cross-checked Nov 5, 2026). Minor points differ between sites – change anything in the calculator and share your own link.</p>`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn));}
 // ---- class pages
@@ -104,13 +104,13 @@ for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;
   const ch=trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0])}</td><td class="n">${tr.name}</td><td class="new">${esc(x[6]||x[5])}</td></tr>`)).join('');
   const body=`<p class="crumb"><a href="./">Classes</a> › ${Cn}</p><h1><img src="../img/icons/class-${c}.webp" alt="">${Cn} in WoW Forever</h1>
 <p class="lede">${esc(C.lede)}</p><p><a class="btn" href="../calculator.html?c=${c}">${Cn} talent calculator</a> <a class="btn ghost" href="../?class=${Cn}#picker">Race picker</a></p>
-<h2>Starter builds</h2><div class="grid">${bl}</div>
+<h2>Starter builds</h2>${bl?`<div class="grid">${bl}</div>`:`<p class="lede">No starter builds for ${Cn} yet. We only list builds that match what the major guide sites recommend for the launch trees – build your own in the <a href="../calculator.html?c=${c}">${Cn} calculator</a>.</p>`}
 <h2>Best race for each ${Cn} spec</h2><p class="lede">Top-scoring race from our racial scores: <span class="h">Horde</span> first, <span class="a">Alliance</span> below. Open the race picker for the full ranking and why.</p>
 <div class="tbl"><table><thead><tr><th>Spec</th>${ctx.CTX.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${specs}</tbody></table></div>
 <h2>${Cn} talents changed for launch</h2>${ch?`<div class="tbl"><table><thead><tr><th>Talent</th><th>Tree</th><th>Now</th></tr></thead><tbody>${ch}</tbody></table></div>`:`<p class="lede">No ${Cn} talents changed for launch.</p>`}`;
   const fn=`classes/${c}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${Cn} Guide – Best Race, Builds & Talents | WoW Forever | Talentsmith`,`WoW Forever ${Cn}: best race for every spec, starter talent builds with leveling order, and every talent changed for launch.`,body,fn));
-  cards.push(`<a class="card" style="text-decoration:none;color:var(--ink);display:flex;gap:12px;align-items:center" href="${c}.html"><img src="../img/icons/class-${c}.webp" alt="" width="40" height="40" style="border-radius:8px"><span><b style="color:var(--gold-soft);font-family:var(--f-display)">${Cn}</b><br><span style="color:var(--muted);font-size:15px">Best race · ${out.filter(b=>b.c===c).length} builds · hotfix changes</span></span></a>`);}
+  cards.push(`<a class="card" style="text-decoration:none;color:var(--ink);display:flex;gap:12px;align-items:center" href="${c}.html"><img src="../img/icons/class-${c}.webp" alt="" width="40" height="40" style="border-radius:8px"><span><b style="color:var(--gold-soft);font-family:var(--f-display)">${Cn}</b><br><span style="color:var(--muted);font-size:15px">Best race · ${(n=>n?n+(n>1?' builds':' build'):'calculator')(out.filter(b=>b.c===c).length)} · launch changes</span></span></a>`);}
 fs.writeFileSync(R+'classes/index.html',page(true,'WoW Forever Class Guides – Best Race & Builds | Talentsmith','Every WoW Forever class: best race per spec, starter talent builds with level-by-level order, and every talent changed for launch.',`<h1>Class guides</h1><p class="lede">Pick a class for its best races, starter builds and hotfix changes.</p><div class="grid">${cards.join('')}</div>`,'classes/'));
 // ---- changes page
 const sec=ORDER.map(c=>{const C=ctx.CLASSES[c];const rows=C.trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0],'')}</td><td class="n">${tr.name}</td><td><div class="new">${esc(x[6]||x[5])}</div>${x[6]?`<div class="old">Beta: ${esc(x[5])}</div>`:''}</td></tr>`)).join('');

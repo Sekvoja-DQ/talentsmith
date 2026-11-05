@@ -39,7 +39,7 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 ## Roadmap
 1. Custom domain (owner is buying one; avoid "WoW" in it) – then CNAME + regenerate with SITE.
 2. "What changed vs Classic" page for talents/racials (talentsforever.com/export/<class>.json is CC BY 4.0).
-3. More builds (done: Shockadin, Smite Priest, bear tank, Prot Warrior, Elemental, Balance; still open: petless Survival, Shaman tank).
+3. Builds: ONLY add a build that matches the split + core talents recommended by the major guide sites (Rankedboost build list, MMOnster raid tier list with build codes, wowforevertalent.com, wowforeverbuilds.com; Icy Veins/Wowhead/Mobalytics/Warcraft Tavern block fetches). No niche/own-idea builds (owner rule, Nov 5). Missing: Mage, Shaman, tanks, MM/Survival Hunter, Destruction, Resto Druid.
 4. Pre-raid BiS table per spec (short, hand-checked).
 5. Analytics (GoatCounter, needs owner sign-up) → popular builds; class tier list labelled as opinion.
 6. Legacy perks calculator if traffic justifies it.
@@ -57,3 +57,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - 2026-11-05 18:10: mobile +/- test – on touch/narrow screens tapping a talent opens a +/- popover on the talent itself; two versions switchable on the page ("Below talent" bar with rank, or "Right of talent" vertical stack ≤150% of the icon height), choice stored in localStorage `pmv` (also `?pm=below|side`). Desktop unchanged. Owner is testing which to keep.
 - 2026-11-05 18:20: owner picked "Below talent" – switch + side version removed. Mobile popover = bar (− name rank +) plus the same text as the desktop tooltip (unmet requirements, current/next rank); opens under the talent, flips above for the bottom rows; tapping the card or outside closes it.
 - 2026-11-05 18:30: phones – tapping a talent no longer adds a point; it only opens the card (tap the same talent again to close). Points only via the card's + / −. Desktop click still adds.
+- 2026-11-05 19:00: owner said half the builds were rubbish. Cross-checked all 26 against Rankedboost (Nov 4, 43 builds with splits) and MMOnster raid list (Nov 3): kept 12 that match tree + split within ~6 points (Arms leveling, Fury raid, Ret leveling, Holy Paladin, Combat leveling, Mutilate raid, BM leveling, Shadow leveling, Disc, Affliction leveling, Feral leveling, Balance); removed 14 (Prot Warrior 6/0/45, Shockadin, Prot Paladin 14/37, MM 19/32, Frost leveling 20/0/31, Fire 20/31, Smite, Enh leveling 20/31, Shaman tank, Resto Shaman 0/18/33, Elemental 46/0/5, Destruction 0/20/31, Resto Druid 16/0/35, bear tank 0/31/20). Build page note now says it matches the major guide sites; class pages show a note when no builds.

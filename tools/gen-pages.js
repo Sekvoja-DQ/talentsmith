@@ -69,7 +69,7 @@ function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype 
 ${body}</div></div>
 <footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/bigdforever" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
 <p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our opinion, made from the launch talent trees in Blizzard's Nov 2 development notes.</p>
-<p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer></body></html>`;}
+<p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><!-- End Cloudflare Web Analytics --></body></html>`;}
 const ti=(c,n,p='../')=>`<span class="ti"><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;
 const calcUrl=(b,p='../')=>`${p}calculator.html?c=${b.c}&b=${b.code}&o=${b.ord}&v=hot`;
 // race picks

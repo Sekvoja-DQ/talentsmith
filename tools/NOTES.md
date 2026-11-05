@@ -14,6 +14,11 @@ Goal: useful free tools that grow search traffic; income via Ko-fi (ko-fi.com/bi
 - Site address: **https://talentsmith.app/** (custom domain since Nov 4; `CNAME` file in the repo root must stay). `SITE` env var defaults to it. Use https://talentsmith.app/ for every new absolute link.
 - Never hand-edit generated pages; edit data or the generator and regenerate.
 
+## Calculator features (Nov 5)
+- Detail panel + desktop hover tooltip show the current rank and the next rank. Per-rank text is computed by `rankText()` from the max-rank text: an explicit `(a / b / c)` list wins, then `X per rank`, else linear scaling of every `up to N` (counts like `up to 5 times/targets/charges` are left alone). So write max-rank texts with `up to N`, and add a `(a / b / c)` list whenever ranks aren't linear.
+- Share links: `&o=` = spending order, one char per point (`0-9a-zA-Z` index over all talents of the class, trees concatenated). Old links without `o` get a legal order rebuilt. Build pages link with `o` (gen-pages `calcUrl`).
+- Leveling-order panel (Lv 10–60) under the details; tree headers show the next row threshold.
+
 ## Calculator data format
 One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRanks,row,col,requires|null,officialText,hotfixText|null,changedInHotfix], ...]}` registered in `CLASSES`. Icons: `img/talents/<class>-<slug(name)>.webp` (Paladin uses `TICON`); `GICON` holds game icon file names. Tree backgrounds `img/trees/`.
 
@@ -48,3 +53,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - 2026-11-04 21:00: Owner: new address https://talentsmith.app (CNAME + canonical/og/sitemap done in 5043479); tip links switched to ko-fi.com/bigdforever everywhere; canonical + og:url + absolute og:image added to index and calculator.
 - 2026-11-04 (nightly): no new patch notes found (WebSearch only; Blizzard forum, foreverchanges.pro unreachable from cloud). Added Enhancement tank (Shaman) build → 26 builds, 39 pages. Open builds: petless Survival. Playwright: clean, no horizontal scroll at 390px.
 - 2026-11-05 (owner live, "Forever is live"): launch build 1.60.1.70790 (Nov 4) now contains the Rogue/Shaman/Warrior reworks – checked against foreverchanges.pro/talents/<class> (shows build). Fixes: Warrior Raging Blows removed (Reckless Swings takes r4c2), Mutilate 90% + 40/57/79, Death Mark values, Ghostly Strike keeps +15% dodge, Riptide 445 over 15 sec, Vengeance up to 15% at rank 3, Arcane Concentration from Arcane Missiles. Stand-in icons replaced with the exact launch icons (71 rogue/shaman/warrior icons re-synced). Notes no longer say 'not in game files'. Home log Nov 5: Touch of the Grave proc fix, spell-triggered talents no longer weaker at low ranks. Competitors: Guild Order still on the October beta Rogue tree; Mobalytics/Icy Veins/Seemeta block fetches.
+- 2026-11-05 evening: owner asked for all four proposed calculator features – per-rank values, desktop tooltips, leveling order in share links (+ panel), per-tree row progress. Paladin texts rewritten with exact launch values (rank-1 numbers from foreverchanges.pro talents/paladin, build 70790). Build links now carry the order.

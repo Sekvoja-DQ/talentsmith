@@ -27,7 +27,9 @@ for(const [c,id,name,kind,blurb,list] of BUILDS){
       pts[ti][i]++; seq.push({lvl:tot()+9,ti,tn,rank:pts[ti][i],max:x[1]});}}
   if(tot()!==51) throw `${id}: total ${tot()}`;
   const code=pts.map(p=>p.join('').replace(/0+$/,'')).join('-');
-  out.push({c,id,name,kind,blurb,seq,pts,code,split:pts.map(p=>p.reduce((a,b)=>a+b,0))});}
+  const ALPH='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',off=trees.map((_,k)=>trees.slice(0,k).reduce((a,tr)=>a+tr.t.length,0));
+  const ord=seq.map(x=>ALPH[off[x.ti]+trees[x.ti].t.findIndex(y=>y[0]===x.tn)]).join('');
+  out.push({c,id,name,kind,blurb,seq,pts,code,ord,split:pts.map(p=>p.reduce((a,b)=>a+b,0))});}
 console.log('builds OK',out.length);
 // ---- shared shell
 const CSS=`:root{color-scheme:dark;--night:#0b0e15;--deep:#11151f;--plate:#171c28;--plate-2:#1f2533;--edge:#2c3242;--gold:#e9b44c;--gold-soft:#f6d68e;--ember:#ff7a2f;--ink:#ede4d3;--muted:#a39886;--horde:#d2483c;--alliance:#4c82db;--f-display:"Cinzel",Georgia,serif;--f-body:"Alegreya Sans",system-ui,sans-serif}
@@ -69,7 +71,7 @@ ${body}</div></div>
 <p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our opinion, made from the launch talent trees in Blizzard's Nov 2 development notes.</p>
 <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer></body></html>`;}
 const ti=(c,n,p='../')=>`<span class="ti"><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;
-const calcUrl=(b,p='../')=>`${p}calculator.html?c=${b.c}&b=${b.code}&v=hot`;
+const calcUrl=(b,p='../')=>`${p}calculator.html?c=${b.c}&b=${b.code}&o=${b.ord}&v=hot`;
 // race picks
 function bestRaces(cls,b){const C=ctx.CCL[cls].name;const res={};
   for(const fac of ['horde','alliance']){res[fac]={};for(const [k] of ctx.CTX){

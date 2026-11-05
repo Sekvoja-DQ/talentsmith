@@ -84,6 +84,28 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .cls a[aria-current="page"]{border-color:var(--gold);color:var(--gold-soft);background:rgba(233,180,76,.1)}
 .cls a.soon{opacity:.45;pointer-events:none}
 .help{color:var(--muted);font-size:14px;margin:12px 2px 0}
+.tree-h em{font-style:normal;font:600 12px/1 var(--f-body);color:var(--muted);margin-left:6px;opacity:.9}
+.tree-h em.done{color:var(--green)}
+.rk-l{display:inline-block;font:700 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-right:6px}
+.detail p.nxt .rk-l,.tip .nx .rk-l{color:var(--green)}
+.detail p.mx{color:var(--muted);font-size:14px}
+.tip{position:fixed;z-index:60;max-width:330px;background:rgba(10,13,20,.97);border:1px solid var(--gold);border-radius:8px;padding:10px 12px 11px;box-shadow:0 10px 28px rgba(0,0,0,.65);pointer-events:none;font-size:14px;line-height:1.42;color:var(--ink);opacity:0;transition:opacity .08s}
+.tip.on{opacity:1}
+.tip h4{margin:0;font:800 15px/1.2 var(--f-display);color:var(--gold-soft)}
+.tip .r{color:var(--muted);font-size:12.5px;margin-top:2px}
+.tip .bad{color:var(--ember)}
+.tip p{margin:6px 0 0}
+.tip .hint{color:var(--muted);font-size:12px;margin-top:7px}
+.order{margin-top:16px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:14px 16px}
+.order summary{cursor:pointer;font:800 17px/1.2 var(--f-display);color:var(--gold-soft)}
+.order summary span{font:600 13px var(--f-body);color:var(--muted);margin-left:8px}
+.order ol{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px}
+.order li{display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
+.order li img{width:22px;height:22px;border-radius:4px;flex:none}
+.order li .lv{font:700 12px/1 var(--f-body);color:var(--gold);min-width:52px;font-variant-numeric:tabular-nums}
+.order li .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order li .rk{color:var(--muted);font-size:12px;margin-left:auto;font-variant-numeric:tabular-nums}
+.order .empty{color:var(--muted);margin:10px 0 0;font-size:14px}
 footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;color:var(--muted);font-size:14px;text-align:center}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#24170a;font-weight:700;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
@@ -121,9 +143,11 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
-  <p class="help">Tap a talent to add a point and see its details. Use − in the details to remove points. Rows open every 5 points in a tree; arrows mean the earlier talent must be maxed.</p>
+  <p class="help">Tap a talent to add a point and see what this rank and the next one give; on a computer, hover for a quick tooltip and right-click to remove a point. Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p>
 
   <section class="detail" id="detail" aria-live="polite"></section>
+  <details class="order" id="order" open><summary>Leveling order<span id="orderSub"></span></summary><div id="orderBody"></div></details>
+  <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 </div>
 </div>
 <footer class="gut"><div class="wrap">
@@ -137,59 +161,59 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 /* [name, max, row, col, requires, official text, hotfix text (null = same as official), changedInHotfix] */
 const PALADIN=[
 {name:"Holy",t:[
- ["Spiritual Focus",5,1,2,null,"Reduces how much taking damage delays your Holy spells. Up to 70% less at 5 ranks.",null,true],
- ["Divine Strength",5,1,3,null,"Increases your Strength.",null,false],
- ["Healing Light",3,2,1,null,"Increases the healing of Holy Light, Flash of Light and Holy Shock.",null,false],
- ["Reverence",2,2,2,null,"Lets up to 30% of your Spirit-based mana regeneration continue while casting (3 ranks officially).","Lets up to 30% of your Spirit-based mana regeneration continue while casting. Now 2 ranks.",true],
- ["Improved Seals",5,2,3,null,"Improves all Seals and Judgements, up to 15%.",null,true],
- ["Purifying Power",2,2,4,null,"Reduces the mana cost of Cleanse and Purify.",null,false],
+ ["Spiritual Focus",5,1,2,null,"Reduces how much taking damage delays your Holy spells. Up to 70% less at 5 ranks.","Up to a 70% chance that taking damage doesn't slow your Flash of Light, Holy Light and Light's Vigil casts.",true],
+ ["Divine Strength",5,1,3,null,"Up to 10% more Strength.",null,false],
+ ["Healing Light",3,2,1,null,"Holy Light, Flash of Light and Holy Shock heal up to 12% more.",null,false],
+ ["Reverence",2,2,2,null,"Lets up to 30% of your Spirit-based mana regeneration continue while casting (3 ranks officially).","Up to 30% of your mana regeneration continues while casting. Now 2 ranks.",true],
+ ["Improved Seals",5,2,3,null,"Improves all Seals and Judgements, up to 15%.","Your Seals and Judgements deal up to 15% more damage.",true],
+ ["Purifying Power",2,2,4,null,"Cleanse and Purify cost up to 20% less mana, and Exorcism and Holy Wrath cooldowns are up to 33% shorter (17 / 33%).",null,false],
  ["Divine Favor",1,3,1,null,"Your next Flash of Light, Holy Light or Holy Shock heal is a guaranteed critical strike.",null,false],
- ["Illumination",5,3,2,"Reverence","Critical heals refund 50% of the spell's base mana cost; also triggers from Light's Vigil.",null,false],
- ["Holy Conduit",2,3,3,null,"Moved from Retribution to Holy in the hotfix. Details pending.",null,true],
+ ["Illumination",5,3,2,"Reverence","After a critical heal, up to a 100% chance (20% per rank) to get back 50% of the spell's base mana cost. Also triggers from Light's Vigil.",null,false],
+ ["Holy Conduit",2,3,3,null,"Moved from Retribution to Holy in the hotfix. Details pending.","Consecration, Holy Wrath, Exorcism and Hammer of Wrath cost up to 40% less mana. Moved into Holy for launch.",true],
  ["Divine Precision",2,4,1,null,"Up to 18% hit chance with Holy spells (3 ranks, requires Holy Shock).","Up to 8% hit chance (4 / 8%) with Holy spells, and silences on you are up to 20% shorter. 2 ranks, no longer requires Holy Shock.",true],
  ["Infusion of Light",2,4,2,null,"Holy Shock and Flash of Light crits cut your next Holy Light's cast time by up to 1 sec.",null,false],
  ["Oath of Light",1,4,3,null,"Not in the beta tree.","Swear an Oath on one ally for 5 min: your Holy Light, Flash of Light and Holy Shock heal them for more. Amount pending.",true],
  ["Consecrated Ground",2,5,1,null,"Your Holy spells deal up to 10% more damage to the first 4 enemies that enter your Consecration.",null,false],
  ["Holy Shock",1,5,2,null,"Instantly damages an enemy or heals an ally with Holy power. 10 sec cooldown.",null,false],
  ["Boundless Light",2,5,3,"Holy Shock","Not in the beta tree.","Up to 30% more critical strike chance for Holy Shock on allies that don't have your Oath.",true],
- ["Holy Power",5,6,3,null,"Holy Shock and Holy Strike get up to 15% more critical strike chance; other spells up to 5%.","Holy spells' critical heals heal 10–50% more. No longer adds crit chance.",true],
+ ["Holy Power",5,6,3,null,"Holy Shock and Holy Strike get up to 15% more critical strike chance; other spells up to 5%.","Holy spells' critical heals heal up to 50% more (10% per rank). No longer adds crit chance.",true],
  ["Light's Vigil",1,7,2,"Holy Shock","Grants Vigil to a target: your next Holy Shock on it skips the cooldown. On enemies it adds Holy damage and refunds 75% of its mana; on allies it heals their party.","Friendly targets only, 40 yd range. Vigil lasts 30 sec: your next Holy Shock on that ally skips the cooldown and heals them and their party.",true]
 ]},
 {name:"Protection",t:[
- ["Divine Intellect",5,1,2,null,"Increases your Intellect. Moved from Holy to Protection.",null,true],
- ["Redoubt",5,1,3,null,"Increases your block chance, up to 20%.","Increases your block chance, up to 30%.",true],
- ["Precision",3,2,1,null,"Increases your chance to hit with melee attacks.",null,false],
- ["Guardian's Favor",2,2,2,null,"Improves Blessing of Protection and Blessing of Freedom.",null,false],
- ["Sacred Duty",2,2,4,null,"Increases Stamina.","No longer gives Stamina: shortens Forbearance by 5 / 10 sec.",true],
+ ["Divine Intellect",5,1,2,null,"Increases your Intellect. Moved from Holy to Protection.","Up to 10% more Intellect. Moved from Holy to Protection.",true],
+ ["Redoubt",5,1,3,null,"Increases your block chance, up to 20%.","Damaging melee hits against you have a 10% chance to raise your block chance by up to 30% (6% per rank) for 10 sec or 5 blocks.",true],
+ ["Precision",3,2,1,null,"Up to +3% hit chance.",null,false],
+ ["Guardian's Favor",2,2,2,null,"Blessing of Protection's cooldown is up to 2 min shorter and Blessing of Freedom lasts up to 6 sec longer.",null,false],
+ ["Sacred Duty",2,2,4,null,"Increases Stamina.","Divine Shield, Divine Protection and Templar's Bulwark cooldowns are up to 60 sec shorter, and Forbearance is up to 10 sec shorter. No longer gives Stamina.",true],
  ["Templar's Bulwark",1,3,1,null,"An absorb shield equal to 100% of your max health for 8 sec. Applies Forbearance for 1 min.",null,true],
- ["Improved Hammer of Justice",3,3,2,null,"Reduces the cooldown of Hammer of Justice.",null,true],
+ ["Improved Hammer of Justice",3,3,2,null,"Reduces the cooldown of Hammer of Justice.","Hammer of Justice's cooldown is up to 15 sec shorter.",true],
  ["Shield Specialization",2,3,3,"Redoubt","Blocks absorb more and can restore mana (3 ranks officially).","Blocks absorb up to 30% more and always restore 4% mana, at most every 3 sec. Now 2 ranks.",true],
- ["Toughness",5,3,4,null,"Increases your armor.",null,true],
+ ["Toughness",5,3,4,null,"Increases your armor.","Up to 10% more armor from items.",true],
  ["Swift Judgement",1,4,1,"Templar's Bulwark","Requires Improved Seal of Fury in the beta.","Unleashes your Seal's Judgement without using up the Seal, on its own cooldown.",true],
  ["Improved Righteous Fury",3,4,2,null,"While Righteous Fury is active you take up to 6% less damage.","While Righteous Fury is active you take up to 9% less damage.",true],
- ["Anticipation",5,4,3,null,"Increases your Defense.",null,true],
+ ["Anticipation",5,4,3,null,"Increases your Defense.","Up to +20 Defense skill.",true],
  ["Stoicism",2,5,1,null,"Not in the beta tree.","Stun and Charm effects on you are up to 20% shorter.",true],
  ["Holy Shield",1,5,2,null,"Increases block chance by 30% and deals Holy damage when you block. Requires Templar's Bulwark in the beta.","Increases block chance by 30% and deals Holy damage when you block. No longer requires Templar's Bulwark; new rank 1 at level 30.",true],
- ["Reckoning",5,5,3,null,"Being critically hit can grant extra attacks; stores up to 4 charges.",null,false],
+ ["Reckoning",5,5,3,null,"After you block (up to a 40% chance, 8% per rank) or take a non-periodic critical hit (up to 100%, 20% per rank) you gain an extra attack; stores up to 4 charges, at most one from blocks every 1.5 sec.",null,false],
  ["Iron Creed",3,6,3,null,"Up to 25% more Holy Strike threat and 10% less damage taken (5 ranks).","Up to 30% more Holy Strike threat and 6% less damage taken. Now 3 ranks.",true],
  ["Shieldsworn",1,7,2,"Holy Shield","Not in the beta tree.","Holy Strike's cooldown is 4 sec shorter and it hits with your shield, triggering Holy Shield and Shield Specialization without using their charges. Also blocks spells for 6 sec.",true]
 ]},
 {name:"Retribution",t:[
- ["Deflection",5,1,2,null,"Increases your parry chance.",null,true],
- ["Benediction",5,1,3,null,"Reduces the mana cost of your Seals and Judgements.",null,false],
- ["Improved Judgement",2,2,1,null,"Reduces the cooldown of Judgement.",null,false],
+ ["Deflection",5,1,2,null,"Increases your parry chance.","Up to +5% parry chance.",true],
+ ["Benediction",5,1,3,null,"Instant spells and abilities cost up to 10% less mana.",null,false],
+ ["Improved Judgement",2,2,1,null,"Judgement's cooldown is up to 2 sec shorter.",null,false],
  ["Conviction",3,2,2,null,"Up to 5% critical strike chance with melee attacks (5 ranks).","Up to 6% critical strike chance (2 / 4 / 6%) with all spells and attacks. Now 3 ranks.",true],
- ["Sanctified Judgement",3,2,3,null,"Your Judgements return mana, without generating threat.",null,true],
- ["Vindication",3,3,1,null,"Your attacks lower the target's attack power and raise yours.","Your attacks lower the target's attack power. No longer raises yours.",true],
- ["Unyielding Faith",2,3,2,null,"Increases your chance to resist Fear and Disorient effects. Moved from Holy.",null,true],
+ ["Sanctified Judgement",3,2,3,null,"Your Judgements return mana, without generating threat.","Your Judgements have up to a 100% chance (33 / 66 / 100%) to return 20% of the judged Seal's mana cost, without threat.",true],
+ ["Vindication",3,3,1,null,"Your attacks lower the target's attack power and raise yours.","Your attacks can lower the target's attack power for 30 sec (67 at rank 1). No longer raises yours.",true],
+ ["Unyielding Faith",2,3,2,null,"Increases your chance to resist Fear and Disorient effects. Moved from Holy.","Fear and Disorient effects on you are up to 30% shorter.",true],
  ["Seal of Command",1,3,3,null,"A Seal that gives your melee attacks a chance to deal extra Holy damage.",null,false],
- ["Pursuit of Justice",2,3,4,null,"Increases your movement speed.",null,false],
- ["Eye for an Eye",2,4,1,null,"Critical hits against you deal part of their damage back to the attacker.",null,false],
+ ["Pursuit of Justice",2,3,4,null,"Up to 16% faster movement, mounted or on foot.",null,false],
+ ["Eye for an Eye",2,4,1,null,"Critical hits against you deal up to 10% of their damage back to the attacker (at most 50% of your health).",null,false],
  ["Sacred Arbiter",1,4,2,null,"Holy Strike deals 20% more damage.",null,true],
- ["Two-Handed Weapon Specialization",3,4,4,null,"Up to 6% more damage with two-handed weapons.","Up to 6% more Holy and Physical damage (2 / 4 / 6%), and less threat while you wield a two-hander. Moved to row 4.",true],
+ ["Two-Handed Weapon Specialization",3,4,4,null,"Up to 6% more damage with two-handed weapons.","Up to 6% more Holy and Physical damage, and up to 21% less threat while you wield a two-hander. Moved to row 4.",true],
  ["Turn Evil",2,5,1,null,"Not in the beta tree.","Turn Undead casts up to 1 sec faster with up to 10 sec less cooldown, and also works on Demons.",true],
  ["Repentance",1,5,2,null,"Puts an enemy out of action for a short time.",null,true],
- ["Vengeance",3,5,3,"Seal of Command","Critical hits boost your damage, stacking up to 3 times. Requires Sanctified Judgement in the beta.","Critical hits raise your Physical and Holy damage, stacking up to 5 times for up to 15% more at rank 3. Now requires Seal of Command.",true],
+ ["Vengeance",3,5,3,"Seal of Command","Critical hits boost your damage, stacking up to 3 times. Requires Sanctified Judgement in the beta.","Each non-periodic critical hit gives up to 3% more Physical and Holy damage (1% per rank) for 30 sec, stacking 5 times. Now requires Seal of Command.",true],
  ["Champion of the Light",5,6,3,null,"Gain spell damage equal to up to 60% of your Intellect (3 ranks).","Gain spell damage equal to up to 60% of your Intellect, and Hammer of Wrath casts up to 1 sec faster. Now 5 ranks.",true],
  ["Unsealed Wrath",1,7,2,"Repentance","Not in the beta tree (replaces Twist of Light).","Melee attacks store your active Seal for 15 sec, up to 3 times. Attacking with a different Seal spends the stored stacks.",true]
 ]}];
@@ -697,14 +721,81 @@ const SOON=[];
 let cls="paladin",TREES=PALADIN;
 const MAXP=51;
 const TICON={"Spiritual Focus":"paladin-spiritual-focus","Divine Strength":"paladin-divine-strength","Healing Light":"paladin-healing-light","Reverence":"paladin-reverence","Improved Seals":"paladin-improved-seals","Purifying Power":"paladin-purifying-power","Divine Favor":"paladin-divine-favor","Illumination":"paladin-illumination","Holy Conduit":"paladin-holy-conduit","Divine Precision":"paladin-divine-precision","Infusion of Light":"paladin-infusion-of-light","Oath of Light":"paladin-oath-of-light","Consecrated Ground":"paladin-consecrated-ground","Holy Shock":"paladin-holy-shock","Boundless Light":"paladin-boundless-light","Holy Power":"paladin-holy-power","Light's Vigil":"paladin-light-s-vigil","Redoubt":"paladin-redoubt","Precision":"paladin-precision","Guardian's Favor":"paladin-guardian-s-favor","Sacred Duty":"paladin-sacred-duty","Templar's Bulwark":"paladin-templar-s-bulwark","Improved Hammer of Justice":"paladin-improved-hammer-of-justice","Shield Specialization":"paladin-shield-specialization","Toughness":"paladin-toughness","Swift Judgement":"paladin-swift-judgement","Improved Righteous Fury":"paladin-improved-righteous-fury","Anticipation":"paladin-anticipation","Stoicism":"paladin-stoicism","Holy Shield":"paladin-holy-shield","Reckoning":"paladin-reckoning","Iron Creed":"paladin-iron-creed","Shieldsworn":"paladin-shieldsworn","Deflection":"paladin-deflection","Benediction":"paladin-benediction","Improved Judgement":"paladin-improved-judgement","Conviction":"paladin-conviction","Sanctified Judgement":"paladin-sanctified-judgement","Vindication":"paladin-vindication","Unyielding Faith":"paladin-unyielding-faith","Seal of Command":"paladin-seal-of-command","Pursuit of Justice":"paladin-pursuit-of-justice","Eye for an Eye":"paladin-eye-for-an-eye","Sacred Arbiter":"paladin-sacred-arbiter","Two-Handed Weapon Specialization":"paladin-two-handed-weapon-specialization","Turn Evil":"paladin-turn-evil","Repentance":"paladin-repentance","Vengeance":"paladin-vengeance","Champion of the Light":"paladin-champion-of-the-light","Unsealed Wrath":"paladin-unsealed-wrath","Divine Intellect":"paladin-divine-intellect"};
-let pts, mode="hot", sel=null, byName;
+let pts, mode="hot", sel=null, byName, ord=[], hov=null;
+/* Per-rank text from max-rank text.
+   "(a / b / c)" lists (one value per rank) give exact values for the "up to N" that ends in c;
+   "X per rank" after an "up to N" gives X*rank; otherwise "up to N" scales linearly N*rank/max.
+   Counts ("up to 5 times / targets / charges") are left alone. */
+function rankText(txt,r,m){
+  if(m<=1||r>=m) return {t:txt,scaled:false};
+  const fmt=v=>{const x=Math.round(v*100)/100;return String(x);};
+  let t=txt;
+  const lists=[];
+  t=t.replace(/\s*\(((?:[\d.]+\s*\/\s*)+[\d.]+)\s*(?:%|\s?sec|\s?yd)?\)/g,(all,body)=>{
+    const v=body.split('/').map(s=>parseFloat(s)); if(v.length===m){lists.push(v);return '';} return all;});
+  const COUNT=/^\s*(?:more\s+|extra\s+)?(times|enemies|targets|target|allies|charges|stacks|members|people)\b/i;
+  const UP=/\b[Uu]p to\s+(a\s+|an\s+|\+)?([\d.]+)/g;
+  let out='',last=0,scaled=false,m1;
+  const ups=[];while((m1=UP.exec(t))) ups.push({i:m1.index,len:m1[0].length,pre:m1[1]||'',N:parseFloat(m1[2])});
+  const drop=[]; // [start,end) ranges to delete (used "per rank" notes)
+  ups.forEach((u,k)=>{
+    const after=t.slice(u.i+u.len);
+    if(COUNT.test(after)){u.skip=true;return;}
+    let val=null;
+    const li=lists.findIndex(l=>Math.abs(l[l.length-1]-u.N)<1e-9);
+    if(li>=0){val=lists[li][r-1];lists.splice(li,1);}
+    else{
+      const end=k+1<ups.length?ups[k+1].i:t.length;
+      const seg=t.slice(u.i+u.len,end);
+      const pm=/(\s*\(|,\s*)([\d.]+)(%|\s?sec)?\s+per rank\)?/.exec(seg);
+      if(pm){val=parseFloat(pm[2])*r;let s=u.i+u.len+pm.index,e=s+pm[0].length;
+        if(pm[1].trim()==='('){/* whole "(X per rank)" */} else if(t[e-1]===')'){e--;} drop.push([s,e]);}
+      else val=u.N*r/m;
+    }
+    u.val=val;scaled=true;
+  });
+  // rebuild
+  const edits=[];ups.forEach(u=>{if(!u.skip)edits.push([u.i,u.i+u.len,(u.pre.trim()==='+'?'+':u.pre)+fmt(u.val)]);});
+  drop.forEach(([s,e])=>edits.push([s,e,'']));
+  edits.sort((a,b)=>a[0]-b[0]);
+  for(const [s,e,rep] of edits){if(s<last) continue; out+=t.slice(last,s)+rep; last=e;}
+  out+=t.slice(last);
+  out=out.replace(/\(\s*\)/g,'').replace(/\s+([,.;)])/g,'$1').replace(/\b([Aa]) (8\d*|11|18)(?=[\s.%])/g,(a,A,n)=>(A==='A'?'An ':'an ')+n).replace(/^a /,'A ').replace(/\s{2,}/g,' ');
+  return {t:out,scaled};
+}
+const effect=x=>(mode==="hot"&&x[6]&&!/^Same effect/.test(x[6]))?x[6]:x[5];
+const ALPH="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const offs=()=>TREES.map((_,k)=>TREES.slice(0,k).reduce((a,tr)=>a+tr.t.length,0));
+function addPt(ti,i){if(!canAdd(ti,i)) return false; pts[ti][i]++; ord.push([ti,i]); return true;}
+function remPt(ti,i){if(!canRemove(ti,i)) return false; pts[ti][i]--; for(let k=ord.length-1;k>=0;k--){if(ord[k][0]===ti&&ord[k][1]===i){ord.splice(k,1);break;}} replayOrder(); return true;}
+function replayOrder(){/* keep the saved order legal after removals; rebuild it if a later point depended on the removed one */
+  const keep=pts.map(p=>p.slice()),old=ord; pts=TREES.map(t=>t.t.map(()=>0)); ord=[];
+  for(const [a,b] of old){if(!addPt(a,b)) break;}
+  if(pts.some((p,k)=>p.some((v,j)=>v!==keep[k][j]))){pts=keep;synthOrder();}}
+function synthOrder(){/* rebuild a legal spending order from point totals (old links without an order) */
+  const tgt=pts.map(p=>p.slice()); pts=TREES.map(t=>t.t.map(()=>0)); ord=[];
+  const trees=TREES.map((_,k)=>k).sort((a,b)=>tgt[b].reduce((x,y)=>x+y,0)-tgt[a].reduce((x,y)=>x+y,0));
+  for(let pass=0;pass<4;pass++) trees.forEach(ti=>{const idx=TREES[ti].t.map((_,k)=>k).sort((a,b)=>{const A=TREES[ti].t[a],B=TREES[ti].t[b];return A[2]-B[2]||(A[4]?1:0)-(B[4]?1:0)||A[3]-B[3];});
+    idx.forEach(i=>{while(pts[ti][i]<tgt[ti][i]&&addPt(ti,i));});});
+  if(pts.some((p,ti)=>p.some((v,i)=>v!==tgt[ti][i]))){pts=tgt;ord=[];}}
+function nextRowNote(ti){const s=treeSum(ti),maxRow=Math.max(...TREES[ti].t.map(x=>x[2]));
+  if(s>=(maxRow-1)*5) return ' <em class="done">all rows open</em>';
+  const r=Math.floor(s/5)+2; return ` <em>row ${r} at ${(r-1)*5}</em>`;}
+function rankLines(x,r,short){const m=x[1],E=effect(x);
+  if(m===1) return `<p>${esc(E)}</p>`;
+  if(!rankText(E,1,m).scaled) return `<p><span class="rk-l">At ${m}/${m}</span>${esc(E)}</p>`;
+  let h='';
+  if(r>0) h+=`<p><span class="rk-l">Rank ${r}/${m}</span>${esc(rankText(E,r,m).t)}</p>`;
+  if(r<m) h+=`<p class="nxt nx"><span class="rk-l">${r?"Next rank":"Rank 1"}</span>${esc(rankText(E,r+1,m).t)}</p>`;
+  if(!short&&r<m-1) h+=`<p class="mx"><span class="rk-l">At ${m}/${m}</span>${esc(E)}</p>`;
+  return h;}
 /* exact game icon file names per class; the icon night run regenerates img/talents/<class>-<slug>.webp from these */
 const GICON={hunter:{"Improved Revive Pet": "ability_hunter_beastsoothe", "Deadly Aspects": "spell_nature_ravenform", "Endurance Training": "spell_nature_reincarnation", "Focused Fire": "inv_weapon_crossbow_10", "Improved Aspect of the Monkey": "ability_hunter_aspectofthemonkey", "Pathfinding": "ability_mount_jungletiger", "Bestial Swiftness": "ability_druid_dash", "Unleashed Fury": "ability_bullrush", "Improved Mend Pet": "ability_hunter_mendpet", "Ferocity": "inv_misc_monsterclaw_04", "Summon Hawk": "ability_hunter_animalhandler", "Spirit Bond": "ability_druid_demoralizingroar", "Intimidation": "ability_devour", "Bestial Discipline": "spell_nature_abolishmagic", "Frenzy": "inv_misc_monsterclaw_03", "Bestial Wrath": "ability_druid_ferociousbite", "Hawk Eye": "ability_townwatch", "Improved Concussive Shot": "spell_frost_stun", "Lethal Attacks": "ability_searingarrow", "Improved Stings": "ability_hunter_quickshot", "Efficiency": "spell_frost_wizardmark", "Careful Aim": "ability_hunter_zenarchery", "Rapid Killing": "ability_hunter_rapidkilling", "Improved Arcane Shot": "ability_impalingbolt", "Lone Wolf": "ability_mount_whitedirewolf", "Trueshot Aura": "ability_trueshot", "Mortal Shots": "ability_piercedamage", "Rapid Recuperation": "ability_hunter_rapidregeneration", "Barrage": "ability_upgrademoonglaive", "Scatter Shot": "ability_golemstormbolt", "Ranged Weapon Specialization": "inv_weapon_rifle_06", "Sniper Shot": "hunter_pvp_snipershot", "Improved Tracking": "inv_misc_head_dragon_black", "Deflection": "ability_parry", "Entrapment": "spell_nature_stranglevines", "Savage Strikes": "ability_racial_bloodrage", "Survivalist": "spell_shadow_twilight", "Improved Wing Clip": "ability_rogue_trip", "Clever Traps": "spell_nature_timestop", "Surefooted": "ability_kick", "Deterrence": "ability_whirlwind", "Survival Tactics": "ability_ensnare", "Predator's Edge": "ability_dualwield", "Counterattack": "ability_warrior_challange", "Resourcefulness": "ability_hunter_resourcefulness", "Expose Prey": "ability_hunter_swiftstrike", "Survivalist's Discipline": "ability_hunter_mastertactitian", "Strider Kick": "ability_hunter_pet_tallstrider", "Lightning Reflexes": "spell_nature_invisibilty", "Lacerating Strikes": "ability_gouge"},druid:{"Improved Wrath": "spell_nature_abolishmagic", "Genesis": "spell_arcane_arcane03", "Moonglow": "spell_nature_sentinal", "Improved Moonfire": "spell_nature_starfall", "Nature's Majesty": "inv_staff_01", "Nature's Reach": "spell_nature_naturetouchgrow", "Improved Entangling Roots": "spell_nature_stranglevines", "Nature's Splendor": "spell_nature_natureresistancetotem", "Insect Swarm": "spell_nature_insectswarm", "Vengeance": "spell_nature_purge", "Improved Starfire": "spell_arcane_starfire", "Overgrowth": "inv_misc_herb_15", "Nature's Grace": "spell_nature_naturesblessing", "Eclipse": "ability_druid_eclipse", "Moonfury": "spell_nature_moonglow", "Moonkin Form": "spell_nature_forceofnature", "Ferocity": "ability_hunter_pet_hyena", "Furor": "spell_holy_blessingofstamina", "Feral Swiftness": "spell_nature_spiritwolf", "Feral Instinct": "ability_ambush", "Brutal Impact": "ability_druid_bash", "Thick Hide": "inv_misc_pelt_bear_03", "Shredding Attacks": "spell_shadow_vampiricaura", "Savage Fury": "ability_druid_ravage", "Feral Charge": "ability_hunter_pet_bear", "Sharpened Claws": "inv_misc_monsterclaw_04", "Predatory Strikes": "ability_hunter_pet_cat", "Lacerate": "ability_druid_lacerate", "Predatory Discipline": "spell_druid_savagery", "Blood Frenzy": "ability_ghoulfrenzy", "Leader of the Pack": "spell_nature_unyeildingstamina", "Natural Instinct": "ability_druid_predatoryinstincts", "Rend and Tear": "ability_druid_primalagression", "Natural Reaction": "ability_bullrush", "Primal Bite": "ability_racial_cannibalize", "Shifting Power": "spell_druid_displacement", "Nature's Focus": "spell_nature_healingwavegreater", "Heart of the Wild": "spell_holy_blessingofagility", "Naturalist": "spell_nature_healingtouch", "Reflection": "spell_frost_windwalkon", "Natural Shapeshifter": "spell_nature_wispsplode", "Subtlety": "ability_eyeoftheowl", "Gift of Nature": "spell_nature_protectionformnature", "Bloom": "inv_misc_herb_felblossom", "Tranquil Spirit": "spell_holy_elunesgrace", "Improved Rejuvenation": "spell_nature_rejuvenation", "Swiftmend": "inv_relics_idolofrejuvenation", "Nature's Swiftness": "spell_nature_ravenform", "Living Spirit": "spell_nature_giftofthewaterspirit", "Improved Tranquility": "spell_nature_tranquility", "Improved Regrowth": "spell_nature_resistnature", "Wild Growth": "ability_druid_flourish"},mage:{"Wand Specialization": "inv_wand_01", "Improved Channeling": "spell_nature_starfall", "Arcane Resilience": "spell_arcane_arcaneresilience", "Arcane Subtlety": "spell_holy_dispelmagic", "Magic Absorption": "spell_nature_astralrecalgroup", "Arcane Concentration": "spell_shadow_manaburn", "Missile Barrage": "ability_mage_missilebarrage", "Arcane Geometry": "inv_ability_mage_radiantspark", "Arcane Impact": "spell_nature_wispsplode", "Arcane Blast": "spell_arcane_blast", "Arcane Shielding": "spell_shadow_detectlesserinvisibility", "Improved Counterspell": "spell_frost_iceshock", "Arcane Meditation": "spell_shadow_siphonmana", "Arcane Wrath": "ability_mage_netherwindpresence", "Presence of Mind": "spell_nature_enchantarmor", "Arcane Mind": "spell_shadow_charm", "Arcane Instability": "spell_shadow_teleport", "Arcane Power": "spell_nature_lightning", "Incineration": "spell_fire_flameshock", "Accelerant": "spell_fire_flamebolt", "Ignite": "spell_fire_incinerate", "Flame Throwing": "spell_fire_flare", "Impact": "spell_fire_meteorstorm", "Burning Soul": "spell_fire_fire", "Improved Flamestrike": "spell_fire_selfdestruct", "Pyroblast": "spell_fire_fireball02", "Improved Fire Blast": "spell_fire_lavaspawn", "Improved Scorch": "spell_fire_soulburn", "Improved Fire Ward": "spell_fire_firearmor", "Heating Up": "spell_fire_firebolt", "Master of Elements": "spell_fire_masterofelements", "Critical Mass": "spell_nature_wispheal", "Blast Wave": "spell_holy_excorcism_02", "Fire Power": "spell_fire_immolation", "Combustion": "spell_fire_sealoffire", "Frost Warding": "spell_frost_frostward", "Improved Frostbolt": "spell_frost_frostbolt02", "Precision": "spell_ice_magicdamage", "Ice Shards": "spell_frost_iceshard", "Frostbite": "spell_frost_frostarmor", "Improved Frost Nova": "spell_frost_freezingbreath", "Permafrost": "spell_frost_wisp", "Frost Channeling": "spell_frost_stun", "Improved Blizzard": "spell_frost_icestorm", "Ice Lance": "spell_frost_frostblast", "Arctic Reach": "spell_shadow_darkritual", "Ice Block": "spell_frost_frost", "Shatter": "spell_frost_frostshock", "Improved Cone of Cold": "spell_frost_glacier", "Cold Snap": "spell_frost_wizardmark", "Fingers of Frost": "ability_mage_wintersgrasp", "Winter's Chill": "spell_frost_chillingblast", "Ice Barrier": "spell_ice_lament"},warrior:{"Improved Heroic Strike": "ability_rogue_ambush", "Deflection": "ability_parry", "Improved Rend": "ability_gouge", "Improved Charge": "ability_warrior_charge", "Improved Tactical Mastery": "spell_nature_enchantarmor", "Improved Overpower": "inv_sword_05", "Anger Management": "spell_holy_blessingofstamina", "Deep Wounds": "ability_backstab", "Spearing Strike": "inv_spear_01", "Two-Handed Weapon Specialization": "inv_axe_09", "Impale": "ability_searingarrow", "Bloodthrill": "inv_sword_01", "Sweeping Strikes": "ability_rogue_slicedice", "Weaponmaster": "garrison_weaponupgrade", "Improved Slam": "ability_warrior_decisivestrike", "Improved Hamstring": "ability_shockwave", "Mortal Strike": "ability_warrior_savageblow", "Booming Voice": "spell_nature_purge", "Cruelty": "ability_rogue_eviscerate", "Lingering Rage": "ability_warrior_secondwind", "Unbridled Wrath": "spell_nature_stoneclawtotem", "Furious Precision": "ability_warrior_incite", "Piercing Howl": "spell_shadow_deathscream", "Blood Craze": "spell_shadow_summonimp", "Dual Wield Specialization": "ability_dualwield", "Raging Blows": "ability_whirlwind", "Enrage": "spell_shadow_unholyfrenzy", "Improved Execute": "inv_sword_48", "Improved Berserker Rage": "spell_nature_ancestralguardian", "Death Wish": "spell_shadow_deathpact", "Improved Intercept": "ability_rogue_sprint", "Flurry": "ability_ghoulfrenzy", "Gore Drinker": "racial_troll_berserk", "Bloodthirst": "spell_nature_bloodlust", "Improved Bloodrage": "ability_racial_bloodrage", "Shield Specialization": "inv_shield_06", "Iron Will": "spell_magic_magearmor", "Anticipation": "spell_nature_mirrorimage", "Improved Revenge": "ability_warrior_revenge", "Improved Thunder Clap": "ability_thunderclap", "Last Stand": "spell_holy_ashestoashes", "Master of Defense": "ability_warrior_shieldguard", "Improved Disarm": "ability_warrior_disarm", "Defiance": "ability_warrior_innerrage", "Improved Sunder Armor": "ability_warrior_sunder", "Vanguard": "ability_warrior_shieldcharge", "Improved Shield Bash": "ability_warrior_shieldbash", "Improved Shield Wall": "ability_warrior_shieldwall", "Concussion Blow": "ability_thunderbolt", "Focused Rage": "ability_warrior_focusedrage", "Bastion": "inv_shield_04", "Shield Slam": "inv_shield_05"},warlock:{"Improved Life Tap": "spell_shadow_burningspirit", "Suppression": "spell_shadow_unsummonbuilding", "Improved Corruption": "spell_shadow_abominationexplosion", "Grim Reach": "spell_shadow_callofbone", "Soul Harvest": "inv_elemental_primal_shadow", "Improved Drains": "spell_shadow_haunting", "Improved Bane of Agony": "spell_shadow_curseofsargeras", "Fel Concentration": "spell_shadow_fingerofdeath", "Amplify Curse": "spell_shadow_contagion", "Pandemic": "spell_shadow_unstableaffliction_2", "Malevolence": "spell_shadow_focusedpower", "Nightfall": "spell_shadow_twilight", "Curse of Exhaustion": "spell_shadow_grimward", "Siphon Life": "spell_shadow_requiem", "Soul Siphon": "spell_shadow_lifedrain02", "Shadow Mastery": "spell_shadow_shadetruesight", "Wrack": "ability_deathknight_hemorrhagicfever", "Improved Health Funnel": "spell_shadow_lifedrain", "Improved Imp": "spell_shadow_summonimp", "Demonic Embrace": "spell_shadow_metamorphosis", "Unholy Power": "spell_shadow_shadowworddominate", "Demonic Aegis": "spell_shadow_ragingscream", "Improved Voidwalker": "spell_shadow_summonvoidwalker", "Fel Vitality": "spell_shadow_demonictactics", "Demonic Energies": "spell_shadow_felmending", "Improved Sayaad": "ability_warlock_randomizesuccubusincubus", "Demonic Sacrifice": "spell_shadow_psychicscream", "Master Summoner": "spell_shadow_impphaseshift", "Decimation": "spell_fire_fireball02", "Fel Domination": "spell_nature_removecurse", "Demonic Brand": "ability_demonhunter_chaoticimprint_fire", "Improved Felhunter": "spell_shadow_summonfelhunter", "Soul Link": "spell_shadow_gathershadows", "Demonic Knowledge": "spell_shadow_improvedvampiricembrace", "Master Demonologist": "spell_shadow_shadowpact", "Demonic Pact": "inv_ability_soulharvesterwarlock_demonicsoul", "Destructive Reach": "spell_shadow_corpseexplode", "Improved Shadow Bolt": "spell_shadow_shadowbolt", "Bane": "spell_shadow_deathpact", "Molten Skin": "ability_mage_moltenarmor", "Cataclysm": "spell_fire_windsofwoe", "Aftermath": "spell_fire_fire", "Ruin": "spell_shadow_shadowwordpain", "Shadowburn": "spell_shadow_scourgebuild", "Intensity": "spell_fire_lavaspawn", "Agonizing Flames": "spell_fire_soulburn", "Conflagrate": "spell_fire_fireball", "Pyroclasm": "spell_fire_volcano", "Bane of Havoc": "ability_warlock_baneofhavoc", "Fire and Brimstone": "spell_fire_meteorstorm", "Shadow and Flame": "spell_fire_playingwithfire", "Incinerate": "spell_fire_burnout"},priest:{"Power in Light":"spell_holy_searinglight","Wand Specialization":"inv_wand_01","Twin Disciplines":"spell_holy_sealofvengeance","Silent Resolve":"spell_nature_manaregentotem","Holy Precision":"spell_holy_divineillumination","Mental Strength":"spell_nature_enchantarmor","Martyrdom":"spell_nature_tranquility","Mental Agility":"ability_hibernation","Inner Focus":"spell_frost_windwalkon","Improved Power Word: Shield":"spell_holy_powerwordshield","Meditation":"spell_nature_sleep","Improved Inner Fire":"spell_holy_innerfire","Improved Mana Burn":"spell_shadow_manaburn","Soul Warding":"spell_holy_pureofheart","Penance":"spell_holy_penance","Renewed Hope":"spell_holy_holyprotection","Divine Aegis":"spell_holy_devineaegis","Power Infusion":"spell_holy_powerinfusion","Twilight Focus":"spell_holy_healingfocus","Improved Renew":"spell_holy_renew","Holy Specialization":"spell_holy_sealofsalvation","Spell Warding":"spell_holy_spellwarding","Divine Fury":"spell_holy_sealofwrath","Holy Nova":"spell_holy_holynova","Blessed Recovery":"spell_holy_blessedrecovery","Inspiration":"spell_holy_layonhands","Holy Reach":"spell_holy_purify","Improved Healing":"spell_holy_heal02","Searing Light":"spell_holy_searinglightpriest","Holy Binding":"spell_holy_blindingheal","Litany of Light":"inv_scroll_07","Spirit of Redemption":"inv_enchant_essenceeternallarge","Spiritual Guidance":"spell_holy_spiritualguidence","Spiritual Healing":"spell_nature_moonglow","Prayer of Mending":"spell_holy_prayerofmendingtga","Shadow Focus":"spell_shadow_burningspirit","Blackout":"spell_shadow_gathershadows","Spirit Tap":"spell_shadow_requiem","Improved Mind Blast":"spell_shadow_unholyfrenzy","Improved Shadow Word: Pain":"spell_shadow_shadowwordpain","Shadow Reach":"spell_shadow_chilltouch","Improved Psychic Scream":"spell_shadow_psychicscream","Mind Flay":"spell_shadow_siphonmana","Improved Mind Flay":"spell_shadow_soulleech_2","Dark Inspiration":"spell_warlock_demonsoul","Vampiric Embrace":"spell_shadow_unsummonbuilding","Shadow Weaving":"spell_shadow_blackplague","Silence":"spell_shadow_impphaseshift","Devouring Contagion":"spell_shadow_devouringplague","Early Demise":"spell_shadow_demonicfortitude","Darkness":"spell_shadow_twilight","Shadowform":"spell_shadow_shadowform"},shaman:{"Convection":"spell_nature_wispsplode","Concussion":"spell_nature_earthshock","Elemental Devastation":"spell_fire_elementaldevastation","Reverberation":"spell_frost_frostward","Elemental Alacrity":"spell_lightning_lightningbolt01","Call of Flame":"spell_fire_immolation","Elemental Focus":"spell_shadow_manaburn","Elemental Warding":"spell_nature_spiritarmor","Trial by Fire":"spell_fire_sealoffire","Eye of the Storm":"spell_nature_eyeofthestorm","Earthbound":"spell_nature_stranglevines","Elemental Reach":"spell_nature_stormreach","Lava Burst":"spell_shaman_lavaburst","Lightning Overload":"spell_nature_lightningoverload","Elemental Fury":"spell_fire_volcano","Elemental Mastery":"spell_nature_wispheal","Earth's Grasp":"spell_nature_stoneclawtotem","Thundering Strikes":"ability_thunderbolt","Ancestral Knowledge":"spell_shadow_grimward","Guardian Totems":"spell_nature_stoneskintotem","Mental Dexterity":"spell_nature_mentalquickness","Improved Ghost Wolf":"spell_nature_spiritwolf","Improved Lightning Shield":"spell_nature_lightningshield","Elemental Weapons":"spell_fire_flametounge","Shamanistic Focus":"spell_nature_elementalabsorption","Anticipation":"spell_nature_mirrorimage","Toughness":"spell_holy_devotion","Flurry":"ability_ghoulfrenzy","Stormstrike":"ability_shaman_stormstrike","Spirit Weapons":"ability_parry","Mental Quickness":"spell_nature_sleep","Improved Stormstrike":"spell_shaman_improvedstormstrike","Maelstrom Weapon":"spell_shaman_maelstromweapon","Rage of the Farseer":"spell_nature_bloodlust","Improved Healing Wave":"spell_nature_magicimmunity","Tidal Focus":"spell_frost_manarecharge","Mindfulness":"spell_nature_sleep","Natural Grace":"spell_nature_healingtouch","Totemic Focus":"spell_nature_moonglow","Improved Reincarnation":"spell_nature_reincarnation","Ancestral Healing":"spell_nature_undyingstrength","Healing Focus":"spell_nature_healingwavelesser","Water Shield":"ability_shaman_watershield","Tidal Mastery":"spell_nature_tranquility","Restorative Totems":"spell_nature_manaregentotem","Mana Tide Totem":"spell_frost_summonwaterelemental","Healing Way":"spell_nature_healingway","Nature's Swiftness":"spell_nature_ravenform","Purification":"spell_frost_wizardmark","Riptide":"spell_nature_riptide"}};
 const BGMAP={retribution:"combat",elemental:"elementalcombat",affliction:"curses",demonology:"summoning",feral:"feralcombat"};
 const treeBg=n=>{const k=n.toLowerCase().replace(/[^a-z]/g,"");return cls+(BGMAP[k]||k);};
 const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const icon=n=>(cls==="paladin"&&TICON[n])||cls+"-"+slug(n);
-function setClass(c){cls=CLASSES[c]?c:"paladin";TREES=CLASSES[cls].trees;pts=TREES.map(t=>t.t.map(()=>0));sel=null;
+function setClass(c){cls=CLASSES[c]?c:"paladin";TREES=CLASSES[cls].trees;pts=TREES.map(t=>t.t.map(()=>0));sel=null;ord=[];
   byName=TREES.map(t=>Object.fromEntries(t.t.map((x,i)=>[x[0],i])));
   const C=CLASSES[cls];document.getElementById("h1").textContent=C.name+" Talent Calculator";
   document.getElementById("lede").textContent=C.lede;document.getElementById("note").innerHTML=C.note;
@@ -729,45 +820,70 @@ function nodeState(ti,i){const x=TREES[ti].t[i],p=pts[ti][i];
   if(p>=x[1]) return "max"; if(p>0) return "some";
   return canAdd(ti,i)||(total()>=MAXP&&pointsAbove(ti,x[2])>=(x[2]-1)*5)?"open":"locked";}
 function render(){
-  document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree" style="--bg:url(img/trees/${treeBg(tr.name)}.webp)"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts <button type="button" data-clear="${ti}">clear</button></span></div>
+  document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree" style="--bg:url(img/trees/${treeBg(tr.name)}.webp)"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts${nextRowNote(ti)} <button type="button" data-clear="${ti}">clear</button></span></div>
     <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${icon(x[0])}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed for launch"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
   requestAnimationFrame(drawLinks);
   const t=total(); document.querySelector("#spent b").textContent=t;
   document.querySelector("#lvl b").textContent=t?t+9:10;
   document.querySelector("#split b").textContent=pts.map((_,i)=>treeSum(i)).join(" / ");
   document.getElementById("spent").classList.toggle("warn",t>=MAXP);
-  renderDetail(); saveURL();}
+  renderDetail(); renderOrder(); saveURL(); if(hov){const n=document.querySelector(`.node[data-t="${hov[0]}"][data-i="${hov[1]}"]`); if(n) showTip(n); else hideTip();}}
 function drawLinks(){document.querySelectorAll(".grid").forEach(g=>{const ti=+g.dataset.tree,s=g.querySelector("svg"),gb=g.getBoundingClientRect();
   s.innerHTML=TREES[ti].t.map((x,i)=>{if(!x[4]) return "";const r=byName[ti][x[4]];
     const a=g.querySelector(`[data-i="${r}"]`).getBoundingClientRect(),b=g.querySelector(`[data-i="${i}"]`).getBoundingClientRect();
     const met=pts[ti][r]>=TREES[ti].t[r][1];
     return `<line x1="${a.left+a.width/2-gb.left}" y1="${a.top+a.height/2-gb.top}" x2="${b.left+b.width/2-gb.left}" y2="${b.top+b.height/2-gb.top}" stroke="${met?"#e9b44c":"#4a5163"}" stroke-width="3" stroke-linecap="round"/>`;}).join("");});}
 function renderDetail(){const d=document.getElementById("detail");
-  if(!sel){d.innerHTML=`<p style="margin:0;color:var(--muted)">Pick a talent to see what it does.</p>`;return;}
-  const [ti,i]=sel,x=TREES[ti].t[i],txt=mode==="hot"&&x[6]?x[6]:x[5];
+  if(!sel){d.innerHTML=`<p style="margin:0;color:var(--muted)">Pick a talent to see what this rank and the next one give.</p>`;return;}
+  const [ti,i]=sel,x=TREES[ti].t[i];
   const req=[]; if(x[2]>1) req.push(`${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]) req.push(`${x[4]} maxed`);
   d.innerHTML=`<div><h3>${esc(x[0])}</h3><div class="meta">${TREES[ti].name} · row ${x[2]} · ${pts[ti][i]} / ${x[1]} ranks${req.length?` · needs ${req.join(" and ")}`:""}</div></div>
     <div class="pm"><button type="button" id="minus" aria-label="Remove a point" ${canRemove(ti,i)?"":"disabled"}>−</button><button type="button" id="plus" aria-label="Add a point" ${canAdd(ti,i)?"":"disabled"}>+</button></div>
-    <p><span class="ver ${mode==="hot"?"hot":"off"}">${mode==="hot"?"Launch":"Beta"}</span>${esc(txt)}</p>
-    ${x[6]&&mode==="hot"?`<p class="meta">Beta: ${esc(x[5])}</p>`:""}${x[6]&&mode==="off"?`<p class="meta">Launch: ${esc(x[6])}</p>`:""}`;}
+    <p style="margin-bottom:-4px"><span class="ver ${mode==="hot"?"hot":"off"}">${mode==="hot"?"Launch":"Beta"}</span></p>${rankLines(x,pts[ti][i])}
+    ${x[6]&&mode==="hot"?`<p class="meta">${/^Same effect/.test(x[6])?"Launch change: "+esc(x[6]):"Beta: "+esc(x[5])}</p>`:""}${x[6]&&mode==="off"?`<p class="meta">Launch: ${esc(x[6])}</p>`:""}`;}
+function renderOrder(){const body=document.getElementById("orderBody"),sub=document.getElementById("orderSub");
+  if(!ord.length){sub.textContent="";body.innerHTML=`<p class="empty">Spend points and they show up here level by level, from 10 to 60.</p>`;return;}
+  const g=[];ord.forEach(([ti,i],k)=>{const last=g[g.length-1];if(last&&last.ti===ti&&last.i===i){last.to=k;}else g.push({ti,i,from:k,to:k});});
+  const cnt={};sub.textContent=`${ord.length} points · level ${ord.length+9}`;
+  body.innerHTML=`<ol>${g.map(o=>{const x=TREES[o.ti].t[o.i],key=o.ti+"-"+o.i,r0=(cnt[key]||0)+1,r1=r0+(o.to-o.from);cnt[key]=r1;
+    const lv=o.from===o.to?`Lv ${o.from+10}`:`Lv ${o.from+10}–${o.to+10}`;
+    return `<li><span class="lv">${lv}</span><img src="img/talents/${icon(x[0])}.webp" alt="" loading="lazy"><span class="nm">${esc(x[0])}</span><span class="rk">${r0===r1?r1:r0+"–"+r1}/${x[1]}</span></li>`;}).join("")}</ol>`;}
+const canHover=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
+function showTip(n){const tip=document.getElementById("tip"),ti=+n.dataset.t,i=+n.dataset.i,x=TREES[ti].t[i],r=pts[ti][i];
+  const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
+  tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
+  const b=n.getBoundingClientRect(),w=tip.offsetWidth||320,h=tip.offsetHeight||120;
+  let left=b.right+12; if(left+w>innerWidth-8) left=b.left-w-12; if(left<8) left=Math.max(8,Math.min(innerWidth-w-8,b.left));
+  let top=b.top-6; if(top+h>innerHeight-8) top=innerHeight-h-8; if(top<8) top=8;
+  tip.style.left=left+"px"; tip.style.top=top+"px"; tip.classList.add("on");}
+function hideTip(){document.getElementById("tip").classList.remove("on");}
+if(canHover){
+  document.addEventListener("mouseover",e=>{const n=e.target.closest(".node"); if(!n) return; hov=[+n.dataset.t,+n.dataset.i]; showTip(n);});
+  document.addEventListener("mouseout",e=>{const n=e.target.closest(".node"); if(n&&!n.contains(e.relatedTarget)){hov=null;hideTip();}});
+  window.addEventListener("scroll",()=>{hov=null;hideTip();},{passive:true});}
 /* share: one digit per talent, trees joined with "-" */
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
-function saveURL(){try{history.replaceState(null,"","?c="+cls+"&b="+code()+"&v="+mode);}catch(e){}}
+function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
+function saveURL(){try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:"")+"&v="+mode);}catch(e){}}
 function load(){try{const q=new URLSearchParams(location.search);setClass(q.get("c")||"paladin");if(q.get("v")==="off") mode="off";
-  const b=(q.get("b")||"").split("-"); b.forEach((s,ti)=>{if(!TREES[ti]) return;[...s].forEach((c,i)=>{if(i<TREES[ti].t.length) pts[ti][i]=Math.min(+c||0,TREES[ti].t[i][1]);});});
-  if(total()>MAXP) pts=TREES.map(t=>t.t.map(()=>0));}catch(e){}}
+  const bs=q.get("b")||"",os=q.get("o")||"";
+  if(os){const o=offs();let ok=true;for(const ch of os){const g=ALPH.indexOf(ch);let ti=-1;for(let k=TREES.length-1;k>=0;k--){if(g>=o[k]){ti=k;break;}}
+      const i=g-(ti>=0?o[ti]:0); if(g<0||ti<0||i>=TREES[ti].t.length||!addPt(ti,i)){ok=false;break;}}
+    if(ok&&(!bs||code()===bs)) return; pts=TREES.map(t=>t.t.map(()=>0)); ord=[];}
+  bs.split("-").forEach((s,ti)=>{if(!TREES[ti]) return;[...s].forEach((c,i)=>{if(i<TREES[ti].t.length) pts[ti][i]=Math.min(+c||0,TREES[ti].t[i][1]);});});
+  if(total()>MAXP) pts=TREES.map(t=>t.t.map(()=>0)); else if(total()) synthOrder();}catch(e){}}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800);}
 document.addEventListener("click",e=>{
   const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); render(); window.scrollTo({top:0});} return;}
-  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; if(canAdd(ti,i)) pts[ti][i]++; render(); return;}
-  if(e.target.id==="plus"&&sel){if(canAdd(...sel)) pts[sel[0]][sel[1]]++; render(); return;}
-  if(e.target.id==="minus"&&sel){if(canRemove(...sel)) pts[sel[0]][sel[1]]--; render(); return;}
-  const c=e.target.closest("[data-clear]"); if(c){pts[+c.dataset.clear]=pts[+c.dataset.clear].map(()=>0); render(); return;}
+  const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; addPt(ti,i); render(); return;}
+  if(e.target.id==="plus"&&sel){addPt(...sel); render(); return;}
+  if(e.target.id==="minus"&&sel){remPt(...sel); render(); return;}
+  const c=e.target.closest("[data-clear]"); if(c){const k=+c.dataset.clear;pts[k]=pts[k].map(()=>0);ord=ord.filter(o=>o[0]!==k);replayOrder(); render(); return;}
   const m=e.target.closest("[data-mode]"); if(m){mode=m.dataset.mode;document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b===m));render();return;}
-  if(e.target.id==="reset"){pts=TREES.map(t=>t.t.map(()=>0)); sel=null; render(); return;}
+  if(e.target.id==="reset"){pts=TREES.map(t=>t.t.map(()=>0)); ord=[]; sel=null; render(); return;}
   if(e.target.id==="share"){const url=location.href; try{navigator.clipboard.writeText(url).then(()=>toast("Build link copied"),()=>fallback(url));}catch(err){fallback(url);}}
 });
-document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; if(canRemove(ti,i)) pts[ti][i]--; render();});
+document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; remPt(ti,i); render();});
 function fallback(url){const w=document.getElementById("copyWrap"),b=document.getElementById("copyBox");b.value=url;w.hidden=false;b.select();}
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
 setClass("paladin"); load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();

@@ -112,6 +112,11 @@ main{display:flex;flex-direction:column;gap:56px;padding-bottom:48px}
 .racial p{margin:3px 0 0;font-size:15.5px;color:#d8cfbf}
 .chg{color:var(--ember)!important;font-size:14px!important}
 .unc{color:var(--muted)!important;font-style:italic;font-size:14px!important}
+#races{width:100%;max-width:1120px;margin-left:auto;margin-right:auto}
+#races .filters{display:flex;flex-wrap:wrap;align-items:center}
+.det-btn{margin-left:auto}
+.races:not(.open) .racial p{display:none}
+.races:not(.open) .racial{padding-top:8px}
 
 /* Changes */
 .log{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px solid var(--stone);display:flex;flex-direction:column;gap:18px}
@@ -280,6 +285,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
       <button type="button" class="chip" data-show="all" aria-pressed="true">All races</button>
       <button type="button" class="chip" data-show="horde" aria-pressed="false">Horde</button>
       <button type="button" class="chip" data-show="alliance" aria-pressed="false">Alliance</button>
+      <button type="button" class="chip det-btn" id="detBtn" aria-pressed="false" aria-controls="raceGrid">Show details ▾</button>
     </div>
     <div class="races" id="raceGrid"></div>
   </section>
@@ -518,6 +524,7 @@ document.addEventListener("click",e=>{
   const c=e.target.closest(".cls-btn"); if(c&&!c.disabled){cls=c.dataset.cls;bid=null;sync();return;}
   const bb=e.target.closest("[data-build]"); if(bb){bid=bb.dataset.build;sync();return;}
   const cx=e.target.closest("[data-ctx]"); if(cx){ctx=cx.dataset.ctx;sync();return;}
+  const db=e.target.closest("#detBtn"); if(db){const o=document.getElementById("raceGrid").classList.toggle("open");db.setAttribute("aria-pressed",o);db.textContent=o?"Hide details ▴":"Show details ▾";return;}
   const s=e.target.closest("[data-show]"); if(s){show=s.dataset.show;document.querySelectorAll("[data-show]").forEach(b=>b.setAttribute("aria-pressed",b===s));renderRaces();}
 });
 renderRaces(); sync();

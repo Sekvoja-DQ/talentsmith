@@ -50,6 +50,7 @@ h1{font:800 26px/1.15 var(--f-display);color:var(--gold-soft);margin:6px 0 4px;l
 @keyframes fxBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}}
 .fac-btn canvas.top{z-index:3}
 .phone{max-width:360px}.phone .fac-btn{font-size:15px;padding:8px 10px;gap:10px;min-height:72px}.phone .fac-btn .emb{height:42px}.phone .cn{width:24px}
+.shot{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--edge)}.shot.ph{max-width:390px;margin:0 auto}
 /* full-page view */
 .site{background:radial-gradient(1200px 600px at 50% -10%,rgba(255,122,47,.10),transparent 60%),radial-gradient(900px 500px at 50% 110%,rgba(76,130,219,.08),transparent 60%);border:1px solid var(--edge);border-radius:12px;padding:24px 18px;margin-top:12px}
 .site .inner{max-width:1120px;margin:0 auto}.site.phone{max-width:390px;margin-left:auto;margin-right:auto}
@@ -66,6 +67,12 @@ const PROPOSALS=[
  {id:"2026-11-09-2",n:2,fac:"alliance",title:"Golden burst when you pick Alliance",what:"The plain circle of light that flashes when you pick Alliance becomes a burst of your gold glitter behind the shield that spreads and fades in about a second.",now:{},opt:{burst:"gold"},hit:true},
  {id:"2026-11-09-3",n:3,fac:"alliance",title:"Gold dust on Alliance",what:"Very fine glitter specks glint quickly and drift slowly upward between the spirits. Barely noticeable – it just makes the light feel richer.",now:{},opt:{dust:true}},
  {id:"2026-11-09-4",n:4,fac:"horde",title:"Sparks with the Horde claw slash",what:"When you pick Horde, a quick spray of embers flies out of the claw marks and drifts away on the wind, then the normal fire continues.",now:{},opt:{clawSparks:true},hit:true},
+ {id:"2026-11-09-5",n:5,title:"Smaller hero",what:"The logo shrinks to about half the screen height (whole logo still visible, nothing cropped), so the Horde / Alliance buttons and the race picker show without scrolling.",shots:"b2-5"},
+ {id:"2026-11-09-6",n:6,title:"Less gold",what:"Gold only where it matters. The nine calculator cards get a dark stone look with a thin gold top edge (full gold on hover), and the selected spec / content buttons become gold outlines with a small gem instead of solid gold. The best-pick card keeps its gold.",shots:"b2-6"},
+ {id:"2026-11-09-7",n:7,title:"Race cards: live values only",what:"The patch-history lines (“Oct 26: 5% → 10%”, “Blizzard's Oct 26 post…”, “Post and hotfix data disagree”) go, like in the calculator. Each racial shows only what it does now, and the hero says “live value” instead of “launch value”.",shots:"b2-7"},
+ {id:"2026-11-09-8",n:8,title:"Shorter home page",what:"The race list shows only the faction you picked above (it follows the Horde / Alliance buttons), and each racial shows just its name until you tap it. The home page goes from about 7,000 to 5,000 pixels tall on a computer.",shots:"b2-8"},
+ {id:"2026-11-09-9",n:9,title:"Same menu on every page",what:"The home page gets the slim top menu the other pages already have (Classes, Calculator, Builds, Changes, Race picker, Ko-fi). The Ko-fi corner button moves into it, and the hero keeps just two buttons: Find your race and Talent calculator.",shots:"b2-9"},
+ {id:"2026-11-09-10",n:10,title:"Frames on the best pick and the selected class",what:"Your corner pieces on two more places: the best-pick card gets two corners (iron for Horde, gold for Alliance, following the faction you picked), and the selected class button gets small gold corner brackets. Nothing else gets frames.",shots:"b2-10"}
 ];
 /* ---------- effects engine (same as the live site, plus the options above) ---------- */
 const IMG={};"%%SPRITES%%".split(",").forEach(k=>{const i=new Image();i.src=document.getElementById("s-"+k).textContent;IMG[k]=i;});
@@ -159,19 +166,27 @@ function queue(){const app=document.getElementById("app");app.innerHTML=`<h1>Tal
  const list=app.querySelector("#list");
  PROPOSALS.forEach(p=>{const c=document.createElement("article");c.className="card";c.dataset.id=p.id;
   c.innerHTML=`<div class="top"><span class="num">${p.n}</span><div><h2>${p.title}</h2><p>${p.what}</p><div class="meta">Proposed ${p.id.slice(0,10)}</div></div><button type="button" class="st" data-s="">${LABEL[""]}</button></div>
-  <div class="pv"><div class="pvbar"><span class="seg"><button type="button" data-v="opt" aria-pressed="true">Proposed</button><button type="button" data-v="now" aria-pressed="false">Now on the site</button></span>${p.hit?'<button type="button" class="btnline" data-replay>Replay the pick</button>':""}<span class="sp"></span><a href="#p${p.n}">See it on the page →</a></div><div class="slot"></div></div>
+  <div class="pv"><div class="pvbar"><span class="seg"><button type="button" data-v="opt" aria-pressed="true">Proposed</button><button type="button" data-v="now" aria-pressed="false">Now on the site</button></span>${p.shots?'<span class="seg sdev"><button type="button" data-d="d" aria-pressed="true">Computer</button><button type="button" data-d="m" aria-pressed="false">Phone</button></span>':""}${p.hit?'<button type="button" class="btnline" data-replay>Replay the pick</button>':""}<span class="sp"></span><a href="#p${p.n}">See it on the page →</a></div><div class="slot"></div></div>
   <div class="note" hidden><label>Note (optional)</label><textarea maxlength="600"></textarea><div class="saved"></div></div>`;
   list.appendChild(c);mount(c,p,"opt");
   c.querySelector(".st").addEventListener("click",()=>{const st=(STATE[p.id]||{}).status||"";c.dataset.keep="1";save(p.id,{status:NEXT[st]});});
-  c.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b) return;c.querySelectorAll("[data-v]").forEach(x=>x.setAttribute("aria-pressed",x===b));mount(c,p,b.dataset.v);});
+  c.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b) return;c.querySelectorAll("[data-v]").forEach(x=>x.setAttribute("aria-pressed",x===b));c._v=b.dataset.v;mount(c,p,b.dataset.v);});
+  const sd=c.querySelector(".sdev");if(sd) sd.addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b) return;sd.querySelectorAll("[data-d]").forEach(x=>x.setAttribute("aria-pressed",x===b));c._d=b.dataset.d;mount(c,p,c._v||"opt");});
   const rp=c.querySelector("[data-replay]");if(rp) rp.addEventListener("click",()=>c._pair._replay());
   const ta=c.querySelector("textarea");ta.addEventListener("input",()=>{clearTimeout(timers[p.id]);timers[p.id]=setTimeout(()=>save(p.id,{note:ta.value.trim()}),900);});
   ta.addEventListener("blur",()=>{clearTimeout(timers[p.id]);if((STATE[p.id]||{}).note!==ta.value.trim()) save(p.id,{note:ta.value.trim()});});});
  app.querySelectorAll("[data-f]").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.f;document.querySelectorAll(".card").forEach(c=>delete c.dataset.keep);applyFilter();}));
  paintAll();}
-function mount(card,p,v){const slot=card.querySelector(".slot");slot.innerHTML="";const pair=facPair(v==="opt"?p.opt:p.now,p.fac);slot.appendChild(pair);card._pair=pair;
+const shotImg=(p,v,d)=>`<img class="shot${d==="m"?" ph":""}" src="shots/${p.shots}-${v}-${d}.webp" alt="${v==="opt"?"Proposed":"Now on the site"} – ${d==="m"?"phone":"computer"}" loading="lazy">`;
+function mount(card,p,v){const slot=card.querySelector(".slot");slot.innerHTML="";if(p.shots){slot.innerHTML=shotImg(p,v,card._d||"d");return;}const pair=facPair(v==="opt"?p.opt:p.now,p.fac);slot.appendChild(pair);card._pair=pair;
  if(p.hit){clearInterval(card._auto);setTimeout(()=>pair._replay(),700);card._auto=setInterval(()=>{if(pair.isConnected) pair._replay();else clearInterval(card._auto);},5500);}}
 function pageView(n){const p=PROPOSALS.find(x=>x.n===n);if(!p) return queue();const app=document.getElementById("app");
+ if(p.shots){app.innerHTML=`<p><a href="#queue">← Review queue</a></p><h1>${p.n}. ${p.title}</h1><p class="lede">${p.what}</p>
+ <div class="pvbar"><span class="seg" id="ver"><button type="button" data-v="opt" aria-pressed="true">Proposed</button><button type="button" data-v="now" aria-pressed="false">Now on the site</button></span><span class="seg" id="dev"><button type="button" data-d="d" aria-pressed="true">Computer</button><button type="button" data-d="m" aria-pressed="false">Phone</button></span></div><div id="slot" style="margin-top:12px"></div>`;
+  let v="opt",d="d";const put=()=>{app.querySelector("#slot").innerHTML=shotImg(p,v,d).replace(' loading="lazy"','');};
+  app.querySelector("#ver").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b) return;v=b.dataset.v;app.querySelectorAll("#ver button").forEach(x=>x.setAttribute("aria-pressed",x===b));put();});
+  app.querySelector("#dev").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b) return;d=b.dataset.d;app.querySelectorAll("#dev button").forEach(x=>x.setAttribute("aria-pressed",x===b));put();});
+  put();window.scrollTo(0,0);return;}
  app.innerHTML=`<p><a href="#queue">← Review queue</a></p><h1>${p.n}. ${p.title}</h1><p class="lede">${p.what}</p>
  <div class="pvbar"><span class="seg" id="ver"><button type="button" data-v="opt" aria-pressed="true">Proposed</button><button type="button" data-v="now" aria-pressed="false">Now on the site</button></span><span class="seg" id="dev"><button type="button" data-d="desk" aria-pressed="true">Computer</button><button type="button" data-d="phone" aria-pressed="false">Phone</button></span>${p.hit?'<button type="button" class="btnline" id="rp">Replay the pick</button>':""}</div>
  <div class="site" id="site"><div class="inner"><div class="sec-head"><span class="gem"></span><h3>Best race for your spec</h3></div><div id="slot"></div><div class="mock">Class buttons, specs and race picks continue here</div></div></div>`;

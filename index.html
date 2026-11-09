@@ -247,6 +247,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <section id="changes" class="wrap" aria-labelledby="chgH">
     <div class="sec-head"><span class="gem"></span><h2 id="chgH">Latest racial changes</h2></div>
     <ol class="log">
+      <li><time>Nov 9</time><p>Live hotfixes checked. Tauren Plainsrunning (Nov 5): stacks can no longer be built in a battleground's preparation phase and are cancelled while you carry a flag. Orc Command (Nov 6): some Warlock pet abilities were gaining too much from it – fixed. Night Elf Shadowmeld (Nov 6): Druids can no longer use Ravage or Pounce out of it. No racial values changed. Coming Tuesday Nov 10 (Blizzard): sturdier Hunter pets and Voidwalkers, Affliction DoTs made worth casting next to Wrack, and Enhancement Shaman moving to Strength and Attack Power.</p></li>
       <li><time>Nov 5</time><p>Launch game data (build 1.60.1.70790) checked: Undead Touch of the Grave now triggers as often as intended (it fired too rarely before), and talents that trigger from spells no longer have a lower chance at low spell ranks. All talent calculators match the launch data, including the reworked Rogue, Shaman and Warrior trees.</p></li>
       <li><time>Nov 4</time><p>Launch day. Blizzard's Nov 2 development notes confirm the racial values on this page (Human Ruthless 1%, The Human Spirit 10%, Orc Command and 2 min Blood Fury, Dwarf Artisan's Precision, Tauren Plainsrunning and Endurance, Troll 15 sec Berserking, Undead 15 sec Touch of the Grave, Skyborne 2% Wind Blessed). New: Cannibalize works again while you're immune to physical damage, and base stats are corrected for every race (a Tauren Warrior now starts with 5 more Strength than a Human Warrior) – Blizzard says that fix isn't in the game files yet. The notes don't give Skysight's or Attuned's durations, so both versions stay listed. All talent calculators now show the launch trees, including the big Rogue, Shaman and Warrior reworks.</p></li>
       <li><time>Nov 2</time><p>Talent calculators for all nine classes are live: Priest, Shaman, Warlock, Warrior, Mage and Druid join Paladin, Rogue and Hunter. No new racial changes since the Oct 30 hotfix.</p></li>
@@ -279,7 +280,7 @@ const RACES=[
  {id:"tauren",name:"Tauren",fac:H,cls:["Warrior","Hunter","Shaman","Druid"],r:[
   ["War Stomp","Active","Stuns up to 5 enemies within 8 yd for 2 sec. 90 sec cooldown."],
   ["Cultivation","Active","Grows bonus herbs when gathering. Every 15 min."],
-  ["Plainsrunning","Passive","Movement speed builds while you keep moving: +2% per stack, up to 60%. Stopping or taking damage weakens it. No effect while mounted.","Oct 26: was 1% up to 30%"],
+  ["Plainsrunning","Passive","Movement speed builds while you keep moving: +2% per stack, up to 60%. Stopping or taking damage weakens it. No effect while mounted; in battlegrounds the stacks are cancelled while you carry a flag.","Oct 26: was 1% up to 30%"],
   ["Endurance","Passive","+5% maximum health.","Oct 26: crit damage bonus removed"]]},
  {id:"troll",name:"Troll",fac:H,cls:["Warrior","Hunter","Rogue","Priest","Shaman","Mage","Warlock*"],r:[
   ["Berserking","Active","+10% attack and casting speed for 15 sec. 3 min cooldown.","Oct 27: duration 10 → 15 sec"],
@@ -357,7 +358,7 @@ const RULES={
  "Command":(b,c)=>[b.pet?pick(c,4,4,3):0,b.pet?"Passive – keep the pet out.":"Only works on Hunter and Warlock pets."],
  "War Stomp":(b,c)=>[b.role==="tank"?pick(c,3,2,4):pick(c,2,1,4),pick(c,"Stun a pack to break away or finish a cast.","Interrupts trash casters; useful tank emergency button.","2 sec AoE stun: peel melee off you or land a hard cast.")],
  "Cultivation":()=>[0,"Herbalism bonus – gold, not combat."],
- "Plainsrunning":(b,c)=>[pick(c,3,0,3),pick(c,"Free run speed between quests before you have a mount.","Little use in instances.","Chase or kite on foot; damage weakens it.")],
+ "Plainsrunning":(b,c)=>[pick(c,3,0,3),pick(c,"Free run speed between quests before you have a mount.","Little use in instances.","Chase or kite on foot; damage weakens it. Lost while carrying a flag.")],
  "Endurance":(b,c)=>[b.role==="tank"?pick(c,1,3,2):pick(c,1,1,2),"Passive: 5% more health."],
  "Berserking":(b,c)=>[b.role==="healer"?pick(c,1,3,2):b.role==="tank"?pick(c,2,2,2):pick(c,2,3,3),
    pick(c,"Speeds up kills on hard pulls; 3 min cooldown.","Pre-pop 1–2 sec before the pull or save it for the burn phase.",b.role==="healer"?"Fast heals when your team is being trained.":"Pair with your burst cooldowns for a kill.")],

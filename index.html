@@ -46,7 +46,6 @@ a{color:var(--gold)}
 .lede{margin:0;max-width:56ch;color:var(--muted);font-size:19px}
 .cta{display:grid;grid-template-columns:repeat(2,minmax(0,200px));gap:10px;justify-content:center}
 .cta .btn{justify-content:center;white-space:nowrap}
-.cta .btn:last-child{grid-column:1/-1;justify-self:center;min-width:200px}
 .kofi-corner{position:absolute;z-index:3;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font:700 12px/1 var(--f-display);letter-spacing:.05em;color:var(--gold);text-decoration:none;padding:7px 11px;border:1px solid var(--gold);border-radius:5px;background:rgba(11,14,21,.72);backdrop-filter:blur(4px)}
 .kofi-corner:hover{background:rgba(233,180,76,.16)}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--f-display);letter-spacing:.06em;text-decoration:none;padding:14px 22px;border-radius:6px;border:1px solid var(--gold);transition:transform .15s,box-shadow .15s}
@@ -129,8 +128,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   .hero-text{margin-top:-14px}
   .cta{grid-template-columns:repeat(2,minmax(0,1fr));width:100%;max-width:400px}
   .cta .btn{padding:13px 8px;font-size:14px}
-  .cta .btn:last-child{min-width:0;padding-inline:22px}
-  .lede{font-size:17px}
+    .lede{font-size:17px}
   .classes{grid-template-columns:repeat(3,1fr)}
 }
 .calc-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:18px 20px;border:1px solid var(--gold);border-radius:12px;background:linear-gradient(135deg,rgba(255,122,47,.14),rgba(233,180,76,.05));color:var(--ink);text-decoration:none}
@@ -179,6 +177,24 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .fac-btn:hover .emb{filter:drop-shadow(0 2px 4px rgba(0,0,0,.6)) grayscale(.2) brightness(.9)}
 .fac-btn[aria-pressed="true"] .emb{filter:drop-shadow(0 0 10px rgba(255,255,255,.18)) drop-shadow(0 2px 4px rgba(0,0,0,.6));transform:scale(1.06)}
 @media (max-width:640px){.fac-btn{gap:10px;padding:8px 10px}.fac-btn .emb{height:42px}}
+
+/* approved review batch 2 (Nov 9): menu, less gold, frames */
+.ts-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--edge);max-width:1120px;margin:0 auto}
+.ts-top .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gold-soft);font:800 18px/1 var(--f-display);letter-spacing:.06em}.ts-top .brand img{width:34px;height:34px;border-radius:50%}
+.ts-top nav{display:flex;gap:14px;font-size:15px;flex-wrap:wrap}.ts-top nav a{color:var(--muted);text-decoration:none}.ts-top nav a:hover{color:var(--gold-soft)}
+@media (max-width:640px){.ts-top{flex-wrap:wrap}.ts-top nav{width:100%;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;gap:18px;padding-bottom:2px}}
+.calc-grid .calc-card{border-color:var(--edge);background:linear-gradient(180deg,#1b1d25,#13161e);box-shadow:inset 0 2px 0 rgba(233,180,76,.5);transition:border-color .2s,box-shadow .2s}
+.calc-grid .calc-card:hover{border-color:rgba(233,180,76,.65);box-shadow:inset 0 2px 0 var(--gold),0 0 18px rgba(255,122,47,.18)}
+.calc-grid .calc-card img{box-shadow:0 0 0 1px rgba(233,180,76,.55),0 0 0 3px rgba(0,0,0,.55)}
+.chip[aria-pressed="true"]{color:var(--gold-soft);background:linear-gradient(180deg,rgba(233,180,76,.18),rgba(233,180,76,.05));border-color:var(--gold);box-shadow:0 0 12px rgba(233,180,76,.16)}
+.chip[aria-pressed="true"]::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;transform:rotate(45deg);background:var(--gold-soft);box-shadow:0 0 6px var(--ember);vertical-align:2px}
+.pick.r0::before,.pick.r0::after{content:"";position:absolute;width:40px;height:52px;background:url(img/fx/gold-corner.webp) center/contain no-repeat;pointer-events:none;z-index:2}
+.pick.r0::before{top:-5px;right:-5px}.pick.r0::after{bottom:-5px;left:-5px;transform:scale(-1,-1)}
+#picker:has(.classes[data-fac="horde"]) .pick.r0::before,#picker:has(.classes[data-fac="horde"]) .pick.r0::after{background-image:url(img/fx/iron-corner.webp)}
+#picker:has(.classes[data-fac="horde"]) .pick.r0{border-color:rgba(210,72,60,.65)}
+.cls-btn{position:relative}
+.cls-btn[aria-pressed="true"]::before,.cls-btn[aria-pressed="true"]::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--gold-soft);pointer-events:none;filter:drop-shadow(0 0 3px rgba(233,180,76,.6))}
+.cls-btn[aria-pressed="true"]::before{top:-1px;left:-1px;border-right:0;border-bottom:0;border-top-left-radius:8px}.cls-btn[aria-pressed="true"]::after{bottom:-1px;right:-1px;border-left:0;border-top:0;border-bottom-right-radius:8px}
 /* animated faction buttons (faction-fx.js) */
 .fac-btn{position:relative;overflow:hidden;isolation:isolate;min-height:84px}
 .fac-btn .emb,.fac-btn .nm{position:relative;z-index:4}
@@ -207,8 +223,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 </style>
 </head>
 <body>
+<div class="gut"><header class="ts-top"><a class="brand" href="./"><img src="img/avatar.webp" alt="" width="34" height="34">Talentsmith</a><nav><a href="classes/">Classes</a><a href="calculator.html">Calculator</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="#picker">Race picker</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav></header></div>
 <header class="hero">
-  <a class="kofi-corner" href="https://ko-fi.com/bigdforever" rel="noopener">Support on Ko-fi</a>
   <picture>
     <source media="(max-width:640px)" srcset="img/hero-tall.webp">
     <img src="img/hero-wide.webp" alt="Talentsmith logo: an anvil forging a glowing talent tree inside a stone ring" width="1254" height="617" fetchpriority="high">
@@ -216,11 +232,10 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   <div class="hero-text gut">
     <h1 class="sr-only">Talentsmith – best race for every class in WoW Forever</h1>
     <p class="kicker">Free tools for World of Warcraft: Forever</p>
-    <p class="lede">Find the best race for your class, with every racial ability at its current launch value. Re-forged after every patch.</p>
+    <p class="lede">Find the best race for your class, with every racial ability at its live value. Re-forged after every patch.</p>
     <div class="cta">
       <a class="btn primary" href="#picker">Find your race</a>
       <a class="btn ghost" href="calculator.html">Talent calculator</a>
-      <a class="btn ghost" href="classes/">Class guides &amp; builds</a>
     </div>
     <p class="stamp">Values checked against the live game, updated <b>Nov 9</b></p>
   </div>
@@ -319,7 +334,7 @@ const RACES=[
   ["Underwater Breathing","Passive","Much longer underwater breath."]]},
  {id:"windshaper",name:"Windshaper Skyborne",fac:H,cls:["Warrior","Hunter","Rogue","Shaman","Druid"],r:[
   ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
-  ["Skysight","Active","+15% movement speed, castable while moving. At an elemental convergence you also become Charged, which doubles it. Blizzard's Oct 26 post: 15 sec, Charged 1 hour. Oct 30 hotfix data: 30 sec, Charged 15 min. Charged is kept through death and removed on entering a raid.","Post and hotfix data disagree"],
+  ["Skysight","Active","+15% movement speed for 15 sec, castable while moving. Using it at an elemental convergence also makes you Charged for 1 hour, which raises it to 30%. Charged is kept through death and removed on entering a raid. 2 min cooldown."],
   ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
   ["Elemental Insight","Passive","+5% damage against Elementals."]]},
  {id:"human",name:"Human",fac:A,cls:["Warrior","Paladin","Rogue","Priest","Mage","Warlock","Hunter*"],r:[
@@ -344,7 +359,7 @@ const RACES=[
   ["Engineering Specialization","Passive","More reliable engineering devices."]]},
  {id:"highorder",name:"High Order Skyborne",fac:A,cls:["Warrior","Hunter","Rogue","Druid","Mage"],r:[
   ["Walk on Air","Active","Directional glide for 10 sec. 90 sec cooldown."],
-  ["Read Leyline","Active","+50% health and mana regeneration for 15 sec. Reading a ley line also makes you Attuned, which doubles it. Attuned lasts 1 hour per Blizzard's Oct 26 post, 15 min in the Oct 30 hotfix data; kept through death, removed on entering a raid. Not usable during Innervate.","Oct 26: 100% → 50% base; Attuned length not confirmed"],
+  ["Read Leyline","Active","+50% health and mana regeneration for 15 sec. Using it at a ley line also makes you Attuned for 1 hour, which raises it to 100%. Attuned is kept through death and removed on entering a raid. Not usable during Innervate."],
   ["Wind Blessed","Passive","+2% casting, melee and ranged attack speed.","Oct 26: 3% → 2%"],
   ["Elemental Insight","Passive","+5% damage against Elementals."]]}
 ];
@@ -489,7 +504,7 @@ function renderRaces(){
   document.getElementById("raceGrid").innerHTML=RACES.filter(r=>show==="all"||r.fac===show).map(r=>`<article class="race" id="${r.id}" style="--fc:var(--${r.fac})">
     <header><span class="nm">${img(IC.race[r.id],"race-face")}<h3>${esc(r.name)}</h3></span><span class="tag-fac">${r.fac}</span></header>
     <div class="cls-row">${r.cls.map(x=>{const c=x.replace("*","");return `<span class="mini${x.endsWith("*")?" new":""}" style="--c:${CLASS_COLOR[c]}" title="${x.endsWith("*")?"New in Forever":""}">${img(IC.cls[c],"")}${esc(c)}</span>`}).join("")}</div>
-    ${r.r.map(([n,t,d,note])=>`<div class="racial">${img(IC.racial[n],"r-ico"+(t==="Active"?" active":""))}<div><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note?`<p class="${/not confirmed/.test(note)?"unc":"chg"}">${esc(note)}</p>`:""}</div></div>`).join("")}
+    ${r.r.map(([n,t,d,note])=>`<div class="racial">${img(IC.racial[n],"r-ico"+(t==="Active"?" active":""))}<div><b>${esc(n)}</b><span class="type">${t}</span><p>${esc(d)}</p>${note&&/not confirmed/.test(note)?`<p class="unc">${esc(note)}</p>`:""}</div></div>`).join("")}
   </article>`).join("");
 }
 function sync(){

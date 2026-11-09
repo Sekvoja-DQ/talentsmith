@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talentsmith – WoW Forever Talent Calculator (Paladin, Rogue, Hunter, Priest, Shaman, Warlock, Warrior, Mage, Druid)</title>
-<meta name="description" content="WoW Forever talent calculator for all 9 classes with the launch trees from Blizzard\'s Nov 2 development notes, a Launch vs Beta switch, level requirements and shareable build links.">
+<meta name="description" content="WoW Forever talent calculator for all 9 classes with the live talent trees, rank-by-rank values, level requirements, leveling order and shareable build links.">
 <meta property="og:title" content="Talentsmith – WoW Forever Talent Calculator">
 <link rel="canonical" href="https://talentsmith.app/calculator.html">
 <meta property="og:url" content="https://talentsmith.app/calculator.html">
@@ -54,7 +54,9 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .tree-h button{font-size:12px;background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline}
 .grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,80px);gap:4px}
 .node{position:relative;justify-self:center;align-self:start;margin-top:4px;width:44px;height:44px;border-radius:7px;border:2px solid #4a5163;background:#1a1f2b center/cover no-repeat;cursor:pointer;padding:0;transition:box-shadow .15s,border-color .15s,filter .15s}
-.node .lbl{position:absolute;top:48px;background:#1b2130;border-radius:3px;padding:1px 2px;left:50%;transform:translateX(-50%);font:600 10.5px/1.1 var(--f-body);color:var(--muted);text-align:center;width:76px;pointer-events:none}
+.node .lbl{position:absolute;top:50px;left:50%;transform:translateX(-50%);font:600 10.5px/1.45 var(--f-body);color:var(--muted);text-align:center;width:92px;pointer-events:none;z-index:2}
+@media (max-width:700px){.node .lbl{width:68px;font-size:10px;line-height:1.4}}
+.node .lbl>span{background:rgba(12,10,8,.86);padding:1px 4px;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .node .rk{position:absolute;right:-9px;bottom:-7px;font:700 11px/1 var(--f-body);background:var(--night);border:1px solid #4a5163;border-radius:4px;padding:2px 4px;color:var(--muted);font-variant-numeric:tabular-nums}
 .node.open{border-color:var(--green)}
 .node.open .lbl{color:var(--ink)}
@@ -66,7 +68,6 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .node.locked{filter:grayscale(1) brightness(.55)}
 .node.locked .lbl{color:#7d766a}
 .node.sel{outline:2px solid var(--gold-soft);outline-offset:3px}
-.node .hf{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--ember);box-shadow:0 0 6px var(--ember);border:1px solid #2a1d12}
 .grid svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .detail{margin-top:16px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:start}
 .detail h3{margin:0;font:800 20px/1.1 var(--f-display);color:var(--gold-soft)}
@@ -133,18 +134,14 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./"><img src="img/avatar.webp" alt="">Talentsmith</a>
-    <nav><a href="classes/">Classes &amp; builds</a><a href="changes.html">Launch changes</a><a href="./#picker">Race picker</a><a href="./#races">Racials</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav>
+    <nav><a href="classes/">Classes</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="./#picker">Race picker</a><a href="./#races">Racials</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav>
   </header>
 
   <h1 id="h1">Paladin Talent Calculator</h1>
   <nav class="cls" id="cls" aria-label="Class"></nav>
-  <p class="lede" id="lede">The WoW Forever Paladin trees at launch, following Blizzard's Nov 2 development notes. Switch to Beta to compare with the October beta trees.</p>
+  <p class="lede" id="lede"></p>
 
   <div class="bar" role="region" aria-label="Build summary">
-    <div class="seg" role="group" aria-label="Values">
-      <button type="button" data-mode="hot" aria-pressed="true">Launch (Nov 2 notes)</button>
-      <button type="button" data-mode="off" aria-pressed="false">Beta (October)</button>
-    </div>
     <span class="stat" id="spent"><b>0</b> / 51 points</span>
     <span class="stat" id="lvl">Level <b>10</b></span>
     <span class="stat" id="split"><b>0 / 0 / 0</b></span>
@@ -153,7 +150,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <button type="button" class="btn" id="reset">Reset</button>
     </div>
   </div>
-  <p class="note" id="note"><span style="color:var(--ember)">●</span> marks talents that are new or changed for launch compared with the October beta. Values follow <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard's WoW Forever development notes</a> (updated Nov 2) and are checked against the launch game data (build 1.60.1.70790, Nov 4).</p>
+  <p class="note" id="note"></p>
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
@@ -175,61 +172,61 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 /* [name, max, row, col, requires, official text, hotfix text (null = same as official), changedInHotfix] */
 const PALADIN=[
 {name:"Holy",t:[
- ["Spiritual Focus",5,1,2,null,"Reduces how much taking damage delays your Holy spells. Up to 70% less at 5 ranks.","Up to a 70% chance that taking damage doesn't slow your Flash of Light, Holy Light and Light's Vigil casts.",true],
+ ["Spiritual Focus",5,1,2,null,"Up to a 70% chance that taking damage doesn't slow your Flash of Light, Holy Light and Light's Vigil casts.",null,false],
  ["Divine Strength",5,1,3,null,"Up to 10% more Strength.",null,false],
  ["Healing Light",3,2,1,null,"Holy Light, Flash of Light and Holy Shock heal up to 12% more.",null,false],
- ["Reverence",2,2,2,null,"Lets up to 30% of your Spirit-based mana regeneration continue while casting (3 ranks officially).","Up to 30% of your mana regeneration continues while casting. Now 2 ranks.",true],
- ["Improved Seals",5,2,3,null,"Improves all Seals and Judgements, up to 15%.","Your Seals and Judgements deal up to 15% more damage.",true],
+ ["Reverence",2,2,2,null,"Up to 30% of your mana regeneration continues while casting.",null,false],
+ ["Improved Seals",5,2,3,null,"Your Seals and Judgements deal up to 15% more damage.",null,false],
  ["Purifying Power",2,2,4,null,"Cleanse and Purify cost up to 20% less mana, and Exorcism and Holy Wrath cooldowns are up to 33% shorter (17 / 33%).",null,false],
  ["Divine Favor",1,3,1,null,"Your next Flash of Light, Holy Light or Holy Shock heal is a guaranteed critical strike.",null,false],
  ["Illumination",5,3,2,"Reverence","After a critical heal, up to a 100% chance (20% per rank) to get back 50% of the spell's base mana cost. Also triggers from Light's Vigil.",null,false],
- ["Holy Conduit",2,3,3,null,"Moved from Retribution to Holy in the hotfix. Details pending.","Consecration, Holy Wrath, Exorcism and Hammer of Wrath cost up to 40% less mana. Moved into Holy for launch.",true],
- ["Divine Precision",2,4,1,null,"Up to 18% hit chance with Holy spells (3 ranks, requires Holy Shock).","Up to 8% hit chance (4 / 8%) with Holy spells, and silences on you are up to 20% shorter. 2 ranks, no longer requires Holy Shock.",true],
+ ["Holy Conduit",2,3,3,null,"Consecration, Holy Wrath, Exorcism and Hammer of Wrath cost up to 40% less mana.",null,false],
+ ["Divine Precision",2,4,1,null,"Up to 8% hit chance (4 / 8%) with Holy spells, and silences on you are up to 20% shorter.",null,false],
  ["Infusion of Light",2,4,2,null,"Holy Shock and Flash of Light crits cut your next Holy Light's cast time by up to 1 sec.",null,false],
- ["Oath of Light",1,4,3,null,"Not in the beta tree.","Swear an Oath on one ally for 5 min: your Holy Light, Flash of Light and Holy Shock heal them for more. Amount pending.",true],
+ ["Oath of Light",1,4,3,null,"Swear an Oath on one ally for 5 min: your Holy Light heals them for 400 more, Flash of Light for 115 more and Holy Shock for 230 more. One Oath at a time; 8% of base mana, 40 yd, instant.",null,false],
  ["Consecrated Ground",2,5,1,null,"Your Holy spells deal up to 10% more damage to the first 4 enemies that enter your Consecration.",null,false],
  ["Holy Shock",1,5,2,null,"Instantly damages an enemy or heals an ally with Holy power. 10 sec cooldown.",null,false],
- ["Boundless Light",2,5,3,"Holy Shock","Not in the beta tree.","Up to 30% more critical strike chance for Holy Shock on allies that don't have your Oath.",true],
- ["Holy Power",5,6,3,null,"Holy Shock and Holy Strike get up to 15% more critical strike chance; other spells up to 5%.","Holy spells' critical heals heal up to 50% more (10% per rank). No longer adds crit chance.",true],
- ["Light's Vigil",1,7,2,"Holy Shock","Grants Vigil to a target: your next Holy Shock on it skips the cooldown. On enemies it adds Holy damage and refunds 75% of its mana; on allies it heals their party.","Friendly targets only, 40 yd range. Vigil lasts 30 sec: your next Holy Shock on that ally skips the cooldown and heals them and their party.",true]
+ ["Boundless Light",2,5,3,"Holy Shock","Up to 30% more critical strike chance for Holy Shock on allies that don't have your Oath.",null,false],
+ ["Holy Power",5,6,3,null,"Critical heals from your Holy spells heal up to 50% more (10% per rank).",null,false],
+ ["Light's Vigil",1,7,2,"Holy Shock","Grants Vigil to a friendly target for 30 sec (40 yd): your next Holy Shock on that ally skips the cooldown and heals them and their party.",null,false]
 ]},
 {name:"Protection",t:[
- ["Divine Intellect",5,1,2,null,"Increases your Intellect. Moved from Holy to Protection.","Up to 10% more Intellect. Moved from Holy to Protection.",true],
- ["Redoubt",5,1,3,null,"Increases your block chance, up to 20%.","Damaging melee hits against you have a 10% chance to raise your block chance by up to 30% (6% per rank) for 10 sec or 5 blocks.",true],
+ ["Divine Intellect",5,1,2,null,"Up to 10% more Intellect.",null,false],
+ ["Redoubt",5,1,3,null,"Damaging melee hits against you have a 10% chance to raise your block chance by up to 30% (6% per rank) for 10 sec or 5 blocks.",null,false],
  ["Precision",3,2,1,null,"Up to +3% hit chance.",null,false],
  ["Guardian's Favor",2,2,2,null,"Blessing of Protection's cooldown is up to 2 min shorter and Blessing of Freedom lasts up to 6 sec longer.",null,false],
- ["Sacred Duty",2,2,4,null,"Increases Stamina.","Divine Shield, Divine Protection and Templar's Bulwark cooldowns are up to 60 sec shorter, and Forbearance is up to 10 sec shorter. No longer gives Stamina.",true],
- ["Templar's Bulwark",1,3,1,null,"An absorb shield equal to 100% of your max health for 8 sec. Applies Forbearance for 1 min.",null,true],
- ["Improved Hammer of Justice",3,3,2,null,"Reduces the cooldown of Hammer of Justice.","Hammer of Justice's cooldown is up to 15 sec shorter.",true],
- ["Shield Specialization",2,3,3,"Redoubt","Blocks absorb more and can restore mana (3 ranks officially).","Blocks absorb up to 30% more and always restore 4% mana, at most every 3 sec. Now 2 ranks.",true],
- ["Toughness",5,3,4,null,"Increases your armor.","Up to 10% more armor from items.",true],
- ["Swift Judgement",1,4,1,"Templar's Bulwark","Requires Improved Seal of Fury in the beta.","Unleashes your Seal's Judgement without using up the Seal, on its own cooldown.",true],
- ["Improved Righteous Fury",3,4,2,null,"While Righteous Fury is active you take up to 6% less damage.","While Righteous Fury is active you take up to 9% less damage.",true],
- ["Anticipation",5,4,3,null,"Increases your Defense.","Up to +20 Defense skill.",true],
- ["Stoicism",2,5,1,null,"Not in the beta tree.","Stun and Charm effects on you are up to 20% shorter.",true],
- ["Holy Shield",1,5,2,null,"Increases block chance by 30% and deals Holy damage when you block. Requires Templar's Bulwark in the beta.","Increases block chance by 30% and deals Holy damage when you block. No longer requires Templar's Bulwark; new rank 1 at level 30.",true],
+ ["Sacred Duty",2,2,4,null,"Divine Shield, Divine Protection and Templar's Bulwark cooldowns are up to 60 sec shorter, and Forbearance is up to 10 sec shorter.",null,false],
+ ["Templar's Bulwark",1,3,1,null,"An absorb shield equal to 100% of your max health for 8 sec. It is a Magic effect and can be dispelled. Applies Forbearance for 1 min.",null,false],
+ ["Improved Hammer of Justice",3,3,2,null,"Hammer of Justice's cooldown is up to 15 sec shorter.",null,false],
+ ["Shield Specialization",2,3,3,"Redoubt","Blocks absorb up to 30% more and always restore 4% mana, at most once every 3 sec.",null,false],
+ ["Toughness",5,3,4,null,"Up to 10% more armor from items.",null,false],
+ ["Swift Judgement",1,4,1,"Templar's Bulwark","Unleashes your Seal's Judgement without using up the Seal, on its own cooldown.",null,false],
+ ["Improved Righteous Fury",3,4,2,null,"While Righteous Fury is active you take up to 9% less damage.",null,false],
+ ["Anticipation",5,4,3,null,"Up to +20 Defense skill.",null,false],
+ ["Stoicism",2,5,1,null,"Stun and Charm effects on you are up to 20% shorter.",null,false],
+ ["Holy Shield",1,5,2,null,"Increases block chance by 30% and deals Holy damage when you block.",null,false],
  ["Reckoning",5,5,3,null,"After you block (up to a 40% chance, 8% per rank) or take a non-periodic critical hit (up to 100%, 20% per rank) you gain an extra attack; stores up to 4 charges, at most one from blocks every 1.5 sec.",null,false],
- ["Iron Creed",3,6,3,null,"Up to 25% more Holy Strike threat and 10% less damage taken (5 ranks).","Up to 30% more Holy Strike threat and 6% less damage taken. Now 3 ranks.",true],
- ["Shieldsworn",1,7,2,"Holy Shield","Not in the beta tree.","Holy Strike's cooldown is 4 sec shorter and it hits with your shield, triggering Holy Shield and Shield Specialization without using their charges. Also blocks spells for 6 sec.",true]
+ ["Iron Creed",3,6,3,null,"Up to 30% more Holy Strike threat and up to 6% less damage taken.",null,false],
+ ["Shieldsworn",1,7,2,"Holy Shield","Holy Strike's cooldown is 4 sec shorter and it hits with your shield, triggering Holy Shield and Shield Specialization without using their charges. Also blocks spells for 6 sec.",null,false]
 ]},
 {name:"Retribution",t:[
- ["Deflection",5,1,2,null,"Increases your parry chance.","Up to +5% parry chance.",true],
+ ["Deflection",5,1,2,null,"Up to +5% parry chance.",null,false],
  ["Benediction",5,1,3,null,"Instant spells and abilities cost up to 10% less mana.",null,false],
  ["Improved Judgement",2,2,1,null,"Judgement's cooldown is up to 2 sec shorter.",null,false],
- ["Conviction",3,2,2,null,"Up to 5% critical strike chance with melee attacks (5 ranks).","Up to 6% critical strike chance (2 / 4 / 6%) with all spells and attacks. Now 3 ranks.",true],
- ["Sanctified Judgement",3,2,3,null,"Your Judgements return mana, without generating threat.","Your Judgements have up to a 100% chance (33 / 66 / 100%) to return 20% of the judged Seal's mana cost, without threat.",true],
- ["Vindication",3,3,1,null,"Your attacks lower the target's attack power and raise yours.","Your attacks can lower the target's attack power for 30 sec (67 at rank 1). No longer raises yours.",true],
- ["Unyielding Faith",2,3,2,null,"Increases your chance to resist Fear and Disorient effects. Moved from Holy.","Fear and Disorient effects on you are up to 30% shorter.",true],
+ ["Conviction",3,2,2,null,"Up to 6% critical strike chance (2 / 4 / 6%) with all spells and attacks.",null,false],
+ ["Sanctified Judgement",3,2,3,null,"Your Judgements have up to a 100% chance (33 / 66 / 100%) to return up to 60% (20 / 40 / 60%) of the judged Seal's mana cost, without generating threat.",null,false],
+ ["Vindication",3,3,1,null,"Your damaging melee attacks have a chance to reduce the target's Strength and Agility by 5% for 10 sec.",null,false],
+ ["Unyielding Faith",2,3,2,null,"Fear and Disorient effects on you are up to 30% shorter.",null,false],
  ["Seal of Command",1,3,3,null,"A Seal that gives your melee attacks a chance to deal extra Holy damage.",null,false],
- ["Pursuit of Justice",2,3,4,null,"Up to 16% faster movement, mounted or on foot.",null,false],
+ ["Pursuit of Justice",2,3,4,null,"Up to 15% faster movement (8 / 15%), mounted or on foot.",null,false],
  ["Eye for an Eye",2,4,1,null,"Critical hits against you deal up to 10% of their damage back to the attacker (at most 50% of your health).",null,false],
- ["Sacred Arbiter",1,4,2,null,"Holy Strike deals 20% more damage.",null,true],
- ["Two-Handed Weapon Specialization",3,4,4,null,"Up to 6% more damage with two-handed weapons.","Up to 6% more Holy and Physical damage, and up to 21% less threat while you wield a two-hander. Moved to row 4.",true],
- ["Turn Evil",2,5,1,null,"Not in the beta tree.","Turn Undead casts up to 1 sec faster with up to 10 sec less cooldown, and also works on Demons.",true],
- ["Repentance",1,5,2,null,"Puts an enemy out of action for a short time.",null,true],
- ["Vengeance",3,5,3,"Seal of Command","Critical hits boost your damage, stacking up to 3 times. Requires Sanctified Judgement in the beta.","Each non-periodic critical hit gives up to 3% more Physical and Holy damage (1% per rank) for 30 sec, stacking 5 times. Now requires Seal of Command.",true],
- ["Champion of the Light",5,6,3,null,"Gain spell damage equal to up to 60% of your Intellect (3 ranks).","Gain spell damage equal to up to 60% of your Intellect, and Hammer of Wrath casts up to 1 sec faster. Now 5 ranks.",true],
- ["Unsealed Wrath",1,7,2,"Repentance","Not in the beta tree (replaces Twist of Light).","Melee attacks store your active Seal for 15 sec, up to 3 times. Attacking with a different Seal spends the stored stacks.",true]
+ ["Sacred Arbiter",1,4,2,null,"Holy Strike deals 20% more damage and refreshes all Judgement effects on the target.",null,false],
+ ["Two-Handed Weapon Specialization",3,4,4,null,"While you wield a two-handed weapon: up to 6% more Holy and Physical damage (2 / 4 / 6%) and up to 20% less threat (7 / 14 / 20%).",null,false],
+ ["Turn Evil",2,5,1,null,"Turn Undead casts up to 1 sec faster with up to 10 sec less cooldown, and also works on Demons.",null,false],
+ ["Repentance",1,5,2,null,"Puts an enemy out of action for a short time.",null,false],
+ ["Vengeance",3,5,3,"Seal of Command","Each non-periodic critical hit gives up to 3% more Physical and Holy damage (1% per rank) for 30 sec, stacking 5 times.",null,false],
+ ["Champion of the Light",5,6,3,null,"Gain spell damage equal to up to 60% of your Intellect, and Hammer of Wrath casts up to 1 sec faster.",null,false],
+ ["Unsealed Wrath",1,7,2,"Repentance","Melee attacks store your active Seal for 15 sec, up to 3 times. Attacking with a different Seal spends the stored stacks.",null,false]
 ]}];
 const ROGUE=[
 {name:"Assassination",t:[
@@ -237,60 +234,60 @@ const ROGUE=[
  ["Remorseless Attacks",2,1,2,null,"After you kill an enemy that gives experience or honor, your next Sinister Strike, Backstab, Ambush, Mutilate or Ghostly Strike gets up to +40% crit chance (20 sec).",null,false],
  ["Malice",5,1,3,null,"Up to +5% crit chance with all attacks and poisons.",null,false],
  ["Ruthlessness",3,2,1,null,"Finishing moves have up to a 60% chance to put a combo point on the target.",null,false],
- ["Improved Expose Armor",2,2,2,null,"Expose Armor costs up to 10 less Energy and, at 5 combo points, gives up to 2 combo points back.","Expose Armor costs up to 10 less Energy and, at 5 combo points, gives up to 2 combo points back. Moved up to row 2.",true],
+ ["Improved Expose Armor",2,2,2,null,"Expose Armor costs up to 10 less Energy and, at 5 combo points, gives up to 2 combo points back.",null,false],
  ["Improved Slice and Dice",3,2,3,null,"Slice and Dice lasts up to 45% longer.",null,false],
- ["Vigor",2,3,1,null,"Up to +10 maximum Energy.","Up to +10 maximum Energy. Moved up to row 3.",true],
- ["Blood Splatter",1,3,2,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Rupture lasts 6 sec longer and Garrote lasts 9 sec longer.",true],
- ["Lethality",2,3,3,"Malice","Up to +20% critical damage bonus on Sinister Strike, Gouge, Backstab, Mutilate, Ghostly Strike and Hemorrhage.","Up to +20% critical damage bonus (10% per rank) on Sinister Strike, Gouge, Backstab, Mutilate, Ghostly Strike and Hemorrhage. Now 2 ranks.",true],
- ["Vile Poisons",5,4,1,null,"Poisons deal up to 20% more damage and get up to +40% chance to resist dispels. Moved to column 1.",null,false],
- ["Cold Blood",1,4,2,null,"Your next Sinister Strike, Backstab, Ambush, Eviscerate or Mutilate is a guaranteed crit. 3 min cooldown. Spent when Mutilate crits.",null,false],
+ ["Vigor",2,3,1,null,"Up to +10 maximum Energy.",null,false],
+ ["Blood Splatter",1,3,2,null,"Rupture lasts 6 sec longer and Garrote lasts 9 sec longer.",null,false],
+ ["Lethality",2,3,3,"Malice","Up to +20% critical damage bonus (10% per rank) on Sinister Strike, Gouge, Backstab, Mutilate, Ghostly Strike and Hemorrhage.",null,false],
+ ["Vile Poisons",5,4,1,null,"Poisons deal up to 20% more damage and get up to +40% chance to resist dispels.",null,false],
+ ["Cold Blood",1,4,2,null,"Your next Sinister Strike, Backstab, Ambush, Eviscerate or Mutilate is a guaranteed crit; a Mutilate crit uses it up. 3 min cooldown.",null,false],
  ["Improved Poisons",5,4,3,null,"Up to +10% chance to apply poisons, and up to a 50% chance an application doesn't use a charge.",null,false],
- ["Relentless Strikes",5,5,1,null,"Each combo point spent on a finishing move gives a 20% chance to get 25 Energy back.","Each combo point spent on a finishing move gives up to a 20% chance (4% per rank) to get 25 Energy back. Now 5 ranks, moved to row 5.",true],
- ["Venom",1,5,2,null,"Finishing move: poisons deal 30% more damage and apply 10% more often. Lasts 9–21 sec depending on combo points. 25 Energy.","Passive: Shank makes your poisons deal 30% more damage and apply 20% more often for 6 sec. No longer a finishing move and no longer needs Mutilate; moved up to row 5.",true],
+ ["Relentless Strikes",5,5,1,null,"Each combo point spent on a finishing move gives up to a 20% chance (4% per rank) to get 25 Energy back.",null,false],
+ ["Venom",1,5,2,null,"Passive: Shank makes your poisons deal 30% more damage and apply 20% more often for 6 sec.",null,false],
  ["Improved Kidney Shot",2,5,3,null,"Targets stunned by your Kidney Shot take up to 10% more damage from your attacks and poisons.",null,false],
- ["Seal Fate",3,6,3,null,"Crits from combo-point abilities have up to a 100% chance to add an extra combo point. No longer needs Cold Blood.","Crits from combo-point abilities have up to a 100% chance (33 / 66 / 100%) to add an extra combo point. Now 3 ranks.",true],
- ["Mutilate",1,7,2,null,"Dagger attack with both weapons: 75% weapon damage plus a flat bonus per weapon (17 in Blizzard's Rogue overview and the Oct 30 data; an older beta tooltip showed 13). 20% more damage to poisoned targets. 2 combo points.","Dagger attack with both weapons: 90% weapon damage plus 40 per weapon (57 and 79 at spell ranks 2 and 3). 20% more damage to poisoned targets. 2 combo points. Now the 31-point talent in row 7.",true]
+ ["Seal Fate",3,6,3,null,"Crits from combo-point abilities have up to a 100% chance (33 / 66 / 100%) to add an extra combo point.",null,false],
+ ["Mutilate",1,7,2,"Venom","Dagger attack with both weapons for 90% weapon damage plus 40 per weapon, and 20% more damage to poisoned targets. Adds 2 combo points. 60 Energy.",null,false]
 ]},
 {name:"Combat",t:[
- ["Coup de Grace",3,1,1,null,"Eviscerate deals up to 20% more damage.","Eviscerate deals up to 20% more damage (7 / 13 / 20%), and Death Mark deals up to 20% more and stores damage up to 20% faster. Renamed from Improved Eviscerate.",true],
- ["Efficient Strikes",2,1,2,null,"Sinister Strike costs up to 5 less Energy.","Sinister Strike and Hemorrhage cost up to 5 less Energy (3 / 5). Renamed from Improved Sinister Strike; now also covers Hemorrhage.",true],
+ ["Coup de Grace",3,1,1,null,"Eviscerate deals up to 20% more damage (7 / 13 / 20%), and Death Mark deals up to 20% more and stores damage up to 20% faster.",null,false],
+ ["Efficient Strikes",2,1,2,null,"Sinister Strike and Hemorrhage cost up to 5 less Energy (3 / 5).",null,false],
  ["Lightning Reflexes",5,1,3,null,"Up to +5% dodge.",null,false],
  ["Puncturing Wounds",3,2,1,null,"Backstab up to +30% crit chance, Mutilate up to +15%, and Backstab has up to a 45% chance to add an extra combo point.",null,false],
  ["Deflection",3,2,2,null,"Up to +6% parry.",null,false],
  ["Precision",3,2,3,null,"Up to +3% hit chance.",null,false],
- ["Improved Sprint",2,2,4,null,"Sprint has up to a 100% chance to remove movement-slowing effects.","Sprint has up to a 100% chance to remove movement-slowing effects. Moved up to row 2.",true],
+ ["Improved Sprint",2,2,4,null,"Sprint has up to a 100% chance to remove movement-slowing effects.",null,false],
  ["Endurance",2,3,1,null,"Sprint and Evasion cooldowns up to 60% shorter.",null,false],
  ["Riposte",1,3,2,"Deflection","After you parry: a strike for 150% weapon damage that disarms the target for 6 sec.",null,false],
- ["Composure",2,3,4,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Poised lowers the cost of your next Energy ability by up to 10 more (5 / 10). Poised is a new level-18 Rogue ability: out of combat at full Energy, your next Energy ability costs 10 less.",true],
+ ["Composure",2,3,4,null,"Poised lowers the cost of your next Energy ability by up to 10 more (5 / 10). Poised is the level-18 Rogue ability: out of combat at full Energy, your next Energy ability costs 10 less.",null,false],
  ["Improved Kick",2,4,1,null,"Kick has up to a 100% chance to silence for 2 sec.",null,false],
- ["Flawless Execution",1,4,2,null,"Eviscerate costs 10 less Energy.","Eviscerate costs 15 less Energy (was 10).",true],
- ["Aggression",3,4,3,null,"Sinister Strike, Backstab and Eviscerate deal up to 6% more damage.","Sinister Strike and Eviscerate deal up to 15% more damage (5 / 10 / 15%); Backstab is no longer included. Moved up to row 4.",true],
- ["Weapon Expertise",2,4,4,null,"Your attacks are up to 2% less likely to be dodged or parried.","Your attacks are up to 2% less likely to be dodged or parried. Moved up to row 4, so it no longer follows Blade Flurry.",true],
- ["Blade Flurry",1,5,1,null,"For 15 sec: +20% melee attack speed and your hits also strike a nearby enemy. 2 min cooldown.",null,false],
- ["Dual Wield Specialization",2,5,3,"Precision","Off-hand damage up to +25%.","Off-hand damage up to +50% (25 / 50%). Now 2 ranks, moved to row 5.",true],
- ["Hack and Slash",5,5,4,null,"By weapon type, up to: Axe/Sword 5% chance for an extra attack, Dagger/Fist +5% crit, Mace ignores 15% armor.","By weapon type, up to: Axe/Sword 5% chance for an extra attack, Dagger/Fist +5% crit, Mace ignores 15% armor. Same effect; placed in column 4 here because Dual Wield Specialization moved into row 5.",true],
- ["Flash of Steel",5,6,2,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Shank gives up to 15 extra Energy (3 per rank) and its cooldown is up to 2 sec shorter (0.4 sec per rank). Shank is a new level-24 Rogue ability: off-hand strike for 50% weapon damage that can't miss, 5 Energy, gives back 15 Energy, 10 sec cooldown.",true],
- ["Adrenaline Rush",1,7,2,null,"Doubles Energy regeneration for 15 sec. 5 min cooldown.",null,false]
+ ["Flawless Execution",1,4,2,null,"Eviscerate costs 15 less Energy.",null,false],
+ ["Aggression",3,4,4,null,"Sinister Strike and Eviscerate deal up to 15% more damage (5 / 10 / 15%).",null,false],
+ ["Weapon Expertise",2,4,3,"Precision","Your attacks are up to 2% less likely to be dodged or parried.",null,false],
+ ["Blade Flurry",1,5,2,null,"For 15 sec: +20% melee attack speed and your hits also strike a nearby enemy. 2 min cooldown.",null,false],
+ ["Dual Wield Specialization",2,5,1,null,"Off-hand damage up to +50% (25 / 50%).",null,false],
+ ["Hack and Slash",5,5,4,null,"Bonus by weapon type, up to: Axe/Sword 5% chance for an extra attack, Dagger/Fist +5% crit, Mace ignores 15% armor.",null,false],
+ ["Flash of Steel",5,6,3,null,"Shank gives up to 15 extra Energy (3 per rank) and its cooldown is up to 2 sec shorter (0.4 sec per rank). Shank is the level-24 Rogue ability: an off-hand strike for 50% weapon damage that can't miss, 5 Energy, gives back 15 Energy, 10 sec cooldown.",null,false],
+ ["Adrenaline Rush",1,7,2,"Blade Flurry","Doubles Energy regeneration for 15 sec. 5 min cooldown.",null,false]
 ]},
 {name:"Subtlety",t:[
- ["Setup",3,1,1,null,"Up to a 100% chance to gain a combo point when you dodge an attack or fully resist a spell.","Up to a 45% chance (15 / 30 / 45%) to gain a combo point when you dodge an attack or fully resist a spell. Moved up to row 1.",true],
+ ["Setup",3,1,1,null,"Up to a 45% chance (15 / 30 / 45%) to gain a combo point when you dodge an attack or fully resist a spell.",null,false],
  ["Master of Deception",3,1,2,null,"Enemies detect you in Stealth as if you were up to 3 levels higher.",null,false],
- ["Opportunity",5,1,3,null,"Backstab, Garrote, Ambush and Mutilate deal up to 10% more damage.","Backstab, Garrote, Ambush and Mutilate deal up to 20% more damage (4% per rank). Now 5 ranks.",true],
- ["Camouflage",3,2,1,null,"Stealth slows you up to 15% less and its cooldown is up to 6 sec shorter.","Stealth slows you up to 15% less (5 / 10 / 15%) and its cooldown is up to 6 sec shorter. Now 3 ranks, moved to row 2.",true],
- ["Dirty Deeds",2,2,2,null,"Cheap Shot and Garrote cost up to 20 less Energy, and Garrote works from the front. Moved to column 1.","Cheap Shot and Garrote cost up to 20 less Energy, and Garrote works from the front. Moved up to row 2.",true],
- ["Dirty Tricks",2,2,3,null,"Sap and Blind cost up to 50% less Energy.",null,false],
- ["Improved Ambush",3,2,4,null,"Ambush up to +45% crit chance. Moved up from row 3.",null,false],
+ ["Opportunity",5,1,3,null,"Backstab, Garrote, Ambush and Mutilate deal up to 20% more damage (4% per rank).",null,false],
+ ["Camouflage",3,2,2,null,"Stealth slows you up to 15% less (5 / 10 / 15%) and its cooldown is up to 6 sec shorter.",null,false],
+ ["Dirty Deeds",2,2,1,null,"Cheap Shot and Garrote cost up to 20 less Energy, and Garrote works from the front.",null,false],
+ ["Dirty Tricks",2,2,4,null,"Sap and Blind cost up to 50% less Energy.",null,false],
+ ["Improved Ambush",3,2,3,null,"Ambush gets up to +45% crit chance.",null,false],
  ["Initiative",3,3,1,null,"Ambush, Garrote and Cheap Shot have up to a 100% chance to add an extra combo point.",null,false],
- ["Premeditation",1,3,2,null,"Adds 2 combo points to a target from Stealth; use them within 20 sec. 2 min cooldown. No longer needs Preparation.","Adds 2 combo points to a target from Stealth; use them within 20 sec. 2 min cooldown. Moved up to row 3.",true],
- ["Serrated Blades",3,3,3,null,"Attacks ignore up to 9% of target armor and Rupture deals up to 30% more damage.","Attacks ignore up to 9% of target armor and Rupture deals up to 30% more damage. Moved up to row 3.",true],
- ["Elusiveness",2,4,1,null,"Vanish and Blind cooldowns up to 90 sec shorter.","Vanish and Blind cooldowns up to 90 sec shorter. Moved down to row 4.",true],
- ["Ghostly Strike",1,4,2,null,"125% weapon damage (180% with a main-hand dagger) and +15% dodge for 7 sec. 1 combo point, 40 Energy, 20 sec cooldown.","125% weapon damage and +15% dodge for 7 sec, and your next Ambush or Garrote within 7 sec can be used without Stealth. 1 combo point, 40 Energy, 20 sec cooldown. Moved to row 4. Blizzard says its extra damage with daggers was too high and is reduced.",true],
- ["Quick Getaway",2,4,4,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Sap can hold one more target, and after you Sap something you move up to 30% faster (15 / 30%) for 3 sec.",true],
- ["Heightened Senses",2,5,1,null,"See stealth as if up to 3 levels higher, and up to 4% less likely to be hit by spells and ranged attacks.","See stealth as if up to 3 levels higher, and up to 4% less likely to be hit by spells and ranged attacks. Moved down to row 5.",true],
+ ["Premeditation",1,3,2,null,"Adds 2 combo points to a target from Stealth; use them within 20 sec. 2 min cooldown.",null,false],
+ ["Serrated Blades",3,3,3,null,"Attacks ignore up to 9% of target armor and Rupture deals up to 30% more damage.",null,false],
+ ["Elusiveness",2,4,1,null,"Vanish and Blind cooldowns up to 90 sec shorter.",null,false],
+ ["Ghostly Strike",1,4,2,null,"125% weapon damage and +15% dodge for 7 sec, and your next Ambush or Garrote within 7 sec can be used without Stealth. 1 combo point, 40 Energy, 20 sec cooldown.",null,false],
+ ["Quick Getaway",2,4,4,null,"Sap can hold one more target, and after you Sap something you move up to 30% faster (15 / 30%) for 3 sec.",null,false],
+ ["Heightened Senses",2,5,1,null,"See stealth as if up to 3 levels higher, and up to 4% less likely to be hit by spells and ranged attacks.",null,false],
  ["Preparation",1,5,2,null,"Finishes the cooldown of your other Rogue abilities. 10 min cooldown.",null,false],
- ["Hemorrhage",1,5,3,"Serrated Blades","100% weapon damage (145% with a dagger); the target takes 15% more Rupture damage from you for 15 sec. 1 combo point, 35 Energy.","100% weapon damage; the target takes 15% more Rupture and Garrote damage from you for 15 sec. 1 combo point, 35 Energy. Garrote is new; the extra damage with daggers was a bug and is fixed.",true],
- ["Boot Knife",5,6,3,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Shank has up to a 100% chance (20% per rank) to add 2 combo points to the target.",true],
- ["Death Mark",1,7,2,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Curse finisher for 25 Energy (20 yd, 10 sec cooldown): for 6 sec it stores 12% of the damage you deal per combo point (60% at 5; Garrote and Rupture store at double rate), then deals the stored damage, capped at about 590 + 20.6% of your Attack Power with 5 combo points.",true]
+ ["Hemorrhage",1,5,3,"Serrated Blades","100% weapon damage; the target takes 15% more Rupture and Garrote damage from you for 15 sec. 1 combo point, 35 Energy.",null,false],
+ ["Boot Knife",5,6,3,null,"Shank has up to a 100% chance (20% per rank) to add 2 combo points to the target.",null,false],
+ ["Death Mark",1,7,2,null,"Curse finisher for 25 Energy (20 yd, 10 sec cooldown): for 6 sec it stores 12% of the damage you deal per combo point (60% at 5; Garrote and Rupture store at double rate), then deals the stored damage. At 5 combo points the cap is 573 plus 20% of your Attack Power, raised by your crit chance.",null,false]
 ]}];
 const HUNTER=[
 {name:"Beast Mastery",t:[
@@ -298,13 +295,13 @@ const HUNTER=[
  ["Endurance Training",5,1,3,null,"Your pet gets up to 15% more Health and Armor.",null,false],
  ["Focused Fire",2,2,1,null,"While your pet is out, you and your pet deal up to 2% more damage.",null,false],
  ["Improved Aspect of the Monkey",3,2,2,null,"Aspect of the Monkey gives up to 6% more dodge, and your pet gets half of the bonus.",null,false],
- ["Improved Revive Pet",2,2,3,null,"Revive Pet casts up to 6 sec faster, costs up to 40% less mana and brings the pet back with up to 30% more health.","Same effect. Moved from column 4 to column 3 of row 2 in the Oct 30 hotfix.",true],
- ["Pathfinding",2,3,1,null,"Aspect of the Cheetah and Aspect of the Pack give up to 6% more speed.","Same effect. Moved from row 2 to row 3 (column 1) in the Oct 30 hotfix, so it now needs 10 points in Beast Mastery.",true],
+ ["Improved Revive Pet",2,2,3,null,"Revive Pet casts up to 6 sec faster, costs up to 40% less mana and brings the pet back with up to 30% more health.",null,false],
+ ["Pathfinding",2,3,1,null,"Aspect of the Cheetah and Aspect of the Pack give up to 6% more speed.",null,false],
  ["Bestial Swiftness",1,3,2,null,"Your pet moves 30% faster.",null,false],
  ["Unleashed Fury",5,3,3,null,"Your pet and hawks deal up to 15% more damage.",null,false],
  ["Improved Mend Pet",2,4,1,null,"Each Mend Pet heal has up to a 50% chance to remove a Curse, Disease, Magic or Poison effect from your pet, and Mend Pet costs up to 20% less mana.",null,false],
  ["Ferocity",5,4,3,null,"Your pet and hawks get up to +10% critical strike chance.",null,false],
- ["Summon Hawk",1,4,4,null,"A hawk dive-bombs your target for Physical damage and fights beside you for 18 sec; up to 2 hawks at once. Shares a cooldown with Arcane Shot. Base damage differs between sources (32 + 5% ranged attack power vs 34), so treat it as unconfirmed.",null,false],
+ ["Summon Hawk",1,4,4,null,"A hawk dive-bombs your target for 32 Physical damage plus 5% of your ranged attack power, then fights beside you for 18 sec; up to 2 hawks at once. Shares a cooldown with Arcane Shot.",null,false],
  ["Spirit Bond",2,5,1,null,"While your pet is out, you and your pet regenerate 1% of total health every 5 sec.",null,false],
  ["Intimidation",1,5,2,"Bestial Swiftness","Your pet's next hit stuns the target for 3 sec and has +100% crit chance; it also causes high threat. 1 min cooldown.",null,false],
  ["Bestial Discipline",2,5,4,null,"Your pet regenerates Focus up to 20% faster, and up to 50% of your mana regeneration continues while casting.",null,false],
@@ -312,7 +309,7 @@ const HUNTER=[
  ["Bestial Wrath",1,7,2,"Intimidation","Your pet deals 50% more damage for 18 sec. 2 min cooldown.",null,false]
 ]},
 {name:"Marksmanship",t:[
- ["Hawk Eye",3,1,1,null,"Up to +6 yards range with ranged weapons. Moved up to the first row.",null,false],
+ ["Hawk Eye",3,1,1,null,"Up to +6 yards range with ranged weapons.",null,false],
  ["Improved Concussive Shot",5,1,2,null,"Concussive Shot has up to a 20% chance to stun for 3 sec.",null,false],
  ["Lethal Attacks",5,1,3,null,"Up to +5% critical strike chance with all attacks.",null,false],
  ["Improved Stings",3,2,1,null,"Serpent Sting deals up to 20% more damage, Viper Sting's cooldown is up to 6 sec shorter and Scorpid Sting lasts up to 45 sec longer.",null,false],
@@ -321,16 +318,16 @@ const HUNTER=[
  ["Rapid Killing",2,3,1,null,"Rapid Fire's cooldown is up to 2 min shorter. Killing an enemy (or having it die with your Serpent Sting on it) makes your next Shot within 20 sec deal up to 20% more damage.",null,false],
  ["Improved Arcane Shot",5,3,2,null,"Arcane Shot's cooldown is up to 1.5 sec shorter.",null,false],
  ["Lone Wolf",1,3,4,null,"With no pet out, all your attacks deal 20% more damage.",null,false],
- ["Trueshot Aura",1,4,2,null,"Party and raid members within 45 yd gain +15 ranged attack power. Now in row 4 and no longer needs Barrage.","Party and raid members within 45 yd gain ranged attack power: 20 / 35 / 50 / 75 / 100 by spell rank (rank 1 comes with the talent). In row 4, no longer needs Barrage.",true],
+ ["Trueshot Aura",1,4,2,null,"Party and raid members within 45 yd gain ranged attack power: 20 / 35 / 50 / 75 / 100 by spell rank (rank 1 comes with the talent).",null,false],
  ["Mortal Shots",5,4,3,"Careful Aim","Ranged critical strikes deal up to 30% more bonus damage.",null,false],
  ["Rapid Recuperation",2,5,1,"Rapid Killing","Serpent Sting lets up to 50% of your mana regeneration continue while casting for 15 sec, or up to 100% when you use a Rapid Killing proc.",null,false],
- ["Barrage",3,5,3,null,"Multi-Shot, Aimed Shot and Volley deal up to 10% more damage.","Multi-Shot, Aimed Shot and Volley deal up to 15% more damage (5 / 10 / 15%).",true],
+ ["Barrage",3,5,3,null,"Multi-Shot, Aimed Shot and Volley deal up to 15% more damage (5 / 10 / 15%).",null,false],
  ["Scatter Shot",1,5,4,null,"50% weapon damage and disorients the target for 4 sec; damage breaks it. 30 sec cooldown.",null,false],
  ["Ranged Weapon Specialization",5,6,3,null,"Up to 5% more damage with ranged weapons.",null,false],
- ["Sniper Shot",1,7,2,"Trueshot Aura","4 sec cast: ranged weapon damage plus 160, and your next 3 Shots within 10 sec get +10 yd range. 8–45 yd, 15 sec cooldown.","4 sec cast: ranged weapon damage plus a bonus that is twice as large as in the beta (about 320 at this rank), and your next 3 Shots within 10 sec get +10 yd range. 8–45 yd, 15 sec cooldown.",true]
+ ["Sniper Shot",1,7,2,"Trueshot Aura","4 sec cast: ranged weapon damage plus 320, and your next 3 Shots within 10 sec get +10 yd range. 8–45 yd, 15 sec cooldown.",null,false]
 ]},
 {name:"Survival",t:[
- ["Improved Tracking",5,1,2,null,"Up to 5% more damage against the creature type you are tracking (Beasts, Demons, Dragonkin, Elementals, Giants, Humanoids or Undead). Replaces Monster and Humanoid Slaying.",null,false],
+ ["Improved Tracking",5,1,2,null,"Up to 5% more damage against the creature type you are tracking (Beasts, Demons, Dragonkin, Elementals, Giants, Humanoids or Undead).",null,false],
  ["Deflection",5,1,3,null,"Up to +5% parry.",null,false],
  ["Entrapment",5,2,1,null,"Enemies that trigger your traps are Entrapped (rooted) for up to 5 sec.",null,false],
  ["Savage Strikes",2,2,2,null,"Up to +4% critical strike chance with melee abilities.",null,false],
@@ -341,149 +338,149 @@ const HUNTER=[
  ["Deterrence",1,3,3,null,"+25% dodge and parry for 10 sec. 5 min cooldown.",null,false],
  ["Survival Tactics",2,4,1,null,"Traps and Feign Death are up to 10% less likely to be resisted.",null,false],
  ["Predator's Edge",5,4,2,null,"Melee ability crits deal up to 30% more bonus damage, and your off-hand weapon deals up to 50% more damage.",null,false],
- ["Counterattack",1,4,3,"Deterrence","After you parry: a strike for 50% weapon damage plus a flat bonus (13 or 26, sources differ) that roots the target for 5 sec. Can't be blocked, dodged or parried.",null,false],
+ ["Counterattack",1,4,3,"Deterrence","After you parry: a strike for 50% weapon damage plus 26 that roots the target for 5 sec. Can't be blocked, dodged or parried.",null,false],
  ["Resourcefulness",2,5,1,null,"Traps and melee abilities cost up to 60% less mana. Melee and ranged crits have up to a 100% chance to let 50% of your mana regeneration continue while casting for 30 sec.",null,false],
  ["Expose Prey",2,5,2,null,"Melee and ranged hits on a target with your Hunter's Mark have up to a 10% chance to enable Mongoose Bite for 10 sec.",null,false],
  ["Survivalist's Discipline",2,5,3,null,"Traps and Deterrence have up to 40% shorter cooldowns.",null,false],
  ["Strider Kick",1,5,4,null,"A melee strike for 100% weapon damage that gives you +30% movement speed for 3 sec. 8 sec cooldown.",null,false],
- ["Lightning Reflexes",5,6,3,null,"Up to 10% more Agility.","Up to 15% more Agility (3% per rank).",true],
- ["Lacerating Strikes",1,7,2,"Expose Prey","Mongoose Bite also makes the target bleed for 40% of its damage over 21 sec.","Mongoose Bite also makes the target bleed for 40% of its damage over 21 sec. A new bleed from you always replaces your earlier one.",true]
+ ["Lightning Reflexes",5,6,3,null,"Up to 15% more Agility (3% per rank).",null,false],
+ ["Lacerating Strikes",1,7,2,"Expose Prey","Mongoose Bite also makes the target bleed for 40% of its damage over 21 sec. Your newest bleed always overwrites your earlier one.",null,false]
 ]}];
 const PRIEST=[
 {name:"Discipline",t:[
  ["Power in Light",5,1,1,null,"Smite and Penance deal up to 10% more damage to targets with your Holy Fire or Shadow Word: Pain.",null,false],
- ["Wand Specialization",2,1,2,null,"Wand damage up to +25%. Now 2 ranks, column 2.",null,false],
+ ["Wand Specialization",2,1,2,null,"Wand damage up to +25%.",null,false],
  ["Twin Disciplines",5,1,3,null,"Your instant spells deal up to 5% more damage and healing.",null,false],
  ["Silent Resolve",3,2,1,null,"Up to 30% less threat, and Stun, Fear and Silence effects on you are up to 15% shorter.",null,false],
  ["Holy Precision",3,2,2,null,"Up to +18% hit chance with Holy spells.",null,false],
- ["Mental Strength",5,2,3,null,"Up to 10% more Intellect. Moved up to row 2.",null,false],
- ["Martyrdom",2,2,4,null,"Melee and ranged crits against you always give Focused Casting for 6 sec, and you resist interrupts up to 20% better.",null,false],
+ ["Mental Strength",5,2,3,null,"Up to 10% more Intellect.",null,false],
+ ["Martyrdom",2,2,4,null,"Melee and ranged crits against you have up to a 100% chance to give Focused Casting for 6 sec, and you resist interrupts up to 20% better.",null,false],
  ["Mental Agility",3,3,1,null,"Smite, Holy Fire and your instant spells cost up to 10% less mana.",null,false],
  ["Inner Focus",1,3,2,null,"Your next spell costs no mana and, if it isn't a periodic effect, gets +25% crit chance. 3 min cooldown.",null,false],
  ["Improved Power Word: Shield",3,3,3,null,"Power Word: Shield absorbs up to 20% more.",null,false],
- ["Meditation",3,3,4,null,"Up to 50% of your mana regeneration continues while casting. Now column 4.",null,false],
+ ["Meditation",3,3,4,null,"Up to 50% of your mana regeneration continues while casting.",null,false],
  ["Improved Inner Fire",3,4,1,null,"Inner Fire gives up to 45% more armor and up to 12 more charges.",null,false],
- ["Improved Mana Burn",2,4,2,null,"Mana Burn casts up to 1 sec faster. Now column 2.",null,false],
+ ["Improved Mana Burn",2,4,2,null,"Mana Burn casts up to 1 sec faster.",null,false],
  ["Soul Warding",1,4,3,"Improved Power Word: Shield","Power Word: Shield has a 4 sec shorter cooldown and costs 15% less mana.",null,false],
- ["Penance",1,5,2,null,"2 sec channel: about 44 Holy damage to an enemy or 133 healing to an ally every second (the two data sources differ by 1). 150 mana, 12 sec cooldown.",null,false],
- ["Renewed Hope",5,5,3,"Soul Warding","Flash Heal, Lesser Heal, Heal, Greater Heal, Binding Heal and Penance get up to +10% crit chance on targets with Weakened Soul, and Weakened Soul is up to 5 sec shorter.","Same, but Binding Heal is no longer listed (it is now a trained spell).",true],
+ ["Penance",1,5,2,null,"2 sec channel: 45 Holy damage to an enemy or 134 healing to an ally every second. 150 mana, 36 yd, 12 sec cooldown.",null,false],
+ ["Renewed Hope",5,5,3,"Soul Warding","Flash Heal, Lesser Heal, Heal, Greater Heal and Penance get up to +10% crit chance on targets with Weakened Soul, and Weakened Soul is up to 5 sec shorter.",null,false],
  ["Divine Aegis",3,6,3,null,"Non-periodic critical heals also shield the target for up to 15% of the heal (max 1,200 damage) for 12 sec.",null,false],
- ["Power Infusion",1,7,2,"Penance","+20% spell damage and healing for 15 sec. 3 min cooldown. Now requires Penance.",null,false]
+ ["Power Infusion",1,7,2,"Penance","+20% spell damage and healing for 15 sec. 3 min cooldown.",null,false]
 ]},
 {name:"Holy",t:[
- ["Twilight Focus",3,1,1,null,"Up to a 70% chance that taking damage doesn't delay your spell casts. Renamed from Healing Focus; now 3 ranks.",null,false],
+ ["Twilight Focus",3,1,1,null,"Up to a 70% chance that taking damage doesn't delay your spell casts.",null,false],
  ["Improved Renew",3,1,2,null,"Renew heals up to 15% more.",null,false],
  ["Holy Specialization",5,1,3,null,"Up to +5% crit chance with Holy spells.",null,false],
  ["Spell Warding",5,2,2,null,"You take up to 10% less spell damage.",null,false],
  ["Divine Fury",5,2,3,null,"Smite, Holy Fire, Heal and Greater Heal cast up to 0.5 sec faster.",null,false],
- ["Holy Nova",1,3,1,null,"Deals 26–30 Holy damage to enemies within 10 yd and heals party members within 10 yd for about 50–57.",null,false],
+ ["Holy Nova",1,3,1,null,"Deals 26–30 Holy damage to enemies within 10 yd and heals party members within 10 yd for 50–57.",null,false],
  ["Blessed Recovery",3,3,2,null,"After a critical hit or any single hit for over 30% of your max health, you heal up to 25% of the damage over 6 sec.",null,false],
  ["Inspiration",3,3,4,null,"Non-periodic critical heals raise the target's armor by up to 25% for 15 sec.",null,false],
  ["Holy Reach",2,4,1,null,"Smite and Holy Fire range, and Prayer of Healing and Holy Nova radius, up to +20%.",null,false],
- ["Improved Healing",3,4,2,null,"Lesser Heal, Heal, Greater Heal, Penance and Prayer of Mending cost up to 15% less mana. Now column 2.",null,false],
+ ["Improved Healing",3,4,2,null,"Lesser Heal, Heal, Greater Heal, Penance and Prayer of Mending cost up to 15% less mana.",null,false],
  ["Searing Light",2,4,3,"Divine Fury","Holy damage up to +5%, and each Holy Fire tick has up to a 10% chance to make your next Holy Nova free.",null,false],
- ["Holy Binding",1,4,4,null,"Not in the beta tree: this slot held the Binding Heal talent.","New in the Oct 30 hotfix, replacing Binding Heal (now a trained spell, rank 1 at level 25). Each Flash Heal you cast on someone else heals you for 50% as much, with no threat.",true],
+ ["Holy Binding",1,4,4,null,"Each Flash Heal you cast on someone else heals you for 50% as much, with no threat.",null,false],
  ["Litany of Light",2,5,1,null,"A heal cast after a different heal refunds up to 10% of its base mana cost.",null,false],
  ["Spirit of Redemption",1,5,2,null,"On death you become a spirit that can heal freely for 15 sec.",null,false],
  ["Spiritual Guidance",5,5,3,null,"Healing up to +25% of your total Spirit, and spell damage up to +8% of it.",null,false],
- ["Spiritual Healing",3,6,3,null,"Your healing spells heal up to 10% more. Now 3 ranks.",null,false],
+ ["Spiritual Healing",3,6,3,null,"Your healing spells heal up to 10% more.",null,false],
  ["Prayer of Mending",1,7,2,"Spirit of Redemption","Puts a prayer on an ally that heals 172 the next time they take damage or a direct heal, then jumps up to 5 times to allies within 20 yd. 210 mana, 40 yd, 10 sec cooldown.",null,false]
 ]},
 {name:"Shadow",t:[
  ["Shadow Focus",5,1,1,null,"Up to +5% hit chance with Shadow spells.",null,false],
- ["Blackout",5,1,2,null,"Shadow damage spells have up to a 10% chance to stun for 3 sec. Now column 2.",null,false],
- ["Spirit Tap",5,1,3,null,"After a kill (or when a target with your Vampiric Embrace dies) your Spirit doubles for 15 sec and 50% of your mana regeneration continues while casting. Now column 3.",null,false],
- ["Improved Mind Blast",5,2,1,null,"Mind Blast's cooldown is up to 2.5 sec shorter. Moved up to row 2.",null,false],
- ["Improved Shadow Word: Pain",2,2,3,null,"Shadow Word: Pain lasts up to 6 sec longer. Now column 3.",null,false],
- ["Shadow Reach",2,2,4,null,"Offensive Shadow spells get up to 20% more range. Now 2 ranks in row 2.",null,false],
- ["Improved Psychic Scream",2,3,2,"Blackout","Psychic Scream's cooldown is up to 4 sec shorter. Now requires Blackout.",null,false],
+ ["Blackout",5,1,2,null,"Shadow damage spells have up to a 10% chance to stun for 3 sec.",null,false],
+ ["Spirit Tap",5,1,3,null,"After a kill (or when a target with your Vampiric Embrace dies) your Spirit doubles for 15 sec and 50% of your mana regeneration continues while casting.",null,false],
+ ["Improved Mind Blast",5,2,1,null,"Mind Blast's cooldown is up to 2.5 sec shorter.",null,false],
+ ["Improved Shadow Word: Pain",2,2,3,null,"Shadow Word: Pain lasts up to 6 sec longer.",null,false],
+ ["Shadow Reach",2,2,4,null,"Offensive Shadow spells get up to 20% more range.",null,false],
+ ["Improved Psychic Scream",2,3,2,"Blackout","Psychic Scream's cooldown is up to 4 sec shorter.",null,false],
  ["Mind Flay",1,3,3,null,"Channel: 63 Shadow damage over 3 sec and slows the target by 50%. 45 mana, 20 yd.",null,false],
  ["Improved Mind Flay",2,3,4,"Mind Flay","Each Mind Flay tick deals up to 20% more than the one before.",null,false],
  ["Dark Inspiration",5,4,1,null,"Mind Blast and fully channeled Mind Flay raise your party's Spirit (and yours) by up to 15% for 10 sec.",null,false],
- ["Vampiric Embrace",1,4,2,null,"For 30 sec your party is healed for 20% of your Shadow spell damage on the target. 30 sec cooldown.","For 30 sec your party is healed for 20% of your Shadow spell damage on the target; this healing can no longer crit. 30 sec cooldown.",true],
- ["Shadow Weaving",3,4,3,null,"Your Shadow spells always make the target take 2% more Shadow damage for 15 sec, stacking 5 times. Now 3 ranks.",null,false],
- ["Silence",1,5,1,null,"Silences the target for 5 sec (interrupts for 3 sec). 45 sec cooldown. No longer needs Improved Psychic Scream.",null,false],
- ["Devouring Contagion",2,5,3,null,"Devouring Plague costs up to 50% less mana, and a target that dies with it spreads it to 2 enemies within 10 yd.","Devouring Plague costs up to 50% less mana, and a target that dies with it spreads it to 2 enemies within 10 yd (critters no longer count).",true],
+ ["Vampiric Embrace",1,4,2,null,"For 30 sec your party is healed for 20% of your Shadow spell damage on the target; this healing cannot crit. 30 sec cooldown.",null,false],
+ ["Shadow Weaving",3,4,3,null,"Your Shadow spells have up to a 100% chance to make the target take 2% more Shadow damage for 15 sec, stacking 5 times.",null,false],
+ ["Silence",1,5,1,null,"Silences the target for 5 sec (interrupts for 3 sec). 45 sec cooldown.",null,false],
+ ["Devouring Contagion",2,5,3,null,"Devouring Plague costs up to 50% less mana, and a target that dies with it spreads it to 2 enemies within 10 yd (critters don't count).",null,false],
  ["Early Demise",2,6,1,null,"Shadow Word: Death gets up to +30% crit chance on targets at or below 20% health.",null,false],
  ["Darkness",5,6,3,null,"Your Shadow spells deal up to 10% more damage.",null,false],
  ["Shadowform",1,7,2,"Vampiric Embrace","Shadow damage +10%, Shadow spells cost 50% less mana and their crits deal +100% bonus damage, physical damage taken −15%; no healing spells while active.",null,false]
 ]}];
 const SHAMAN=[
 {name:"Elemental",t:[
- ["Convection",5,1,2,null,"Shocks, Lightning Bolt, Chain Lightning and Lava Burst cost up to 10% less mana.","Shocks, Lightning Bolt and Chain Lightning cost up to 10% less mana. (Lava Burst is removed.)",true],
+ ["Convection",5,1,2,null,"Shocks, Lightning Bolt and Chain Lightning cost up to 10% less mana.",null,false],
  ["Concussion",5,1,3,null,"Lightning Bolt, Chain Lightning and Earth Shock deal up to 5% more damage.",null,false],
- ["Elemental Devastation",3,2,1,null,"A critical strike with a direct damage spell gives up to +9% melee crit chance for 10 sec. Moved up to row 2.",null,false],
- ["Reverberation",5,2,2,null,"Shock cooldowns up to 1 sec shorter. Moved up to row 2.",null,false],
- ["Elemental Alacrity",3,2,3,null,"Lightning Bolt, Chain Lightning and Lava Burst cast up to 0.5 sec faster. Replaces Lightning Mastery and no longer needs Call of Thunder (removed).","Lightning Bolt and Chain Lightning cast up to 0.5 sec faster. (Lava Burst is removed.)",true],
- ["Call of Flame",3,2,4,null,"Fire totems, Flame Shock, Fire Nova and Lava Burst deal up to 15% more damage, and Flame Shock lasts up to 9 sec longer. Now column 4.","Fire totems, Flame Shock and Fire Nova deal up to 15% more damage, and Flame Shock lasts up to 9 sec longer. (Lava Burst is removed.)",true],
+ ["Elemental Devastation",3,2,1,null,"A critical strike with a direct damage spell gives up to +9% melee crit chance for 10 sec.",null,false],
+ ["Reverberation",5,2,2,null,"Shock cooldowns up to 1 sec shorter.",null,false],
+ ["Elemental Alacrity",3,2,3,null,"Lightning Bolt and Chain Lightning cast up to 0.5 sec faster.",null,false],
+ ["Call of Flame",3,2,4,null,"Fire totems, Flame Shock and Fire Nova deal up to 15% more damage, and Flame Shock lasts up to 9 sec longer.",null,false],
  ["Elemental Focus",1,3,1,null,"Fire, Frost and Nature damage spells have a 10% chance to make your next damage spell cost no mana (Clearcasting).",null,false],
- ["Elemental Warding",3,3,2,null,"You take up to 10% less Fire, Frost and Nature damage. Moved down to row 3.",null,false],
- ["Trial by Fire",2,4,1,null,"Fire Nova deals up to 20% more damage with up to 4 sec less cooldown, and Magma Totem lasts up to 20 sec longer. Replaces Improved Fire Totems.",null,false],
- ["Eye of the Storm",3,4,2,null,"Up to a 70% chance that taking damage doesn't delay Lightning Bolt, Chain Lightning or Lava Burst.","Up to a 70% chance that taking damage doesn't delay Lightning Bolt or Chain Lightning. (Lava Burst is removed.)",true],
+ ["Elemental Warding",3,3,2,null,"You take up to 10% less Fire, Frost and Nature damage.",null,false],
+ ["Trial by Fire",2,4,1,null,"Fire Nova deals up to 20% more damage with up to 4 sec less cooldown, and Magma Totem lasts up to 20 sec longer.",null,false],
+ ["Eye of the Storm",3,4,2,null,"Up to a 70% chance that taking damage doesn't delay Lightning Bolt or Chain Lightning.",null,false],
  ["Earthbound",1,4,4,null,"Earthbind Totem roots nearby enemies for 5 sec when you drop it.",null,false],
- ["Elemental Reach",2,5,1,null,"Lightning Bolt, Chain Lightning, Fire Nova and Lava Burst get up to +6 yd range, and Totemic Projection's cooldown is up to 20 sec shorter. Replaces Storm Reach.","Lightning Bolt, Chain Lightning and Fire Nova get up to +6 yd range. No longer shortens the totem-moving spell (now called Totemic Call, 30 sec cooldown).",true],
- ["Call of Thunder",1,5,2,null,"Beta: this slot was Lava Burst – 2.5 sec cast, about 113–145 Fire damage, 20% more if your Flame Shock is on the target. 135 mana, 30 yd, 10 sec cooldown.","Lightning Bolt and Chain Lightning get +5% critical strike chance. Replaces Lava Burst, which is removed.",true],
- ["Lightning Overload",3,5,3,"Elemental Alacrity","Lightning Bolt and Chain Lightning have up to a 10% chance to fire a second copy at the same target for half damage, free and with no threat.","Lightning Bolt and Chain Lightning have up to a 30% chance (10 / 20 / 30%) to fire a second copy at the same target for half damage, free and with no threat.",true],
- ["Elemental Fury",5,6,3,"Lightning Overload","Fire, Frost and Nature spells and Searing and Magma Totems get up to +100% critical damage bonus. Now 5 ranks.",null,false],
- ["Lightning Mastery",1,7,2,"Call of Thunder","For 15 sec: Lightning Bolt and Lava Burst cast 0.5 sec faster and Chain Lightning has no cooldown. 3 min cooldown. Now requires Lava Burst.","For 15 sec: Lightning Bolt casts 0.5 sec faster and Chain Lightning has no cooldown. 3 min cooldown. Renamed from Elemental Mastery now that Lava Burst is gone; we assume it follows Call of Thunder, which took Lava Burst's slot.",true]
+ ["Elemental Reach",2,5,1,null,"Lightning Bolt, Chain Lightning and Fire Nova get up to +6 yd range.",null,false],
+ ["Call of Thunder",1,5,2,null,"Lightning Bolt and Chain Lightning get +5% critical strike chance.",null,false],
+ ["Lightning Overload",3,5,3,"Elemental Alacrity","Lightning Bolt and Chain Lightning have up to a 30% chance (10 / 20 / 30%) to fire a second copy at the same target for half damage, free and with no threat.",null,false],
+ ["Elemental Fury",5,6,3,"Lightning Overload","Fire, Frost and Nature spells and Searing and Magma Totems get up to +100% critical damage bonus.",null,false],
+ ["Lightning Mastery",1,7,2,"Call of Thunder","For 15 sec: Lightning Bolt casts 0.5 sec faster and Chain Lightning has no cooldown. 3 min cooldown.",null,false]
 ]},
 {name:"Enhancement",t:[
- ["Earth's Grasp",2,1,1,null,"Stoneclaw Totem has up to 50% more health and Earthbind Totem's radius is up to 20% larger. Moved here from Elemental.",null,false],
+ ["Earth's Grasp",2,1,1,null,"Stoneclaw Totem has up to 50% more health and Earthbind Totem's radius is up to 20% larger.",null,false],
  ["Thundering Strikes",5,1,2,null,"Up to +5% critical strike chance with all spells and attacks.",null,false],
- ["Ancestral Knowledge",5,1,3,null,"Up to 10% more Intellect. Now column 3.",null,false],
+ ["Ancestral Knowledge",5,1,3,null,"Up to 10% more Intellect.",null,false],
  ["Guardian Totems",2,2,1,null,"Stoneskin and Windwall Totems reduce up to 20% more damage, and Grounding Totem's cooldown is up to 2 sec shorter.",null,false],
- ["Mental Dexterity",3,2,2,null,"Gain Attack Power equal to up to 100% of your Intellect.","Gain Attack Power equal to up to 150% of your Intellect (50 / 100 / 150%).",true],
- ["Improved Lightning Shield",3,2,4,null,"Lightning Shield orbs deal up to 15% more damage.",null,false],
- ["Elemental Weapons",3,3,1,null,"Rockbiter's Attack Power bonus up to +20%, Windfury's effect up to +40%, Flametongue and Frostbrand damage up to +15%. Moved up to row 3.",null,false],
+ ["Mental Dexterity",3,2,2,null,"Gain Attack Power equal to up to 150% of your Intellect (50 / 100 / 150%).",null,false],
+ ["Improved Lightning Shield",3,2,3,null,"Lightning Shield orbs deal up to 15% more damage.",null,false],
+ ["Elemental Weapons",3,3,1,null,"Rockbiter's Attack Power bonus up to +20%, Windfury's effect up to +40%, Flametongue and Frostbrand damage up to +15%.",null,false],
  ["Shamanistic Focus",1,3,3,null,"Shocks and Lightning Shield cost 45% less mana.",null,false],
- ["Anticipation",3,3,4,null,"Up to +6% dodge. Now 3 ranks.",null,false],
- ["Toughness",5,4,1,null,"Up to 10% more Stamina. Now column 1.",null,false],
- ["Flurry",5,4,2,"Mental Dexterity","After a melee crit your next 3 swings are up to 25% faster. Now requires Mental Dexterity.","After a melee crit your next 3 swings are up to 30% faster (6% per rank).",true],
- ["Stormstrike",1,4,3,null,"Instant weapon strike; your next Lightning Bolt, Chain Lightning or Earth Shock within 12 sec deals 20% more damage. 8% of base mana, 8 sec cooldown. Moved up to row 4.","Instant strike for 150% normalized weapon damage; your next Lightning Bolt, Chain Lightning or Earth Shock within 12 sec deals 20% more damage. 8% of base mana, 6 sec cooldown.",true],
- ["Improved Ghost Wolf",2,4,4,null,"Ghost Wolf casts up to 3 sec faster and works indoors.","Ghost Wolf casts up to 3 sec faster and works indoors. Moved down to row 4.",true],
- ["Spirit Weapons",1,5,1,null,"Lets you parry. 30% less threat while Rockbiter Weapon is not active, 30% more while it is. Replaces Parry; column 1.",null,false],
+ ["Anticipation",3,3,4,null,"Up to +6% dodge.",null,false],
+ ["Toughness",5,4,1,null,"Up to 10% more Stamina.",null,false],
+ ["Flurry",5,4,2,"Mental Dexterity","After a melee crit your next 3 swings are up to 30% faster (6% per rank).",null,false],
+ ["Stormstrike",1,4,3,null,"Instant strike for 150% normalized weapon damage; your next Lightning Bolt, Chain Lightning or Earth Shock within 12 sec deals 20% more damage. 8% of base mana, 6 sec cooldown.",null,false],
+ ["Improved Ghost Wolf",2,4,4,null,"Ghost Wolf casts up to 3 sec faster and works indoors.",null,false],
+ ["Spirit Weapons",1,5,1,null,"Lets you parry. 30% less threat while Rockbiter Weapon is not active, 30% more while it is.",null,false],
  ["Mental Quickness",2,5,2,null,"Gain spell damage and healing equal to up to 30% of your Intellect.",null,false],
- ["Improved Stormstrike",2,5,3,"Stormstrike","Stormstrike lets 50% of your mana regeneration continue while casting for 15 sec, and a dodge or parry can reset its cooldown (100% chance at max rank).",null,false],
- ["Maelstrom Weapon",5,6,3,null,"Melee hits can grant a stack (up to 5, 30 sec) that cuts your next Lightning Bolt's cast time and mana cost, up to 20%. Proc chance not published.","Melee hits can grant a stack (up to 5, 30 sec) that cuts your next Lightning Bolt's cast time and mana cost, up to 20%. Now triggers twice as often (exact chance not published).",true],
+ ["Improved Stormstrike",2,5,3,"Stormstrike","Stormstrike lets 50% of your mana regeneration continue while casting for 15 sec, and a dodge or parry has up to a 100% chance to reset its cooldown.",null,false],
+ ["Maelstrom Weapon",5,6,3,null,"Melee hits have a doubled chance to grant a stack (up to 5, 30 sec) that cuts your next Lightning Bolt's cast time and mana cost, up to 20%.",null,false],
  ["Rage of the Farseer",1,7,2,"Mental Quickness","+30% attack speed for 25 sec. 3 min cooldown.",null,false]
 ]},
 {name:"Restoration",t:[
  ["Improved Healing Wave",5,1,2,null,"Healing Wave casts up to 0.5 sec faster.",null,false],
- ["Tidal Focus",5,1,3,null,"Healing spells cost up to 5% less mana, and up to +5% hit chance. Moved up to row 1.",null,false],
+ ["Tidal Focus",5,1,3,null,"Healing spells cost up to 5% less mana, and up to +5% hit chance.",null,false],
  ["Mindfulness",3,2,1,null,"Up to 50% of your mana regeneration continues while casting.",null,false],
- ["Natural Grace",3,2,2,null,"Your spells cause up to 15% less threat. Replaces Healing Grace.",null,false],
- ["Totemic Focus",5,2,3,null,"Totems, and summoning or moving them, cost up to 25% less mana. Moved to row 2.",null,false],
- ["Improved Reincarnation",2,2,4,null,"Reincarnation cooldown up to 20 min shorter, up to 4% more maximum health, and you return with up to 20% extra health and mana. Now column 4.",null,false],
+ ["Natural Grace",3,2,2,null,"Your spells cause up to 15% less threat.",null,false],
+ ["Totemic Focus",5,2,3,null,"Totems, and summoning or moving them, cost up to 25% less mana.",null,false],
+ ["Improved Reincarnation",2,2,4,null,"Reincarnation cooldown up to 20 min shorter, up to 4% more maximum health, and you return with up to 20% extra health and mana.",null,false],
  ["Ancestral Healing",3,3,1,null,"Critical heals raise the target's armor by up to 25% for 15 sec.",null,false],
- ["Healing Focus",3,3,2,null,"Up to a 70% chance that taking damage doesn't delay your healing spells. Now 3 ranks.",null,false],
+ ["Healing Focus",3,3,2,null,"Up to a 70% chance that taking damage doesn't delay your healing spells.",null,false],
  ["Water Shield",1,3,3,null,"3 water globes for 10 min: being hit or landing a spell crit uses a globe (at most one every few seconds) to restore 2% of your maximum mana.",null,false],
- ["Tidal Mastery",5,4,1,null,"Up to +5% critical strike chance with healing spells. Now column 1.",null,false],
+ ["Tidal Mastery",5,4,1,null,"Up to +5% critical strike chance with healing spells.",null,false],
  ["Restorative Totems",5,4,2,null,"Mana Spring Totem up to 25% stronger and Healing Stream Totem up to 50% stronger.",null,false],
- ["Mana Tide Totem",1,4,3,null,"A totem for 12 sec that restores 88 mana every 3 sec to group members within 30 yd. 10 mana, 5 min cooldown. Moved up to row 4; no longer needs Restorative Totems.",null,false],
- ["Healing Way",3,5,2,null,"Healing Wave heals up to 25% more. Now column 2.",null,false],
+ ["Mana Tide Totem",1,4,3,null,"A totem for 12 sec that restores 88 mana every 3 sec to group members within 30 yd. 10 mana, 5 min cooldown.",null,false],
+ ["Healing Way",3,5,2,null,"Healing Wave heals up to 25% more.",null,false],
  ["Nature's Swiftness",1,5,3,null,"Your next Nature spell with a cast time under 10 sec is instant. 3 min cooldown.",null,false],
  ["Purification",5,6,3,null,"Your healing spells heal up to 10% more.",null,false],
- ["Riptide",1,7,2,"Healing Way","Instant heal for 485–533 plus 445 over 15 sec; Chain Heal on that target is 25% stronger. 245 mana, 40 yd, 6 sec cooldown.","Heals the target for 445 over 15 sec – the instant heal is gone – and Chain Heal on that target is 25% stronger. About 40% less mana, 12 sec cooldown.",true]
+ ["Riptide",1,7,2,"Healing Way","Heals the target for 445 over 15 sec, and Chain Heal on that target is 25% stronger. 150 mana, 40 yd, 12 sec cooldown.",null,false]
 ]}];
 const WARLOCK=[
 {name:"Affliction",t:[
  ["Improved Life Tap",2,1,1,null,"Life Tap gives up to 20% more mana.",null,false],
  ["Suppression",5,1,2,null,"Up to +5% hit chance and up to 20% less threat.",null,false],
  ["Improved Corruption",5,1,3,null,"Corruption casts up to 2 sec faster and deals up to 10% more damage.",null,false],
- ["Grim Reach",2,2,1,null,"Affliction spells get up to 20% more range. Older Oct 8 data shows Malediction (periodic damage +1% per rank, 5 ranks) in this slot; the later data has Grim Reach.",null,false],
+ ["Grim Reach",2,2,1,null,"Affliction spells get up to 20% more range.",null,false],
  ["Soul Harvest",2,2,2,null,"After you kill a target that has your Drain Soul on it, mana regeneration is up to 100% higher for 10 sec and up to 100% of it continues while casting.",null,false],
- ["Improved Drains",3,2,3,null,"Drain Life, Drain Soul and Wrack deal or drain more (7% at rank 1).","Now covers Drain Mana instead of Wrack: Drain Life, Drain Soul and Drain Mana deal or drain 7 / 13 / 20% more.",true],
- ["Improved Bane of Agony",2,3,1,null,"Bane of Agony deals up to 10% more damage. Renamed from Improved Curse of Agony.",null,false],
+ ["Improved Drains",3,2,3,null,"Drain Life, Drain Soul and Drain Mana deal or drain more (7 / 13 / 20%).",null,false],
+ ["Improved Bane of Agony",2,3,1,null,"Bane of Agony deals up to 10% more damage.",null,false],
  ["Fel Concentration",3,3,2,null,"Up to a 70% chance that taking damage doesn't delay Drain Life, Drain Mana, Drain Soul or Wrack.",null,false],
- ["Amplify Curse",1,3,3,null,"Your next Curse of Weakness or Bane of Agony is 50% stronger, or your next Curse of Exhaustion 20% stronger (cut from 50% in the Oct 16 hotfix). Instant, 3 min cooldown.","Your next Curse of Weakness or Bane of Agony is 50% stronger, or your next Curse of Exhaustion 20% stronger. Instant, 3 min cooldown. Now works correctly on Curse of Exhaustion and Bane of Agony.",true],
+ ["Amplify Curse",1,3,3,null,"For 30 sec, your next Curse of Weakness or Bane of Agony is 50% stronger, or your next Curse of Exhaustion 20% stronger. Instant, 3 min cooldown.",null,false],
  ["Pandemic",3,3,4,null,"Critical hits from Corruption, Bane of Agony, Bane of Doom, Drain Soul, Drain Life, Siphon Life and Wrack deal up to 100% more bonus damage.",null,false],
  ["Malevolence",5,4,1,null,"Up to +5% critical effect chance with Shadow spells.",null,false],
  ["Nightfall",2,4,2,null,"Corruption, Drain Soul, Drain Life and Wrack have up to a 4% chance to make your next Shadow Bolt instant (Shadow Trance).",null,false],
  ["Curse of Exhaustion",1,4,3,"Amplify Curse","Slows the target's movement by 30% for 12 sec. 8% of base mana, 30 yd, instant.",null,false],
  ["Siphon Life",1,5,2,null,"Steals 11 health from the target every 3 sec for 30 sec. 150 mana, 30 yd, instant.",null,false],
- ["Soul Siphon",3,5,3,null,"Drain Life, Drain Soul and Wrack deal or drain up to 12% more for each of your other Affliction effects on the target, up to +36%. Wrack no longer counts itself (Nov 6 hotfix).",null,false],
- ["Shadow Mastery",5,6,3,null,"Your Shadow spells deal (and drain) up to 10% more. Now column 3; 2% per rank (older data showed 1%).",null,false],
- ["Wrack",1,7,2,"Siphon Life","Channel: 36 Shadow damage every second, and your other Shadow damage-over-time effects on the target deal 10% more for 6 sec. 200 mana, 30 yd.","Channel: about 86 Shadow damage every second at level 60 (was 36), with double the spell-power scaling; your other Shadow damage-over-time effects on the target deal 10% more for 6 sec. 200 mana, 30 yd. Improved Drains no longer boosts it.",true]
+ ["Soul Siphon",3,5,3,null,"Drain Life, Drain Soul and Wrack deal or drain up to 12% more for each of your other Affliction effects on the target, up to +36%. Wrack doesn't count itself.",null,false],
+ ["Shadow Mastery",5,6,3,null,"Your Shadow spells deal (and drain) up to 10% more.",null,false],
+ ["Wrack",1,7,2,"Siphon Life","Channel: 86 Shadow damage every second at level 60, with strong spell-power scaling; your other Shadow damage-over-time effects on the target deal 10% more for 6 sec. Not boosted by Improved Drains. 200 mana, 30 yd.",null,false]
 ]},
 {name:"Demonology",t:[
  ["Improved Health Funnel",2,1,1,null,"Health Funnel transfers up to 40% more health for up to 30% less health cost, with no threat, whatever your demon's health.",null,false],
@@ -499,159 +496,159 @@ const WARLOCK=[
  ["Master Summoner",2,3,3,null,"Summoning a demon takes up to 4 sec less and costs up to 40% less mana.",null,false],
  ["Decimation",2,4,1,null,"Soul Fire cooldown up to 90% shorter. Shadow Bolt and Searing Pain deal up to 6% more to targets under 35% health and, for 10 sec, make Soul Fire up to 40% faster and free of Soul Shards.",null,false],
  ["Fel Domination",1,4,3,"Master Summoner","Your next demon summon is 5.5 sec faster and costs 50% less mana. 5 min cooldown.",null,false],
- ["Demonic Brand",3,4,4,null,"Searing Pain causes up to 50% less threat and brands the target for 10 sec: your demon's next 6 attacks add 65–68 Fire or Shadow damage (one source shows a placeholder 1–1).",null,false],
+ ["Demonic Brand",3,4,4,null,"Searing Pain causes up to 50% less threat and brands the target for 10 sec: your demon's next 6 attacks add 65–68 Fire or Shadow damage plus 7.8% of your higher Fire or Shadow spell power. The Shadow version causes high threat.",null,false],
  ["Improved Felhunter",3,5,1,null,"The Felhunter's Tainted Blood, Devour Magic heal and Paranoia are up to 30% stronger, and Spell Lock's cooldown is up to 6 sec shorter.",null,false],
  ["Soul Link",1,5,2,"Demonic Sacrifice","30% of the damage you take goes to your demon instead, and you and your demon deal 3% more damage while it is out. 20% of base mana.",null,false],
  ["Demonic Knowledge",3,5,3,null,"While your demon is out, you and it gain spell damage equal to up to 100% of your level.",null,false],
  ["Master Demonologist",5,6,3,null,"You and your demon get, by demon (up to): Imp +10% Fire damage, Voidwalker −10% Physical damage taken, Succubus/Incubus +10% Shadow damage, Felhunter −10% magic damage taken.",null,false],
- ["Demonic Pact",1,7,2,"Soul Link","Summoning a different demon no longer cancels Demonic Sacrifice (summoning the sacrificed one again still does).",null,false]
+ ["Demonic Pact",1,7,2,"Soul Link","Summoning a different demon doesn't cancel Demonic Sacrifice (summoning the sacrificed demon type still does).",null,false]
 ]},
 {name:"Destruction",t:[
  ["Destructive Reach",2,1,1,null,"Destruction spells get up to 20% more range.",null,false],
  ["Improved Shadow Bolt",5,1,2,null,"Shadow Bolt crits make the target take up to 20% more Shadow damage from you for 12 sec.",null,false],
  ["Bane",5,1,3,null,"Shadow Bolt, Immolate and Incinerate cast up to 0.5 sec faster; Soul Fire up to 2 sec faster.",null,false],
- ["Molten Skin",5,2,1,null,"You take up to 10% less damage from all sources.",null,false],
+ ["Molten Skin",5,2,1,null,"All damage you take is up to 10% lower.",null,false],
  ["Cataclysm",3,2,2,null,"Destruction spells cost up to 10% less mana.",null,false],
  ["Aftermath",5,2,3,null,"Immolate's initial hit deals up to 50% more, and Conflagrate has up to a 100% chance to daze the target (50% slower) for 5 sec.",null,false],
- ["Ruin",5,3,1,null,"Destruction spell critical hits deal up to 100% more bonus damage.",null,false],
- ["Shadowburn",1,3,3,null,"Instant: 65–73 Shadow damage (one source says 74); if the target dies within 8 sec you get a Soul Shard. 105 mana, 30 yd, 15 sec cooldown, uses a Soul Shard. Now column 3.",null,false],
+ ["Ruin",5,3,2,null,"Destruction spell critical hits deal up to 100% more bonus damage.",null,false],
+ ["Shadowburn",1,3,3,null,"Instant: 65–74 Shadow damage; if the target dies within 8 sec you get a Soul Shard. 105 mana, 30 yd, 15 sec cooldown, uses a Soul Shard.",null,false],
  ["Intensity",3,4,1,null,"Up to a 70% chance that taking damage doesn't delay your Destruction spells.",null,false],
- ["Agonizing Flames",3,4,2,null,"Searing Pain gets up to +10% crit chance and all Destruction damage is up to 10% higher. Formerly Improved Searing Pain; now column 2.",null,false],
- ["Conflagrate",1,4,3,null,"Instant: consumes your Immolate on the target for 88–110 Fire damage (one source says 111). 100 mana, 30 yd, 10 sec cooldown.",null,false],
+ ["Agonizing Flames",3,4,2,null,"Searing Pain gets up to +10% crit chance and all Destruction damage is up to 10% higher.",null,false],
+ ["Conflagrate",1,4,3,null,"Instant: consumes your Immolate on the target for 88–111 Fire damage. 100 mana, 30 yd, 10 sec cooldown.",null,false],
  ["Pyroclasm",2,5,1,"Intensity","Soul Fire, Rain of Fire and Hellfire have up to a 26% chance to stun for 3 sec.",null,false],
  ["Bane of Havoc",1,5,2,null,"Banes one target for 5 min: 15% of the damage you deal to other targets is also dealt to it. One target at a time. 5% of base mana, instant.",null,false],
  ["Fire and Brimstone",3,5,3,"Conflagrate","Conflagrate gets up to +25% crit chance.",null,false],
- ["Shadow and Flame",5,6,3,null,"Conflagrate gives up to +10% Shadow damage and Shadowburn up to +10% Fire damage for 20 sec; Conflagrate has up to a 100% chance not to consume Immolate and Shadowburn up to a 100% chance to refund its Soul Shard.","Conflagrate gives up to +20% Shadow damage and Shadowburn up to +20% Fire damage (4% per rank) for 20 sec; Conflagrate has up to a 100% chance not to consume Immolate and Shadowburn up to a 100% chance to refund its Soul Shard.",true],
- ["Incinerate",1,7,2,"Bane of Havoc","2.5 sec cast: 99–113 Fire damage (one source says 100–114), 25% more if the target has your Immolate. 205 mana, 30 yd.",null,false]
+ ["Shadow and Flame",5,6,3,null,"Conflagrate gives up to +20% Shadow damage and Shadowburn up to +20% Fire damage (4% per rank) for 20 sec; Conflagrate has up to a 100% chance not to consume Immolate and Shadowburn up to a 100% chance to refund its Soul Shard.",null,false],
+ ["Incinerate",1,7,2,"Bane of Havoc","2.5 sec cast: 100–114 Fire damage, 25% more if the target has your Immolate. 205 mana, 30 yd.",null,false]
 ]}];
 const WARRIOR=[
 {name:"Arms",t:[
  ["Improved Heroic Strike",3,1,1,null,"Heroic Strike costs up to 3 less Rage.",null,false],
- ["Deflection",5,1,2,null,"Up to +5% parry.",null,false],
+ ["Deflection",5,1,2,null,"Up to +5% parry chance.",null,false],
  ["Improved Rend",3,1,3,null,"Rend's Bleed deals up to 35% more damage.",null,false],
  ["Improved Charge",2,2,1,null,"Charge generates up to 6 more Rage.",null,false],
- ["Improved Tactical Mastery",3,2,2,null,"You keep up to 15 extra Rage when you change stances. Renamed from Tactical Mastery.","You keep up to 15 extra Rage (5 / 10 / 15) when you change stances. Now 3 ranks.",true],
- ["Improved Overpower",2,2,4,null,"Overpower gets up to +50% crit chance. Moved up from row 3.",null,false],
+ ["Improved Tactical Mastery",3,2,2,null,"You keep up to 15 extra Rage (5 / 10 / 15) when you change stances.",null,false],
+ ["Improved Overpower",2,2,4,null,"Overpower gets up to +50% critical strike chance.",null,false],
  ["Anger Management",1,3,2,"Improved Tactical Mastery","In combat you generate 1 Rage every 3 sec, and you lose 30% less Rage out of combat.",null,false],
  ["Deep Wounds",3,3,3,"Improved Rend","Your critical strikes make the target bleed for up to 60% of your weapon's average damage over 12 sec.",null,false],
- ["Spearing Strike",1,4,1,null,"Battle Stance attack for 40% weapon damage, plus 80% more against Giants, Dragonkin and mounted targets (it also dismounts them). 15 Rage, instant, 20 sec cooldown.",null,false],
- ["Two-Handed Weapon Specialization",3,4,2,null,"Up to 3% more damage with two-handed melee weapons. Now 3 ranks.","Up to 6% more damage (2 / 4 / 6%) with two-handed melee weapons.",true],
+ ["Spearing Strike",1,4,1,null,"Battle Stance attack for 75% weapon damage, plus 75% more against Giants, Dragonkin and mounted targets (it also dismounts them). 15 Rage, instant, 20 sec cooldown.",null,false],
+ ["Two-Handed Weapon Specialization",3,4,2,null,"Up to 6% more damage (2 / 4 / 6%) with two-handed melee weapons.",null,false],
  ["Impale",2,4,3,"Deep Wounds","Your abilities' critical strikes deal up to 20% more bonus damage.",null,false],
- ["Bloodthrill",2,5,1,null,"Main-hand hits on targets with your Rend have up to a 20% chance to enable Overpower.","Main-hand hits on targets with your Rend have up to a 20% chance (10 / 20%) to enable Overpower. Now 2 ranks.",true],
+ ["Bloodthrill",2,5,1,null,"Main-hand hits on targets with your Rend have up to a 20% chance (10 / 20%) to enable Overpower.",null,false],
  ["Sweeping Strikes",1,5,2,null,"Battle Stance: your next 5 melee attacks also hit one more nearby enemy. 30 Rage, 30 sec cooldown.",null,false],
- ["Weaponmaster",5,5,3,null,"By weapon type, up to: Axe/Polearm +5% crit chance, Mace/Staff ignore 15% of target armor, Sword 5% chance for an extra attack. Replaces the four weapon specializations.",null,false],
- ["Improved Slam",2,6,1,null,"Slam's cast time and global cooldown are up to 0.5 sec shorter, it no longer interrupts or delays your melee swing, and its cooldown is up to 3 sec shorter. Moved from Fury; now 2 ranks.","Slam's cast time and global cooldown are up to 0.5 sec shorter, it no longer interrupts or delays your melee swing, and its cooldown is up to 5 sec shorter (2.5 / 5 sec). Slam's base cooldown is now 15 sec.",true],
- ["Improved Hamstring",3,6,3,null,"Hamstring has up to a 15% chance to root the target for 5 sec.","Hamstring has up to a 15% chance to root the target for 5 sec. Since the Oct 28 hotfix the root shares one diminishing-returns group with Entrapment, Counterattack, Improved Wing Clip and Frostbite.",true],
+ ["Weaponmaster",5,5,3,null,"Bonus by weapon type, up to: Axe/Polearm +5% crit chance, Mace/Staff ignore 15% of target armor, Sword 5% chance for an extra attack.",null,false],
+ ["Improved Slam",2,6,1,null,"Slam's cast time and global cooldown are up to 0.5 sec shorter and it doesn't interrupt or delay your melee swing. Its 15 sec cooldown is up to 5 sec shorter (2.5 / 5 sec).",null,false],
+ ["Improved Hamstring",3,6,3,null,"Hamstring has up to a 15% chance to root the target for 5 sec. The root shares one diminishing-returns group with Entrapment, Counterattack, Improved Wing Clip and Frostbite.",null,false],
  ["Mortal Strike",1,7,2,"Sweeping Strikes","Weapon damage plus 85, and the target receives 50% less healing for 10 sec. 30 Rage, 6 sec cooldown.",null,false]
 ]},
 {name:"Fury",t:[
- ["Booming Voice",5,1,2,null,"Shouts cover up to 50% more area and cost up to 25% less Rage.","Shouts cover up to 50% more area and cost up to 25% less Rage, and Piercing Howl costs up to 25% less Rage too.",true],
+ ["Booming Voice",5,1,2,null,"Shouts cover up to 50% more area and cost up to 25% less Rage, and Piercing Howl costs up to 25% less Rage too.",null,false],
  ["Cruelty",5,1,3,null,"Up to +5% melee critical strike chance.",null,false],
  ["Lingering Rage",5,2,2,null,"After combat your Rage starts to decay up to 10 sec later.",null,false],
  ["Unbridled Wrath",5,2,3,null,"Up to a 60% chance to gain 1 extra Rage when you deal melee weapon damage.",null,false],
  ["Furious Precision",3,3,1,null,"Up to +10% hit chance with off-hand attacks.",null,false],
  ["Piercing Howl",1,3,2,null,"Enemies within 10 yd are Dazed: 50% slower for 6 sec. 10 Rage, instant.",null,false],
- ["Blood Craze",3,3,3,null,"After you take a critical hit, or a single hit for over 20% of your max health, you regenerate up to 3% of your health over 6 sec.","After you take a critical hit, or a single hit for over 20% of your max health, you regenerate up to 3% of your health over 6 sec. No longer causes threat and no longer triggers while sitting.",true],
- ["Enrage",5,3,4,null,"When you are hit, a 30% chance to deal up to 10% more Physical damage for 12 sec.","When you are hit, a 30% chance to deal up to 10% more Physical damage for 12 sec. Moved up to row 3.",true],
+ ["Blood Craze",3,3,3,null,"After you take a critical hit, or a single hit for over 20% of your max health, you regenerate up to 3% of your health over 6 sec. The healing causes no threat and doesn't trigger while sitting.",null,false],
+ ["Enrage",5,3,4,null,"When you are hit, a 30% chance to deal up to 10% more Physical damage for 12 sec.",null,false],
  ["Dual Wield Specialization",5,4,1,null,"Off-hand damage up to +25%, and off-hand attacks generate up to 50% more Rage.",null,false],
- ["Reckless Swings",1,4,2,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Costs 25% of your base health: your next 4 melee attacks within 8 sec generate 5 extra Rage each. 15 sec cooldown.",true],
- ["Improved Execute",2,4,4,null,"Execute costs up to 5 less Rage. Moved to column 4.",null,false],
- ["Improved Berserker Rage",2,5,1,null,"Berserker Rage instantly gives up to 10 Rage and has up to a 100% chance to remove movement-slowing effects. Moved up from row 6.",null,false],
- ["Death Wish",1,5,2,null,"For 30 sec: 20% more Physical damage and immune to Fear, but you take 5% more damage (no longer lowers armor or resistances). 10 Rage, 3 min cooldown.",null,false],
- ["Gore Drinker",2,5,3,"Blood Craze","After Enrage, Berserker Rage, Bloodrage, Death Wish or Bloodthirst, your next 3 melee attacks each restore up to 1% of your max health.","After Enrage, Berserker Rage, Bloodrage, Death Wish, Bloodthirst or Reckless Swings, your next 3 melee attacks each restore up to 1% of your max health; the healing no longer causes threat. Moved up to row 5 and now follows Blood Craze instead of Enrage.",true],
+ ["Reckless Swings",1,4,2,null,"Costs 25% of your base health: your next 4 melee attacks within 8 sec generate 5 extra Rage each. 15 sec cooldown.",null,false],
+ ["Improved Execute",2,4,4,null,"Execute costs up to 5 less Rage.",null,false],
+ ["Improved Berserker Rage",2,5,1,null,"Berserker Rage instantly gives up to 10 Rage and has up to a 100% chance to remove movement-slowing effects.",null,false],
+ ["Death Wish",1,5,2,null,"For 30 sec: 20% more Physical damage and immune to Fear, but you take 5% more damage. 10 Rage, 3 min cooldown.",null,false],
+ ["Gore Drinker",2,5,3,"Blood Craze","After Enrage, Berserker Rage, Bloodrage, Death Wish, Bloodthirst or Reckless Swings, your next 3 melee attacks each restore up to 1% of your max health. The healing causes no threat.",null,false],
  ["Improved Intercept",2,5,4,null,"Intercept's cooldown is up to 10 sec shorter.",null,false],
- ["Flurry",3,6,1,null,"After a melee crit your next 3 swings are up to 25% faster. Now column 2.","After a melee crit your next 3 swings are up to 30% faster (10 / 20 / 30%). Now 3 ranks and no longer needs Death Wish.",true],
- ["Improved Whirlwind",2,6,3,null,"Not in the beta tree – new in Blizzard's Nov 2 notes.","Whirlwind's cooldown is up to 2 sec shorter, and it deals up to 30% more damage (15 / 30%) to the closest enemy.",true],
- ["Bloodthirst",1,7,2,"Death Wish","Instant attack for 45% of your Attack Power plus 30, and 10% faster movement for 10 sec. 30 Rage, 6 sec cooldown. No longer needs Death Wish.","Instant attack for 45% of your Attack Power plus 30, and 10% faster movement for 10 sec. 30 Rage, 6 sec cooldown. Now requires Death Wish.",true]
+ ["Flurry",3,6,3,null,"After a melee crit your next 3 swings are up to 30% faster (10 / 20 / 30%).",null,false],
+ ["Improved Whirlwind",2,6,1,null,"Whirlwind's cooldown is up to 2 sec shorter, and it deals up to 30% more damage (15 / 30%) to the closest enemy.",null,false],
+ ["Bloodthirst",1,7,2,"Death Wish","Instant attack for 45% of your Attack Power plus 30, and 10% faster movement for 10 sec. 30 Rage, 6 sec cooldown.",null,false]
 ]},
 {name:"Protection",t:[
- ["Improved Bloodrage",2,1,1,null,"Bloodrage generates up to 50% more Rage. Moved up to row 1.",null,false],
+ ["Improved Bloodrage",2,1,1,null,"Bloodrage generates up to 50% more Rage.",null,false],
  ["Shield Specialization",5,1,2,null,"Up to +5% block chance, and up to a 100% chance to gain 5 Rage when you block.",null,false],
- ["Iron Will",5,1,3,null,"Stun and Fear effects on you are up to 15% shorter. Moved up to row 1.",null,false],
- ["Anticipation",5,2,1,null,"Up to +20 Defense skill. Moved down to row 2.",null,false],
- ["Improved Revenge",3,2,3,null,"Revenge deals up to 60% more damage (no longer stuns). Moved up to row 2.",null,false],
- ["Improved Thunder Clap",3,2,4,null,"Thunder Clap costs up to 6 less Rage. Moved here from Arms.",null,false],
- ["Last Stand",1,3,1,null,"Gain 30% of your max health for 20 sec; the health is lost when it ends. 3 min cooldown. No longer needs Improved Bloodrage.",null,false],
+ ["Iron Will",5,1,3,null,"Stun and Fear effects on you are up to 15% shorter.",null,false],
+ ["Anticipation",5,2,1,null,"Up to +20 Defense skill.",null,false],
+ ["Improved Revenge",3,2,3,null,"Revenge deals up to 60% more damage.",null,false],
+ ["Improved Thunder Clap",3,2,4,null,"Thunder Clap costs up to 6 less Rage.",null,false],
+ ["Last Stand",1,3,1,null,"Gain 30% of your max health for 20 sec; the health is lost when it ends. 3 min cooldown.",null,false],
  ["Master of Defense",2,3,2,"Shield Specialization","Up to a 100% chance to gain 5 Rage when you dodge or parry with a shield equipped.",null,false],
- ["Improved Disarm",3,3,3,null,"Disarm's cooldown is up to 20 sec shorter. Moved up to row 3.",null,false],
- ["Defiance",3,3,4,null,"Up to 15% more threat in Defensive Stance with a shield equipped. Now 3 ranks.","Up to 20% more threat (7 / 13 / 20%) in Defensive Stance with a shield equipped. Defensive Stance itself now adds 80% threat (was 30%).",true],
+ ["Improved Disarm",3,3,3,null,"Disarm's cooldown is up to 20 sec shorter.",null,false],
+ ["Defiance",3,3,4,null,"Up to 20% more threat (7 / 13 / 20%) in Defensive Stance with a shield equipped.",null,false],
  ["Improved Sunder Armor",3,4,1,null,"Sunder Armor costs up to 3 less Rage.",null,false],
  ["Vanguard",1,4,2,null,"Charge can be used in Defensive Stance.",null,false],
- ["Improved Shield Bash",2,4,3,null,"Shield Bash has up to a 100% chance to silence for 3 sec. Moved up from row 5.",null,false],
+ ["Improved Shield Bash",2,4,3,null,"Shield Bash has up to a 100% chance to silence for 3 sec.",null,false],
  ["Improved Shield Wall",2,5,1,null,"Shield Wall's cooldown is up to 11 min shorter.",null,false],
  ["Concussion Blow",1,5,2,null,"Stuns the target for 5 sec. 10 Rage, 45 sec cooldown.",null,false],
  ["Focused Rage",3,5,3,null,"Offensive abilities cost up to 3 less Rage.",null,false],
- ["Bastion",5,6,3,null,"Up to 10% more damage of all kinds while a shield is equipped. Replaces One-Handed Weapon Specialization.",null,false],
+ ["Bastion",5,6,3,null,"Up to 10% more damage of all kinds while a shield is equipped.",null,false],
  ["Shield Slam",1,7,2,"Concussion Blow","Shield strike for 421–439 damage plus your Block Value, with a 50% chance to dispel 1 magic effect; very high threat. 20 Rage, 6 sec cooldown, needs a shield.",null,false]
 ]}];
 const MAGE=[
 {name:"Arcane",t:[
- ["Wand Specialization",2,1,1,null,"Wand damage up to +25%. Moved up to row 1.",null,false],
- ["Improved Channeling",5,1,2,null,"Taking damage has up to a 100% chance not to cut Arcane Missiles short, and up to a 70% chance not to delay Arcane Blast or Arcane Wrath. Renamed from Improved Arcane Missiles; now column 2.",null,false],
- ["Arcane Resilience",3,1,3,null,"Gain Armor equal to up to 50% of your Intellect (2 ranks before the Oct 30 hotfix). Moved to row 1, column 3.","Gain Armor equal to up to 75% of your Intellect. Now 3 ranks (25% per rank).",true],
+ ["Wand Specialization",2,1,1,null,"Wand damage up to +25%.",null,false],
+ ["Improved Channeling",5,1,2,null,"Taking damage has up to a 100% chance not to cut Arcane Missiles short, and up to a 70% chance not to delay Arcane Blast or Arcane Wrath.",null,false],
+ ["Arcane Resilience",3,1,3,null,"Gain Armor equal to up to 75% of your Intellect (25% per rank).",null,false],
  ["Arcane Subtlety",2,2,1,null,"Targets resist your spells less (up to −15 resistance) and your Arcane spells cause up to 30% less threat.",null,false],
- ["Magic Absorption",2,2,2,null,"Up to +10 to all resistances; fully resisted spells give back up to 2% of your total mana (at most once per second). Now 2 ranks.",null,false],
- ["Arcane Concentration",5,2,3,null,"Damage spell hits have up to a 10% chance to make your next damage spell cost no mana (Clearcasting).","Damage spell hits have up to a 10% chance to make your next damage spell cost no mana (Clearcasting). Arcane Missiles can trigger it again, and Clearcasting isn't spent on Arcane Missiles while Missile Barrage is active.",true],
- ["Missile Barrage",2,2,4,null,"Arcane Blast (up to 40%) and Arcane Wrath, Fireball, Frostbolt, Frost Blast and Frostfire Bolt (up to 20%) can make your next Arcane Missiles free, with a 50% shorter channel and a missile every 0.5 sec. Moved down to row 2.","Arcane Blast (up to 40%) and Arcane Wrath, Fireball, Frostbolt and Frostfire Bolt (up to 20%) can make your next Arcane Missiles free, with a 50% shorter channel and a missile every 0.5 sec. Now used up as soon as Arcane Missiles starts, and Clearcasting isn't spent on Arcane Missiles while it is active. Frost Blast is removed.",true],
+ ["Magic Absorption",2,2,2,null,"Up to +10 to all resistances; fully resisted spells give back up to 2% of your total mana (at most once per second).",null,false],
+ ["Arcane Concentration",5,2,3,null,"Damage spell hits have up to a 10% chance to make your next damage spell cost no mana (Clearcasting). Arcane Missiles can trigger it, and Clearcasting isn't spent on Arcane Missiles while Missile Barrage is active.",null,false],
+ ["Missile Barrage",2,2,4,null,"Arcane Blast (up to 40%) and Arcane Wrath, Fireball, Frostbolt and Frostfire Bolt (up to 20%) can make your next Arcane Missiles free, with a 50% shorter channel and a missile every 0.5 sec. It is used up as soon as Arcane Missiles starts, and Clearcasting isn't spent on Arcane Missiles while it is active.",null,false],
  ["Arcane Geometry",2,3,1,null,"Arcane spells get up to +6 yd range.",null,false],
- ["Arcane Impact",3,3,2,null,"Up to +6% critical strike chance with Arcane spells. Renamed from Improved Arcane Explosion.",null,false],
- ["Arcane Blast",1,3,4,null,"1.5 sec cast: 34–38 Arcane damage. Each cast gives you 15% of your Intellect as spell damage and raises Arcane Blast's mana cost by 175%, stacking 4 times for 15 sec. 15% of base mana, 30 yd.","1.5 sec cast: 34–38 Arcane damage. Each cast gives you 12% of your Intellect as spell damage and raises Arcane Blast's mana cost by 100%, stacking 4 times for 18 sec. 15% of base mana, 30 yd.",true],
- ["Arcane Shielding",2,4,1,null,"Mana Shield drains up to 33% less mana per point of damage, and Mage Armor's resistance bonus is up to 50% higher. Renamed from Improved Mana Shield.",null,false],
+ ["Arcane Impact",3,3,2,null,"Up to +6% critical strike chance with Arcane spells.",null,false],
+ ["Arcane Blast",1,3,4,null,"1.5 sec cast: 34–38 Arcane damage. Each cast gives you 12% of your Intellect as spell damage and raises Arcane Blast's mana cost by 100%, stacking 4 times for 18 sec. 15% of base mana, 30 yd.",null,false],
+ ["Arcane Shielding",2,4,1,null,"Mana Shield drains up to 33% less mana per point of damage, and Mage Armor's resistance bonus is up to 50% higher.",null,false],
  ["Improved Counterspell",2,4,2,null,"Counterspell also silences the target for up to 4 sec.",null,false],
- ["Arcane Meditation",3,4,3,"Arcane Concentration","Up to 50% of your mana regeneration continues while casting. Now column 3.",null,false],
+ ["Arcane Meditation",3,4,3,"Arcane Concentration","Up to 50% of your mana regeneration continues while casting.",null,false],
  ["Arcane Wrath",1,4,4,"Arcane Blast","3.5 sec cast: 122–146 Arcane damage, plus spell damage equal to 5% of your maximum mana. 140 mana, 30 yd, 6 sec cooldown.",null,false],
  ["Presence of Mind",1,5,2,null,"Your next Mage spell with a cast time under 10 sec is instant. 3 min cooldown.",null,false],
- ["Arcane Mind",5,5,3,null,"Up to 10% more Intellect, and Arcane critical strikes deal up to 100% more bonus damage. No longer needs Arcane Resilience.",null,false],
- ["Arcane Instability",3,6,3,null,"Up to +3% spell damage and +3% spell critical strike chance. Now column 3; no longer needs Presence of Mind.",null,false],
- ["Arcane Power",1,7,2,"Presence of Mind","For 15 sec your spells deal 30% more damage and cost 30% more mana. 3 min cooldown. Now requires Presence of Mind.",null,false]
+ ["Arcane Mind",5,5,3,null,"Up to 10% more Intellect, and Arcane critical strikes deal up to 100% more bonus damage.",null,false],
+ ["Arcane Instability",3,6,3,null,"Up to +3% spell damage and +3% spell critical strike chance.",null,false],
+ ["Arcane Power",1,7,2,"Presence of Mind","For 15 sec your spells deal 30% more damage and cost 30% more mana. 3 min cooldown.",null,false]
 ]},
 {name:"Fire",t:[
- ["Incineration",5,1,2,null,"Fire Blast, Ice Lance, Arcane Blast and Scorch get up to +10% critical strike chance. Moved up to row 1; now 5 ranks.",null,false],
- ["Accelerant",5,1,3,null,"Fireball, Frostfire Bolt and Arcane Wrath cast up to 0.5 sec faster. Renamed from Improved Fireball; now column 3.",null,false],
- ["Ignite",5,2,1,null,"Fire spell critical strikes burn the target for up to an extra 40% of the damage over 4 sec.","Fire spell critical strikes burn the target for up to an extra 40% of the damage over 4 sec. Now works with all Flamestrike damage.",true],
+ ["Incineration",5,1,2,null,"Fire Blast, Ice Lance, Arcane Blast and Scorch get up to +10% critical strike chance.",null,false],
+ ["Accelerant",5,1,3,null,"Fireball, Frostfire Bolt and Arcane Wrath cast up to 0.5 sec faster.",null,false],
+ ["Ignite",5,2,1,null,"Fire spell critical strikes, including Flamestrike's damage after its first hit, burn the target for up to an extra 40% of the damage over 4 sec.",null,false],
  ["Flame Throwing",2,2,2,null,"Fire spells get up to +6 yd range.",null,false],
- ["Impact",3,2,3,null,"Fire spells have up to a 10% chance to stun the target for 2 sec. Now 3 ranks.",null,false],
- ["Burning Soul",3,3,1,null,"Up to a 70% chance that taking damage doesn't delay your Fire spells, and Fire spells cause up to 30% less threat. Now 3 ranks, column 1.",null,false],
+ ["Impact",3,2,3,null,"Fire spells have up to a 10% chance to stun the target for 2 sec.",null,false],
+ ["Burning Soul",3,3,1,null,"Up to a 70% chance that taking damage doesn't delay your Fire spells, and Fire spells cause up to 30% less threat.",null,false],
  ["Improved Flamestrike",3,3,2,null,"Flamestrike gets up to +15% critical strike chance.",null,false],
  ["Pyroblast",1,3,3,null,"6 sec cast: 101–131 Fire damage plus 44 over 12 sec. 125 mana, 35 yd.",null,false],
- ["Improved Fire Blast",2,3,4,null,"Fire Blast's cooldown is up to 2 sec shorter and its range up to 15 yd longer. Moved to row 3, column 4.",null,false],
+ ["Improved Fire Blast",2,3,4,null,"Fire Blast's cooldown is up to 2 sec shorter and its range up to 15 yd longer.",null,false],
  ["Improved Scorch",3,4,1,null,"Scorch has up to a 100% chance to make the target take 3% more Fire damage for 30 sec, stacking 5 times.",null,false],
  ["Improved Fire Ward",2,4,2,null,"Fire Ward has up to a 20% chance to reflect Fire spells.",null,false],
  ["Heating Up",1,4,3,"Pyroblast","Direct crits from Fireball, Frostfire Bolt, Fire Blast and Scorch make your next Pyroblast within 20 sec cast 25% faster, stacking 3 times; Fire Blast adds an extra stack whenever it deals damage.",null,false],
  ["Master of Elements",3,4,4,null,"Fire and Frost spell critical strikes refund up to 30% of the spell's base mana cost.",null,false],
- ["Critical Mass",3,5,2,null,"Up to +6% critical strike chance with Fire spells. Now 3 ranks.",null,false],
- ["Blast Wave",1,5,3,null,"Instant: 154–184 Fire damage to nearby enemies, slowing them by 50% (Dazed) for 6 sec. 215 mana, 45 sec cooldown. No longer needs Pyroblast.",null,false],
- ["Fire Power",3,6,3,null,"Your Fire spells deal up to 3% more damage for each of your Fire effects on the target, up to +12%. Now 3 ranks.",null,false],
+ ["Critical Mass",3,5,2,null,"Up to +6% critical strike chance with Fire spells.",null,false],
+ ["Blast Wave",1,5,3,null,"Instant: 154–184 Fire damage to nearby enemies, slowing them by 50% (Dazed) for 6 sec. 215 mana, 45 sec cooldown.",null,false],
+ ["Fire Power",3,6,3,null,"Your Fire spells deal up to 3% more damage for each of your Fire effects on the target, up to +12%.",null,false],
  ["Combustion",1,7,2,"Critical Mass","Each Fire spell hit adds +10% Fire critical strike chance until 3 non-periodic Fire crits have landed. 3 min cooldown.",null,false]
 ]},
 {name:"Frost",t:[
  ["Frost Warding",2,1,1,null,"Frost Armor and Ice Armor give up to 30% more armor and resistance, Frost Ward has up to a 20% chance to negate the spell it absorbs, and Ice Barrier and Frost Ward absorb up to 20% more.",null,false],
- ["Improved Frostbolt",5,1,2,null,"Frostbolt and Frost Blast cast up to 0.5 sec faster.",null,false],
- ["Precision",3,1,3,null,"Up to +6% hit chance with all spells. Was Elemental Precision (Frost and Fire only).",null,false],
+ ["Improved Frostbolt",5,1,2,null,"Frostbolt casts up to 0.5 sec faster.",null,false],
+ ["Precision",3,1,3,null,"Up to +6% hit chance with all spells.",null,false],
  ["Ice Shards",5,2,1,null,"Frost spell critical strikes deal up to 100% more bonus damage.",null,false],
- ["Frostbite",3,2,2,null,"Your Chill effects have up to a 15% chance to freeze the target for 5 sec.","Your Chill effects have up to a 15% chance to freeze the target for 5 sec. Since the Oct 28 hotfix the root shares one diminishing-returns group with Entrapment, Counterattack, Improved Wing Clip and Improved Hamstring.",true],
+ ["Frostbite",3,2,2,null,"Your Chill effects have up to a 15% chance to freeze the target for 5 sec. The freeze shares one diminishing-returns group with Entrapment, Counterattack, Improved Wing Clip and Improved Hamstring.",null,false],
  ["Improved Frost Nova",2,2,3,null,"Frost Nova's cooldown is up to 4 sec shorter.",null,false],
  ["Permafrost",3,2,4,null,"Chill effects last up to 33% longer and slow the target by up to another 10%.",null,false],
- ["Frost Channeling",3,3,1,null,"Frost spells cost up to 15% less mana and cause up to 30% less threat. Moved up to row 3.",null,false],
- ["Improved Blizzard",3,3,2,null,"Blizzard also Chills targets, slowing them by up to 40% for 1.5 sec. Now column 2.",null,false],
- ["Ice Lance",1,3,3,null,"Instant: 28–32 Frost damage, 200% more against Frozen targets. 45 mana, 30 yd, 8 sec cooldown (only the talent rank had the cooldown).","Instant: 28–32 Frost damage, 300% more against Frozen targets. 45 mana, 30 yd, 8 sec cooldown, now on every rank.",true],
- ["Arctic Reach",2,4,1,null,"Frostbolt, Frost Blast and Blizzard get up to 20% more range, and Frost Nova and Cone of Cold up to 20% more radius.","Frostbolt, Frost Blast, Ice Lance and Blizzard get up to 20% more range, and Frost Nova and Cone of Cold up to 20% more radius. Now includes Ice Lance.",true],
- ["Ice Block",1,4,2,null,"Immune to physical attacks and spells for 10 sec, but you can't attack, move or cast. 5 min cooldown. Moved up to row 4.",null,false],
- ["Shatter",3,4,4,null,"Up to +50% critical strike chance with all spells against Frozen targets. Now 3 ranks, column 4; no longer needs Improved Frost Nova.",null,false],
- ["Improved Cone of Cold",3,5,1,null,"Cone of Cold deals up to 35% more damage. Now column 1.",null,false],
- ["Cold Snap",1,5,2,null,"Finishes the cooldown of your other Frost spells. 10 min cooldown. Moved down to row 5.",null,false],
+ ["Frost Channeling",3,3,1,null,"Frost spells cost up to 15% less mana and cause up to 30% less threat.",null,false],
+ ["Improved Blizzard",3,3,2,null,"Blizzard also Chills targets, slowing them by up to 40% for 1.5 sec.",null,false],
+ ["Ice Lance",1,3,3,null,"Instant: 28–32 Frost damage, 300% more against Frozen targets. 45 mana, 30 yd, 8 sec cooldown shared with Fire Blast.",null,false],
+ ["Arctic Reach",2,4,1,null,"Frostbolt, Ice Lance and Blizzard get up to 20% more range, and Frost Nova and Cone of Cold up to 20% more radius.",null,false],
+ ["Ice Block",1,4,2,null,"Immune to physical attacks and spells for 10 sec, but you can't attack, move or cast. 5 min cooldown.",null,false],
+ ["Shatter",3,4,4,null,"Up to +50% critical strike chance with all spells against Frozen targets.",null,false],
+ ["Improved Cone of Cold",3,5,1,null,"Cone of Cold deals up to 35% more damage.",null,false],
+ ["Cold Snap",1,5,2,null,"Finishes the cooldown of your other Frost spells. 10 min cooldown.",null,false],
  ["Fingers of Frost",2,5,3,"Ice Lance","Your Chill effects have a 15% chance to treat your next 2 spells (1 at rank 1) as if the target were Frozen. Lasts 15 sec.",null,false],
- ["Winter's Chill",5,6,3,null,"Frostbolt, Frost Blast and Fingers of Frost Ice Lances have up to a 100% chance to apply Winter's Chill: per stack (up to 5) the target takes 5% more damage from your next Cone of Cold and 7% of your spell damage more.","Same, but each stack now makes your next Cone of Cold deal 20% more instead of 5%.",true],
- ["Ice Barrier",1,7,2,"Cold Snap","Absorbs 447 damage (another source shows 493) and raises your Frost damage by 3% for 1 min, another 3% while the shield holds; damage doesn't delay your casts while shielded. 305 mana, 30 sec cooldown. Now requires Cold Snap.","Same shield, but Frost damage is now +15% for 1 min and another +5% while the shield holds.",true]
+ ["Winter's Chill",5,6,3,null,"Frostbolt and Fingers of Frost Ice Lances have up to a 100% chance to apply Winter's Chill, stacking 5 times: each stack makes your next Cone of Cold deal 20% more damage plus 7% of your spell damage.",null,false],
+ ["Ice Barrier",1,7,2,"Cold Snap","Absorbs 448 damage plus 10% of your Frost spell power and raises your Frost damage by 15% for 1 min, plus another 5% while the shield holds; damage doesn't delay your casts while shielded. 305 mana, 30 sec cooldown.",null,false]
 ]}];
 const DRUID=[
 {name:"Balance",t:[
- ["Improved Wrath",5,1,2,null,"Wrath casts up to 0.5 sec faster and costs up to 50% less mana. Moved to column 2.",null,false],
- ["Genesis",5,1,3,null,"Your periodic damage and healing are up to 5% stronger (1% per rank).","Your periodic damage and healing are up to 10% stronger (2% per rank).",true],
- ["Moonglow",3,2,1,null,"Damaging spells cost up to 25% less mana. Moved up to row 2.",null,false],
- ["Improved Moonfire",2,2,2,null,"Moonfire deals up to 10% more damage and gets up to +10% crit chance. Now 2 ranks.",null,false],
+ ["Improved Wrath",5,1,2,null,"Wrath casts up to 0.5 sec faster and costs up to 50% less mana.",null,false],
+ ["Genesis",5,1,3,null,"Your periodic damage and healing are up to 10% stronger (2% per rank).",null,false],
+ ["Moonglow",3,2,1,null,"Damaging spells cost up to 25% less mana.",null,false],
+ ["Improved Moonfire",2,2,2,null,"Moonfire deals up to 10% more damage and gets up to +10% crit chance.",null,false],
  ["Nature's Majesty",2,2,3,null,"Up to +4% critical strike chance with spells and melee attacks.",null,false],
- ["Nature's Reach",2,2,4,null,"Balance spells get up to 20% more range and up to +4% hit chance. Moved up to row 2.",null,false],
+ ["Nature's Reach",2,2,4,null,"Balance spells get up to 20% more range and up to +4% hit chance.",null,false],
  ["Improved Entangling Roots",3,3,1,null,"Entangling Roots deals up to 75% more damage, and rooted targets take up to 75% more damage from it.",null,false],
  ["Nature's Splendor",1,3,3,"Nature's Majesty","Moonfire and Rejuvenation last 3 sec longer, Regrowth 6 sec and Insect Swarm 2 sec.",null,false],
  ["Insect Swarm",1,4,1,null,"A swarm deals 48 Nature damage over 12 sec and lowers the target's hit chance by 2%.",null,false],
@@ -660,82 +657,82 @@ const DRUID=[
  ["Overgrowth",2,5,1,null,"Entangling Roots hits up to 2 more targets.",null,false],
  ["Nature's Grace",1,5,2,null,"After a non-periodic spell crit, your casts and global cooldown are 10% faster for 3 sec.",null,false],
  ["Eclipse",3,5,3,null,"Wrath makes your next 2 Starfires cast up to 0.5 sec faster (up to 4 charges, 15 sec).",null,false],
- ["Moonfury",5,6,3,null,"Your Arcane and Nature spells deal up to 10% more damage. No longer needs Nature's Grace.",null,false],
- ["Moonkin Form",1,7,2,null,"Moonkin shape: +360% armor from items, Omen of Clarity procs twice as often, and party/raid members within 45 yd get +3% crit chance (not every crit type).","Same form, but the +3% crit aura now covers every type of critical strike.",true]
+ ["Moonfury",5,6,2,null,"Your Arcane and Nature spells deal up to 10% more damage.",null,false],
+ ["Moonkin Form",1,7,2,null,"Moonkin shape: +360% armor from items, Omen of Clarity procs twice as often, and party and raid members within 45 yd get +3% chance on every type of critical strike; doesn't stack with Leader of the Pack. Protects from Polymorph, but you can't cast healing spells. 35% of base mana, instant.",null,false]
 ]},
 {name:"Feral Combat",t:[
  ["Ferocity",5,1,2,null,"Maul, Primal Bite, Swipe, Claw and Rake cost up to 5 less Rage or Energy.",null,false],
- ["Furor",5,1,3,null,"Bear Form gives 10 Rage, and Cat Form brings back the Energy you had when you last left it (+10 per sec away from Bear, up to 100). Restoration row 1 in the beta notes.","Same effect. Moved to Feral row 1, column 3 in the Oct 30 hotfix.",true],
- ["Feral Swiftness",2,2,1,null,"Up to 30% faster in Cat Form and up to +4% dodge. Renamed from Feline Swiftness.",null,false],
- ["Feral Instinct",3,2,2,null,"Swipe deals up to 30% more damage, and Prowl is harder to see (up to 3 levels). Now 3 ranks.",null,false],
+ ["Furor",5,1,3,null,"Entering Bear or Dire Bear Form has up to a 100% chance to give 10 Rage. Entering Cat Form restores up to 100% of the Energy you had when you last left it, plus up to 10 Energy per sec spent outside Bear Form, capped at up to 100.",null,false],
+ ["Feral Swiftness",2,2,1,null,"Up to 30% faster in Cat Form and up to +4% dodge.",null,false],
+ ["Feral Instinct",3,2,2,null,"Swipe deals up to 30% more damage, and Prowl is harder to see (up to 3 levels).",null,false],
  ["Brutal Impact",2,2,3,null,"Bash and Pounce stun up to 1 sec longer, and Bash's cooldown is up to 30 sec shorter.",null,false],
- ["Thick Hide",3,2,4,null,"Up to 3 extra base armor per level, plus up to 2 per Defense point above 5× your level. One source shows a different value (178 armor per level) – unconfirmed.",null,false],
- ["Shredding Attacks",3,3,1,null,"Shred costs up to 18 less Energy and Lacerate up to 3 less Rage. Renamed from Improved Shred.",null,false],
+ ["Thick Hide",3,2,4,null,"Up to 3 extra base armor per level, plus up to 2 per Defense point above 5× your level, in Bear, Cat, Dire Bear and Moonkin Form.",null,false],
+ ["Shredding Attacks",3,3,1,null,"Shred costs up to 18 less Energy and Lacerate up to 3 less Rage.",null,false],
  ["Savage Fury",2,3,2,null,"Claw, Rake, Shred, Maul and Swipe deal up to 10% more damage.",null,false],
- ["Feral Charge",1,3,3,null,"Charge an enemy to immobilize and interrupt it for 4 sec. Bear: 5 Rage, 8–25 yd, 15 sec cooldown; Cat: 30 sec cooldown. Now column 3.",null,false],
- ["Sharpened Claws",2,3,4,null,"Up to +6% crit chance in Bear, Dire Bear and Cat Form. Now 2 ranks.",null,false],
- ["Predatory Strikes",3,4,1,null,"In Cat, Bear and Dire Bear Form your melee attack power rises by up to 150% of your level.","Same effect. Moved to column 1 in the Oct 30 hotfix.",true],
- ["Lacerate",1,4,2,"Savage Fury","Not a talent here in the beta notes (this slot held Primal Bite).","New in this slot in the Oct 30 hotfix: a bleed for 20 damage over 15 sec plus 10% weapon damage per application, stacking 5 times. Higher spell ranks at 34, 42, 50 and 58.",true],
- ["Predatory Discipline",1,4,3,null,"Not in the beta tree.","New in the Oct 30 hotfix: Ferocious Bite no longer spends extra Energy but still deals its extra damage. Tooltip not yet translated in game.",true],
+ ["Feral Charge",1,3,3,null,"Bear or Dire Bear Form: charge an enemy to immobilize it and interrupt its spellcasting for 4 sec. 5 Rage, 25 yd, 15 sec cooldown.",null,false],
+ ["Sharpened Claws",2,3,4,null,"Up to +6% crit chance in Bear, Dire Bear and Cat Form.",null,false],
+ ["Predatory Strikes",3,4,1,null,"In Cat, Bear and Dire Bear Form your melee attack power rises by up to 150% of your level.",null,false],
+ ["Lacerate",1,4,2,"Savage Fury","Bear or Dire Bear Form: a bleed for 20 damage over 15 sec plus 10% weapon damage per existing application, stacking 5 times, with high threat. 15 Rage. Higher spell ranks at levels 34, 42, 50 and 58.",null,false],
+ ["Predatory Discipline",1,4,3,null,"Ferocious Bite doesn't spend your extra Energy, but still deals extra damage based on it.",null,false],
  ["Blood Frenzy",2,4,4,"Sharpened Claws","Crits in Bear or Dire Bear Form give 5 Rage, and non-periodic crits in Cat Form add an extra combo point (100% at max rank).",null,false],
- ["Leader of the Pack",1,5,2,null,"Party and raid members within 45 yd get +3% crit chance (not every crit type).","Same aura, but the +3% now covers every type of critical strike.",true],
+ ["Leader of the Pack",1,5,2,null,"In Cat, Bear or Dire Bear Form, party and raid members within 45 yd get +3% chance on every type of critical strike. Doesn't stack with the Moonkin Form aura.",null,false],
  ["Natural Instinct",2,5,4,null,"Melee crits deal up to 20% more bonus damage, and you gain healing equal to up to 25% of your Intellect.",null,false],
- ["Rend and Tear",5,6,1,"Predatory Strikes","You deal up to 10% more damage to bleeding targets.","You deal up to 15% more damage (3% per rank) to bleeding targets. Moved to column 1.",true],
- ["Natural Reaction",5,6,4,null,"Up to +5% dodge, and each dodge gives 5 Rage (100% at max rank).","Same effect. Moved to column 4 in the Oct 30 hotfix.",true],
- ["Primal Bite",1,7,2,"Leader of the Pack","Bear attack for 100% weapon damage plus a bonus, 20 Rage, 6 sec cooldown. A row 4 talent (level 25) with 4 spell ranks in the beta notes.","Moved to row 7 (level 40) in the Oct 30 hotfix, replacing Berserk: 100% weapon damage plus 42 (later ranks 62 / 77), 20 Rage, 6 sec cooldown. Now 3 spell ranks.",true],
- ["Shifting Power",1,7,3,"Predatory Discipline","Cat Form: turn 55% of your base mana into 40 Energy. 16 sec cooldown; a row 4 talent in the beta notes.","Moved to row 7 in the Oct 30 hotfix with an 8 sec cooldown (was 16). Improved Shifting Power was removed.",true]
+ ["Rend and Tear",5,6,1,"Predatory Strikes","You deal up to 15% more damage (3% per rank) to bleeding targets.",null,false],
+ ["Natural Reaction",5,6,4,null,"Up to +5% dodge, and up to a 100% chance to gain 5 Rage each time you dodge.",null,false],
+ ["Primal Bite",1,7,2,"Leader of the Pack","Bear or Dire Bear Form: bite for 100% weapon damage plus 42 (62 and 77 at higher spell ranks) with high threat. 20 Rage, 6 sec cooldown.",null,false],
+ ["Shifting Power",1,7,3,"Predatory Discipline","Cat Form, instant: turn 55% of your base mana into 40 Energy. Effects that lower shapeshift costs also lower this cost. 8 sec cooldown.",null,false]
 ]},
 {name:"Restoration",t:[
- ["Nature's Focus",5,1,2,null,"Up to a 70% chance that taking damage doesn't delay your spell casts. Moved up to row 1.",null,false],
- ["Heart of the Wild",5,1,3,null,"Up to 10% more Intellect, 20% more Stamina in Bear/Dire Bear Form and 10% more Strength in Cat Form. A Feral talent that needed Predatory Strikes in the beta notes.","Same effect. Moved to Restoration row 1, column 3 in the Oct 30 hotfix, with no requirement.",true],
- ["Naturalist",5,2,1,null,"Healing Touch casts up to 0.5 sec faster, and all your damage is up to 5% higher.","Healing Touch and Wild Growth cast up to 0.5 sec faster, and all your damage is up to 10% higher (2% per rank).",true],
- ["Reflection",3,2,2,null,"Up to 50% of your mana regeneration continues while casting. Row 3 in the beta notes.","Same effect. Moved up to row 2 in the Oct 30 hotfix.",true],
+ ["Nature's Focus",5,1,2,null,"Up to a 70% chance that taking damage doesn't delay your spell casts.",null,false],
+ ["Heart of the Wild",5,1,3,null,"Up to 10% more Intellect, 20% more Stamina in Bear/Dire Bear Form and 10% more Strength in Cat Form.",null,false],
+ ["Naturalist",5,2,1,null,"Healing Touch and Wild Growth cast up to 0.5 sec faster, and all your damage is up to 10% higher (2% per rank).",null,false],
+ ["Reflection",3,2,2,null,"Up to 50% of your mana regeneration continues while casting.",null,false],
  ["Natural Shapeshifter",3,2,3,null,"Shapeshifting costs up to 30% less mana.",null,false],
- ["Subtlety",3,3,2,null,"Your Nature and Arcane spells cause up to 30% less threat. Row 2 in the beta notes.","Same effect. Moved down to row 3 in the Oct 30 hotfix.",true],
- ["Gift of Nature",5,3,3,null,"All your healing spells heal up to 10% more. No longer needs Insect Swarm.",null,false],
- ["Bloom",1,3,4,null,"Not in the beta tree (this slot held Gift of the Earthmother: 0.5 sec shorter global cooldown on Rejuvenation, Swiftmend and Wild Growth).","New in the Oct 30 hotfix, replacing Gift of the Earthmother: when your Rejuvenation or Regrowth ends, the target is healed for 100% of your Spirit (50% if dispelled). Nov 6 hotfix: the heal now actually lands on the target (it was bugged at launch).",true],
+ ["Subtlety",3,3,2,null,"Your Nature and Arcane spells cause up to 30% less threat.",null,false],
+ ["Gift of Nature",5,3,3,null,"All your healing spells heal up to 10% more.",null,false],
+ ["Bloom",1,3,4,null,"When your Rejuvenation or Regrowth runs its full duration, the target is healed for 100% of your Spirit (50% if the effect is dispelled).",null,false],
  ["Tranquil Spirit",5,4,2,null,"Healing Touch and Tranquility cost up to 10% less mana.",null,false],
- ["Improved Rejuvenation",3,4,3,null,"Rejuvenation heals up to 15% more. Now column 3.",null,false],
- ["Swiftmend",1,4,4,null,"Consumes your Rejuvenation or Regrowth on an ally to heal them for its full periodic amount. 20% of base mana, 40 yd, 15 sec cooldown. No longer needs Tranquil Spirit.","Consumes your own Rejuvenation or Regrowth on an ally to heal them for its full periodic amount – someone else's no longer counts. 20% of base mana, 40 yd, 15 sec cooldown.",true],
+ ["Improved Rejuvenation",3,4,3,null,"Rejuvenation heals up to 15% more.",null,false],
+ ["Swiftmend",1,4,4,null,"Instantly heals a target that has your own Rejuvenation or Regrowth for that effect's full periodic amount, without using up the effect. 20% of base mana, 40 yd, 15 sec cooldown.",null,false],
  ["Nature's Swiftness",1,5,1,"Naturalist","Your next Nature spell with a cast time under 10 sec is instant. 3 min cooldown.",null,false],
  ["Living Spirit",3,5,2,null,"Up to 15% more Spirit.",null,false],
  ["Improved Tranquility",2,5,4,null,"Tranquility causes up to 100% less threat and its cooldown is up to 60% shorter.",null,false],
  ["Improved Regrowth",5,6,3,"Improved Rejuvenation","Regrowth gets up to +50% critical effect chance.",null,false],
- ["Wild Growth",1,7,2,"Living Spirit","Instant: heals the target and its party within 43.5 yd for 336 over 7 sec. 550 mana, 40 yd, 6 sec cooldown.","Now a 3 sec cast (was instant), 2.5 sec with Naturalist. Heals the target and its party for 336 over 7 sec. 550 mana, 40 yd, 6 sec cooldown.",true]
+ ["Wild Growth",1,7,2,"Living Spirit","3 sec cast: heals the target and its party members within 43.5 yd of it for 336 over 7 sec, fast at first and slower later. 550 mana, 40 yd, 6 sec cooldown.",null,false]
 ]}];
 const CLASSES={
  paladin:{name:"Paladin",trees:PALADIN,
-  lede:"The WoW Forever Paladin trees at launch, following Blizzard's Nov 2 development notes. Switch to Beta to compare with the October beta trees.",
-  note:'<span style="color:var(--ember)">●</span> Blizzard\'s Nov 2 notes confirm the reworked Paladin trees first seen in the Oct 30 game data: Holy Power now boosts critical heals, Light\'s Vigil works on allies only, Divine Precision gives 4 / 8% hit, and Oath of Light, Boundless Light, Stoicism, Shieldsworn, Turn Evil and Unsealed Wrath are new. The notes also show Vengeance stacking up to 5 times (not 3) and Two-Handed Weapon Specialization boosting Holy and Physical damage. Righteous Fury is now learned at level 10. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Paladin talent trees as they are in the live game: Holy, Protection and Retribution. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  hunter:{name:"Hunter",trees:HUNTER,
-  lede:"The WoW Forever Hunter trees at launch (Blizzard's Nov 2 notes): Summon Hawk and Bestial Wrath in Beast Mastery, Careful Aim, Lone Wolf and Sniper Shot in Marksmanship, Predator's Edge, Strider Kick and Lacerating Strikes in Survival. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> For launch: Barrage 5 / 10 / 15%, Sniper Shot\'s bonus damage doubled, Trueshot Aura up to +100 ranged attack power, Lightning Reflexes 3–15% Agility, and Lacerating Strikes always replaces your earlier bleed. Pathfinding sits in row 3. All traps now share one 30 sec cooldown (a spell change). <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Summon Hawk and Counterattack base damage differ between sources and are marked. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Hunter talent trees as they are in the live game: Beast Mastery, Marksmanship and Survival. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  priest:{name:"Priest",trees:PRIEST,
-  lede:"The WoW Forever Priest trees at launch (Blizzard's Nov 2 notes): Penance, Divine Aegis and Power Infusion in Discipline, Holy Binding, Litany of Light and Prayer of Mending in Holy, Improved Mind Flay, Dark Inspiration and Early Demise in Shadow. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> For launch: Holy Binding replaces the Binding Heal talent (Binding Heal is now a trained spell), Vampiric Embrace\'s healing can\'t crit, and Devouring Contagion no longer spreads from critters. Shadow Word: Death\'s backlash is 30% of your maximum health (a spell change). <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Penance and Holy Nova numbers differ by 1 point between sources. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Priest talent trees as they are in the live game: Discipline, Holy and Shadow. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  shaman:{name:"Shaman",trees:SHAMAN,
-  lede:"The WoW Forever Shaman trees at launch (Blizzard's Nov 2 notes): Call of Thunder, Lightning Overload and Lightning Mastery in Elemental, Mental Dexterity, Maelstrom Weapon and Rage of the Farseer in Enhancement, Water Shield, Mana Tide Totem and Riptide in Restoration. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> Big launch changes: <b>Lava Burst is removed</b> and Call of Thunder (+5% crit to Lightning Bolt and Chain Lightning) takes its slot, Elemental Mastery is renamed Lightning Mastery, Lightning Overload is 10 / 20 / 30%, Stormstrike hits for 150% normalized weapon damage on a 6 sec cooldown, Maelstrom Weapon triggers twice as often, Mental Dexterity gives up to 150% of Intellect, Flurry up to 30%, Improved Ghost Wolf moves to row 4, and Riptide becomes a heal over time only (12 sec cooldown, about 40% cheaper). Totemic Projection is now Totemic Call. Confirmed in the launch game data (build 1.60.1.70790, Nov 4); Call of Thunder is a 1-point talent in row 5. Lightning Mastery\'s requirement isn\'t published, so the arrow from Call of Thunder is our assumption. <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Shaman talent trees as they are in the live game: Elemental, Enhancement and Restoration. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  warlock:{name:"Warlock",trees:WARLOCK,
-  lede:"The WoW Forever Warlock trees at launch (Blizzard's Nov 2 notes): Siphon Life, Soul Siphon and Wrack in Affliction, Soul Link, Demonic Knowledge and Demonic Pact in Demonology, Shadowburn, Bane of Havoc and Incinerate in Destruction. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> For launch: Wrack\'s damage more than doubles (about 86 per second at level 60, double spell-power scaling), Shadow and Flame gives 4–20%, Amplify Curse now works on Curse of Exhaustion and Bane of Agony, and Improved Drains boosts Drain Mana instead of Wrack. <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Grim Reach replaced Malediction; Shadowburn, Conflagrate and Incinerate damage differ by 1 between sources. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Warlock talent trees as they are in the live game: Affliction, Demonology and Destruction. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  warrior:{name:"Warrior",trees:WARRIOR,
-  lede:"The WoW Forever Warrior trees at launch (Blizzard's Nov 2 notes): Spearing Strike, Bloodthrill and Weaponmaster in Arms, Reckless Swings, Improved Whirlwind and Bloodthirst in Fury, Master of Defense, Vanguard and Bastion in Protection. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> Launch changes: Improved Tactical Mastery and Bloodthrill drop to 3 and 2 ranks, Two-Handed Weapon Specialization is 2 / 4 / 6%, Improved Slam cuts up to 5 sec off Slam\'s cooldown, Flurry is 3 ranks (up to 30%) and no longer needs Death Wish – Bloodthirst does instead, Enrage moves to row 3, Gore Drinker to row 5 under Blood Craze, Defiance is 7 / 13 / 20%, Reckless Swings takes Raging Blows\' row 4 slot, and Improved Whirlwind (row 6) is new. Defensive Stance now adds 80% threat. Confirmed in the launch game data (build 1.60.1.70790, Nov 4). <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Warrior talent trees as they are in the live game: Arms, Fury and Protection. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  mage:{name:"Mage",trees:MAGE,
-  lede:"The WoW Forever Mage trees at launch (Blizzard's Nov 2 notes): Missile Barrage, Arcane Blast and Arcane Wrath in Arcane, Accelerant, Heating Up and Blast Wave in Fire, Ice Lance, Fingers of Frost and Ice Barrier in Frost. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> Blizzard\'s Nov 2 notes confirm the Oct 30 Mage changes: Arcane Resilience in row 1 with 3 ranks (up to 75% of Intellect as Armor), Arcane Blast at 12% of Intellect and +100% cost per stack for 18 sec, Ice Lance 300% vs Frozen with an 8 sec cooldown shared with Fire Blast, Ice Barrier\'s Frost damage bonus, Winter\'s Chill +20% Cone of Cold per stack, Incineration 5 ranks, Critical Mass and Precision 3 ranks. New in the notes: Missile Barrage is spent when Arcane Missiles starts, Ignite works with all Flamestrike damage, and Frost Blast, Arcane Focus and Piercing Ice are gone. <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Ice Barrier\'s absorb differs between sources (447 vs 493). Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Mage talent trees as they are in the live game: Arcane, Fire and Frost. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  druid:{name:"Druid",trees:DRUID,
-  lede:"The WoW Forever Druid trees at launch (Blizzard's Nov 2 notes): Genesis, Eclipse and Moonkin Form in Balance, Lacerate, Predatory Discipline and Primal Bite in Feral Combat, Bloom, Living Spirit and Wild Growth in Restoration. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> Blizzard\'s Nov 2 notes confirm the reshaped Druid trees from the Oct 30 data: Genesis and Naturalist 2–10%, Lacerate and Predatory Discipline in Feral row 4, Berserk removed with Primal Bite and Shifting Power in row 7, Furor and Heart of the Wild swapped, Reflection and Subtlety swapped, Bloom replacing Gift of the Earthmother and a 3 sec Wild Growth. The notes add Rend and Tear at 3–15% and Swiftmend needing your own Rejuvenation or Regrowth. Bear Form threat is now 115% and Poised (level 32) is a new ability. <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Thick Hide\'s armor value and the max ranks of Living Spirit, Improved Tranquility and Improved Regrowth are not fully confirmed. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'},
+  lede:"The Druid talent trees as they are in the live game: Balance, Feral Combat and Restoration. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."},
  rogue:{name:"Rogue",trees:ROGUE,
-  lede:"The WoW Forever Rogue trees at launch (Blizzard's Nov 2 notes): Blood Splatter, Venom and Mutilate in Assassination, Composure, Flash of Steel and Adrenaline Rush in Combat, Quick Getaway, Boot Knife and Death Mark in Subtlety. Values shown at max rank.",
-  note:'<span style="color:var(--ember)">●</span> Big launch rework built around two new abilities: <b>Shank</b> (level 24, off-hand strike that gives Energy back) and <b>Poised</b> (level 18, cheaper first ability at full Energy). Mutilate becomes the 31-point Assassination talent with Venom (now a Shank passive) in row 5; Murder, Improved Distract, Quietus, Cutthroat and Thousand Cuts are removed; Blood Splatter, Composure, Flash of Steel, Quick Getaway, Boot Knife and Death Mark are new; Improved Eviscerate is now Coup de Grace and Improved Sinister Strike is Efficient Strikes. Confirmed in the launch game data (build 1.60.1.70790, Nov 4). Which talents require which isn\'t published for the new Rogue tree, so the arrows follow the beta tree. <b>The left-to-right order inside a row is approximate</b> where no source publishes it. Sources: <a href="https://us.forums.blizzard.com/en/wow/t/2360696" rel="noopener">Blizzard\'s development notes (Nov 2)</a>, talent data from foreverchanges.pro and talentsforever.com.'}};
+  lede:"The Rogue talent trees as they are in the live game: Assassination, Combat and Subtlety. Tap a talent to see what every rank gives.",
+  note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."}};
 const SOON=[];
 let cls="paladin",TREES=PALADIN;
 const MAXP=51;
 const TICON={"Spiritual Focus":"paladin-spiritual-focus","Divine Strength":"paladin-divine-strength","Healing Light":"paladin-healing-light","Reverence":"paladin-reverence","Improved Seals":"paladin-improved-seals","Purifying Power":"paladin-purifying-power","Divine Favor":"paladin-divine-favor","Illumination":"paladin-illumination","Holy Conduit":"paladin-holy-conduit","Divine Precision":"paladin-divine-precision","Infusion of Light":"paladin-infusion-of-light","Oath of Light":"paladin-oath-of-light","Consecrated Ground":"paladin-consecrated-ground","Holy Shock":"paladin-holy-shock","Boundless Light":"paladin-boundless-light","Holy Power":"paladin-holy-power","Light's Vigil":"paladin-light-s-vigil","Redoubt":"paladin-redoubt","Precision":"paladin-precision","Guardian's Favor":"paladin-guardian-s-favor","Sacred Duty":"paladin-sacred-duty","Templar's Bulwark":"paladin-templar-s-bulwark","Improved Hammer of Justice":"paladin-improved-hammer-of-justice","Shield Specialization":"paladin-shield-specialization","Toughness":"paladin-toughness","Swift Judgement":"paladin-swift-judgement","Improved Righteous Fury":"paladin-improved-righteous-fury","Anticipation":"paladin-anticipation","Stoicism":"paladin-stoicism","Holy Shield":"paladin-holy-shield","Reckoning":"paladin-reckoning","Iron Creed":"paladin-iron-creed","Shieldsworn":"paladin-shieldsworn","Deflection":"paladin-deflection","Benediction":"paladin-benediction","Improved Judgement":"paladin-improved-judgement","Conviction":"paladin-conviction","Sanctified Judgement":"paladin-sanctified-judgement","Vindication":"paladin-vindication","Unyielding Faith":"paladin-unyielding-faith","Seal of Command":"paladin-seal-of-command","Pursuit of Justice":"paladin-pursuit-of-justice","Eye for an Eye":"paladin-eye-for-an-eye","Sacred Arbiter":"paladin-sacred-arbiter","Two-Handed Weapon Specialization":"paladin-two-handed-weapon-specialization","Turn Evil":"paladin-turn-evil","Repentance":"paladin-repentance","Vengeance":"paladin-vengeance","Champion of the Light":"paladin-champion-of-the-light","Unsealed Wrath":"paladin-unsealed-wrath","Divine Intellect":"paladin-divine-intellect"};
-let pts, mode="hot", sel=null, byName, ord=[], hov=null;
+let pts, sel=null, byName, ord=[], hov=null;
 /* Per-rank text from max-rank text.
    "(a / b / c)" lists (one value per rank) give exact values for the "up to N" that ends in c;
    "X per rank" after an "up to N" gives X*rank; otherwise "up to N" scales linearly N*rank/max.
@@ -777,7 +774,7 @@ function rankText(txt,r,m){
   out=out.replace(/\(\s*\)/g,'').replace(/\s+([,.;)])/g,'$1').replace(/\b([Aa]) (8\d*|11|18)(?=[\s.%])/g,(a,A,n)=>(A==='A'?'An ':'an ')+n).replace(/^a /,'A ').replace(/\s{2,}/g,' ');
   return {t:out,scaled};
 }
-const effect=x=>(mode==="hot"&&x[6]&&!/^Same effect/.test(x[6]))?x[6]:x[5];
+const effect=x=>x[5];
 const ALPH="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const offs=()=>TREES.map((_,k)=>TREES.slice(0,k).reduce((a,tr)=>a+tr.t.length,0));
 function addPt(ti,i){if(!canAdd(ti,i)) return false; pts[ti][i]++; ord.push([ti,i]); return true;}
@@ -835,7 +832,7 @@ function nodeState(ti,i){const x=TREES[ti].t[i],p=pts[ti][i];
   return canAdd(ti,i)||(total()>=MAXP&&pointsAbove(ti,x[2])>=(x[2]-1)*5)?"open":"locked";}
 function render(){
   document.getElementById("trees").innerHTML=TREES.map((tr,ti)=>`<div class="tree" style="--bg:url(img/trees/${treeBg(tr.name)}.webp)"><div class="tree-h"><h2>${tr.name}</h2><span>${treeSum(ti)} pts${nextRowNote(ti)} <button type="button" data-clear="${ti}">clear</button></span></div>
-    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${icon(x[0])}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}">${x[7]?'<span class="hf" title="Changed for launch"></span>':""}<span class="lbl">${esc(x[0])}</span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
+    <div class="grid" data-tree="${ti}"><svg class="links" aria-hidden="true"></svg>${tr.t.map((x,i)=>`<button type="button" class="node ${nodeState(ti,i)} ${sel&&sel[0]===ti&&sel[1]===i?"sel":""}" style="grid-row:${x[2]};grid-column:${x[3]};background-image:url(img/talents/${icon(x[0])}.webp)" data-t="${ti}" data-i="${i}" aria-label="${esc(x[0])}, ${pts[ti][i]} of ${x[1]}"><span class="lbl"><span>${esc(x[0])}</span></span><span class="rk">${pts[ti][i]}/${x[1]}</span></button>`).join("")}</div></div>`).join("");
   requestAnimationFrame(drawLinks);
   const t=total(); document.querySelector("#spent b").textContent=t;
   document.querySelector("#lvl b").textContent=t?t+9:10;
@@ -843,18 +840,21 @@ function render(){
   document.getElementById("spent").classList.toggle("warn",t>=MAXP);
   renderDetail(); renderOrder(); placePm(); saveURL(); if(hov){const n=document.querySelector(`.node[data-t="${hov[0]}"][data-i="${hov[1]}"]`); if(n) showTip(n); else hideTip();}}
 function drawLinks(){document.querySelectorAll(".grid").forEach(g=>{const ti=+g.dataset.tree,s=g.querySelector("svg"),gb=g.getBoundingClientRect();
-  s.innerHTML=TREES[ti].t.map((x,i)=>{if(!x[4]) return "";const r=byName[ti][x[4]];
-    const a=g.querySelector(`[data-i="${r}"]`).getBoundingClientRect(),b=g.querySelector(`[data-i="${i}"]`).getBoundingClientRect();
-    const met=pts[ti][r]>=TREES[ti].t[r][1];
-    return `<line x1="${a.left+a.width/2-gb.left}" y1="${a.top+a.height/2-gb.top}" x2="${b.left+b.width/2-gb.left}" y2="${b.top+b.height/2-gb.top}" stroke="${met?"#e9b44c":"#4a5163"}" stroke-width="3" stroke-linecap="round"/>`;}).join("");});}
+  const L=[];TREES[ti].t.forEach((x,i)=>{if(!x[4]) return;const r=byName[ti][x[4]];
+    const an=g.querySelector(`[data-i="${r}"]`),bn=g.querySelector(`[data-i="${i}"]`),a=an.getBoundingClientRect(),b=bn.getBoundingClientRect(),la=an.querySelector(".lbl").getBoundingClientRect();
+    const met=pts[ti][r]>=TREES[ti].t[r][1],c=met?"#e9b44c":"rgba(214,196,166,.30)",X=v=>v-gb.left,Y=v=>v-gb.top;let x1,y1,x2,y2,hx,hy;
+    if(Math.abs(a.top-b.top)<4){const dir=b.left>a.left?1:-1;y1=y2=Y(a.top+a.height/2);x1=X(dir>0?a.right+5:a.left-5);x2=X(dir>0?b.left-6:b.right+6);hx=dir;hy=0;}
+    else{x1=X(a.left+a.width/2);y1=Y(la.bottom+3);x2=X(b.left+b.width/2);y2=Y(b.top-6);hx=0;hy=1;}
+    const len=Math.hypot(x2-x1,y2-y1)||1,ux=(x2-x1)/len,uy=(y2-y1)/len,px=-uy,py=ux,h=6;
+    L.push(`<line x1="${x1}" y1="${y1}" x2="${x2-ux*h*.6}" y2="${y2-uy*h*.6}" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M${x2} ${y2}L${x2-ux*h+px*h*.65} ${y2-uy*h+py*h*.65}L${x2-ux*h-px*h*.65} ${y2-uy*h-py*h*.65}Z" fill="${c}"/>`);});
+  s.innerHTML=L.join("");});}
 function renderDetail(){const d=document.getElementById("detail");
   if(!sel){d.innerHTML=`<p style="margin:0;color:var(--muted)">Pick a talent to see what this rank and the next one give.</p>`;return;}
   const [ti,i]=sel,x=TREES[ti].t[i];
   const req=[]; if(x[2]>1) req.push(`${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]) req.push(`${x[4]} maxed`);
   d.innerHTML=`<div><h3>${esc(x[0])}</h3><div class="meta">${TREES[ti].name} · row ${x[2]} · ${pts[ti][i]} / ${x[1]} ranks${req.length?` · needs ${req.join(" and ")}`:""}</div></div>
     <div class="pm"><button type="button" id="minus" aria-label="Remove a point" ${canRemove(ti,i)?"":"disabled"}>−</button><button type="button" id="plus" aria-label="Add a point" ${canAdd(ti,i)?"":"disabled"}>+</button></div>
-    <p style="margin-bottom:-4px"><span class="ver ${mode==="hot"?"hot":"off"}">${mode==="hot"?"Launch":"Beta"}</span></p>${rankLines(x,pts[ti][i])}
-    ${x[6]&&mode==="hot"?`<p class="meta">${/^Same effect/.test(x[6])?"Launch change: "+esc(x[6]):"Beta: "+esc(x[5])}</p>`:""}${x[6]&&mode==="off"?`<p class="meta">Launch: ${esc(x[6])}</p>`:""}`;}
+    ${rankLines(x,pts[ti][i])}`;}
 function renderOrder(){const body=document.getElementById("orderBody"),sub=document.getElementById("orderSub");
   if(!ord.length){sub.textContent="";body.innerHTML=`<p class="empty">Spend points and they show up here level by level, from 10 to 60.</p>`;return;}
   const g=[];ord.forEach(([ti,i],k)=>{const last=g[g.length-1];if(last&&last.ti===ti&&last.i===i){last.to=k;}else g.push({ti,i,from:k,to:k});});
@@ -895,8 +895,8 @@ if(canHover){
 /* share: one digit per talent, trees joined with "-" */
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
-function saveURL(){try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:"")+"&v="+mode);}catch(e){}}
-function load(){try{const q=new URLSearchParams(location.search);setClass(q.get("c")||"paladin");if(q.get("v")==="off") mode="off";
+function saveURL(){try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:""));}catch(e){}}
+function load(){try{const q=new URLSearchParams(location.search);setClass(q.get("c")||"paladin");
   const bs=q.get("b")||"",os=q.get("o")||"";
   if(os){const o=offs();let ok=true;for(const ch of os){const g=ALPH.indexOf(ch);let ti=-1;for(let k=TREES.length-1;k>=0;k--){if(g>=o[k]){ti=k;break;}}
       const i=g-(ti>=0?o[ti]:0); if(g<0||ti<0||i>=TREES[ti].t.length||!addPt(ti,i)){ok=false;break;}}
@@ -914,14 +914,13 @@ document.addEventListener("click",e=>{
   if(e.target.id==="plus"&&sel){addPt(...sel); render(); return;}
   if(e.target.id==="minus"&&sel){remPt(...sel); render(); return;}
   const c=e.target.closest("[data-clear]"); if(c){const k=+c.dataset.clear;pts[k]=pts[k].map(()=>0);ord=ord.filter(o=>o[0]!==k);replayOrder(); render(); return;}
-  const m=e.target.closest("[data-mode]"); if(m){mode=m.dataset.mode;document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b===m));render();return;}
-  if(e.target.id==="reset"){pts=TREES.map(t=>t.t.map(()=>0)); ord=[]; sel=null; render(); return;}
+    if(e.target.id==="reset"){pts=TREES.map(t=>t.t.map(()=>0)); ord=[]; sel=null; render(); return;}
   if(e.target.id==="share"){const url=location.href; try{navigator.clipboard.writeText(url).then(()=>toast("Build link copied"),()=>fallback(url));}catch(err){fallback(url);}}
 });
 document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; remPt(ti,i); render();});
 function fallback(url){const w=document.getElementById("copyWrap"),b=document.getElementById("copyBox");b.value=url;w.hidden=false;b.select();}
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
-setClass("paladin"); load(); document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode)); render();
+setClass("paladin"); load(); render();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><!-- End Cloudflare Web Analytics --></body>
 </html>

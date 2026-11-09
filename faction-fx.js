@@ -1,11 +1,11 @@
 /* Talentsmith – animated faction buttons (home page).
    Horde: soft fire bed (80% soft particles, 20% sharper particles + a faint broken-fire texture), embers, ash and smoke on a gradual wind.
-   Alliance: rising spirits and golden orbs, rare thin stars, a light streak. Only the selected button animates; nothing runs off-screen,
+   Alliance: rising spirits and golden orbs, rare thin stars (no light streak – owner removed it). Only the selected button animates; nothing runs off-screen,
    in a background tab or with reduced motion. */
 (function(){
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const btns=[...document.querySelectorAll(".fac-btn[data-fac]")]; if(!btns.length) return;
-const IMG={};["ember1","ember2","ember3","ember4","ember5","ember6","smoke1","smoke2","orb1","orb2","orb3","star-m","star-l","streak"].forEach(k=>{const i=new Image();i.decoding="async";i.src="img/fx/"+k+".webp";IMG[k]=i;});
+const IMG={};["ember1","ember2","ember3","ember4","ember5","ember6","smoke1","smoke2","orb1","orb2","orb3","star-m","star-l"].forEach(k=>{const i=new Image();i.decoding="async";i.src="img/fx/"+k+".webp";IMG[k]=i;});
 const ok=i=>i&&i.complete&&i.naturalWidth>0;
 const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[(Math.random()*a.length)|0];
 function sizeCanvas(c){const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);const w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h;}return d;}
@@ -42,10 +42,8 @@ FX.horde=c=>{const g=c.getContext("2d"),cells=Cells(),wind=Wind();let P=[],E=[],
 const SCOL=[[255,248,228],[255,230,170],[200,222,255],[228,238,255],[255,214,178],[214,200,255]];
 const HALO=sprite([[0,.7],[.14,.34],[.45,.09],[1,0]]);const HT={};
 function halo(c){const k=c.join();if(HT[k]) return HT[k];const t=document.createElement("canvas");t.width=t.height=64;const x=t.getContext("2d");x.drawImage(HALO,0,0);x.globalCompositeOperation="source-in";x.fillStyle=`rgb(${c})`;x.fillRect(0,0,64,64);return HT[k]=t;}
-FX.alliance=c=>{const g=c.getContext("2d");let S=[],T=[],K=null,kt=60;
+FX.alliance=c=>{const g=c.getContext("2d");let S=[],T=[];
  return (d,k)=>{const W=c.width,H=c.height;g.clearRect(0,0,W,H);g.globalCompositeOperation="lighter";
-  kt-=k;if(!K&&kt<=0) K={x:-.35*W,l:0};
-  if(K){K.l+=.012*k;K.x=-.35*W+K.l*1.7*W;const im=IMG.streak;if(ok(im)){const h=H*1.1,ww=h*im.width/im.height;g.globalAlpha=Math.sin(Math.min(1,K.l)*Math.PI)*.75;g.drawImage(im,K.x,H*.5-h/2,ww,h);}if(K.l>=1){K=null;kt=rnd(150,240);}}
   if(S.length<22&&Math.random()<.2*k){const orb=Math.random()<.5;S.push({x:rnd(.04,.96)*W,y:rnd(.45,1.05)*H,vy:-rnd(.28,.7)*d,ax:rnd(4,12)*d,fx:rnd(.025,.06),ay:rnd(1,3)*d,fy:rnd(.04,.09),ph:rnd(0,6.28),l:0,dl:rnd(.006,.012),r:rnd(.6,1.1)*d,h:(orb?rnd(9,16):rnd(14,24))*d,c:pick(SCOL),a:rnd(.5,.85),orb:orb?pick(["orb1","orb2","orb3"]):null});}
   S=S.filter(s=>{s.l+=s.dl*k;if(s.l>=1) return false;s.ph+=k;s.y+=s.vy*k;const x=s.x+Math.sin(s.ph*s.fx)*s.ax,y=s.y+Math.sin(s.ph*s.fy)*s.ay,a=s.a*Math.pow(Math.sin(s.l*Math.PI),1.6)*(.75+.25*Math.sin(s.ph*.21));
    const im=s.orb&&IMG[s.orb];g.globalAlpha=a;if(im&&ok(im)){g.drawImage(im,x-s.h,y-s.h,s.h*2,s.h*2);}else{g.drawImage(halo(s.c),x-s.h,y-s.h,s.h*2,s.h*2);g.globalAlpha=Math.min(1,a*1.3);g.fillStyle=`rgb(${s.c})`;g.beginPath();g.arc(x,y,s.r,0,7);g.fill();}return true;});

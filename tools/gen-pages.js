@@ -110,7 +110,7 @@ for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;
   const bl=twoCols(out.filter(b=>b.c===c),'../builds/');
   const ch=trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0])}</td><td class="n">${tr.name}</td><td class="new">${esc(x[6]||x[5])}</td></tr>`)).join('');
   const body=`<p class="crumb"><a href="./">Classes</a> › ${Cn}</p><h1><img src="../img/icons/class-${c}.webp" alt="">${Cn} in WoW Forever</h1>
-<p class="lede">${esc(C.lede)}</p><p><a class="btn" href="../calculator.html?c=${c}">${Cn} talent calculator</a> <a class="btn ghost" href="../?class=${Cn}#picker">Race picker</a></p>
+<p style="margin-top:14px"><a class="btn" href="../calculator.html?c=${c}">${Cn} talent calculator</a> <a class="btn ghost" href="../?class=${Cn}#picker">Race picker</a></p>
 <h2>${Cn} builds</h2>${bl}
 <h2>Best race for each ${Cn} spec</h2><p class="lede">Top-scoring race from our racial scores: <span class="h">Horde</span> first, <span class="a">Alliance</span> below. Open the race picker for the full ranking and why.</p>
 <div class="tbl" style="display:inline-block;max-width:100%"><table class="races"><thead><tr><th>Spec</th>${ctx.CTX.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${specs}</tbody></table></div>`;

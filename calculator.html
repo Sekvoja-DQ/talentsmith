@@ -76,6 +76,7 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .node.locked .lbl{color:#7d766a}
 .node.sel{outline:2px solid var(--gold-soft);outline-offset:3px}
 .grid svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.detail[hidden]{display:none!important}
 .detail{margin-top:16px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:start}
 .detail h3{margin:0;font:800 20px/1.1 var(--f-display);color:var(--gold-soft)}
 .detail .meta{font-size:14px;color:var(--muted);margin-top:4px}
@@ -91,7 +92,8 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .cls a img{width:26px;height:26px;border-radius:50%}
 .cls a[aria-current="page"]{border-color:var(--gold);color:var(--gold-soft);background:rgba(233,180,76,.1)}
 .cls a.soon{opacity:.45;pointer-events:none}
-.help{color:var(--muted);font-size:14px;margin:12px 2px 0}
+.help{color:var(--muted);font-size:14px;margin:14px 0 0;border:1px solid var(--edge);border-radius:8px;padding:0 12px}.help summary{cursor:pointer;padding:10px 0;font-weight:600;color:var(--gold-soft)}.help p{margin:0 0 12px}
+.note{font-size:12.5px!important;opacity:.75;margin:14px 2px 0!important}
 .tree-h em{font-style:normal;font:600 12px/1 var(--f-body);color:var(--muted);margin-left:6px;opacity:.9}
 .tree-h em.done{color:var(--green)}
 .rk-l{display:inline-block;font:700 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-right:6px}
@@ -120,7 +122,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .copybox{width:100%;margin-top:8px;font:13px ui-monospace,Menlo,monospace;background:var(--deep);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:8px}
 @media (max-width:640px){.act{margin-left:0}.top nav{display:none}}
 /* mobile: +/- bar and talent text on the selected talent */
-.pmpop{position:absolute;z-index:20;width:min(280px,100%);background:rgba(10,13,20,.97);border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.65);overflow:hidden}
+.pmpop{position:absolute;z-index:20;width:min(280px,100%);background:#0a0d14;border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.65);overflow:hidden}
 .pmbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(233,180,76,.3)}
 .pmbar button{border:0;background:transparent;color:var(--gold);font:700 22px/1 var(--f-body);width:52px;height:38px;display:grid;place-items:center;cursor:pointer;padding:0;touch-action:manipulation}
 .pmbar button:disabled{opacity:.3}
@@ -146,7 +148,6 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 
   <h1 id="h1">Paladin Talent Calculator</h1>
   <nav class="cls" id="cls" aria-label="Class"></nav>
-  <p class="lede" id="lede"></p>
 
   <div class="bar" role="region" aria-label="Build summary">
     <span class="stat" id="spent"><b>0</b> / 51 points</span>
@@ -158,7 +159,6 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <button type="button" class="btn" id="reset">Reset</button>
     </div>
   </div>
-  <p class="note" id="note"></p>
   <section class="myb" id="myb" hidden aria-label="My builds">
     <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
     <div id="mybList"></div>
@@ -167,16 +167,17 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
-  <p class="help">Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p>
 
   <section class="detail" id="detail" aria-live="polite"></section>
   <details class="order" id="order" open><summary>Leveling order<span id="orderSub"></span></summary><div id="orderBody"></div></details>
+  <details class="help"><summary>How the calculator works</summary><p>Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p></details>
+  <p class="note" id="note"></p>
   <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 </div>
 </div>
 <footer class="gut"><div class="wrap">
   <p><a href="https://ko-fi.com/bigdforever" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps the forge burning and new calculators coming.</p>
-  <p>Fan-made, not affiliated with Blizzard Entertainment. The trees follow Blizzard's Nov 2 development notes, built on the Oct 30 talent data for tiers, ranks and requirements; positions inside a row are approximate where no source gives them. Descriptions are summarized in our own words, and "details pending" means the exact numbers aren't published yet. Talent icons match the game data; new launch talents use their icons from the launch game data.</p>
+  <p>Fan-made, not affiliated with Blizzard Entertainment.</p>
   <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons and talent backgrounds © Blizzard Entertainment, Inc.</p>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
@@ -822,7 +823,7 @@ const icon=n=>(cls==="paladin"&&TICON[n])||cls+"-"+slug(n);
 function setClass(c){cls=CLASSES[c]?c:"paladin";TREES=CLASSES[cls].trees;pts=TREES.map(t=>t.t.map(()=>0));sel=null;ord=[];
   byName=TREES.map(t=>Object.fromEntries(t.t.map((x,i)=>[x[0],i])));
   const C=CLASSES[cls];document.getElementById("h1").textContent=C.name+" Talent Calculator";
-  document.getElementById("lede").textContent=C.lede;document.getElementById("note").innerHTML=C.note;
+  document.getElementById("note").innerHTML=C.note;
   document.title="Talentsmith – WoW Forever "+C.name+" Talent Calculator";
   document.getElementById("cls").innerHTML=Object.entries(CLASSES).map(([k,v])=>`<a href="?c=${k}" data-cls="${k}" ${k===cls?'aria-current="page"':""}><img src="img/icons/class-${k}.webp" alt="">${v.name}</a>`).join("")+SOON.map(n=>`<a class="soon" aria-disabled="true" title="Coming soon"><img src="img/icons/class-${n.toLowerCase()}.webp" alt="">${n}</a>`).join("");}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -862,7 +863,7 @@ function drawLinks(){document.querySelectorAll(".grid").forEach(g=>{const ti=+g.
     L.push(`<line x1="${x1}" y1="${y1}" x2="${x2-ux*h*.6}" y2="${y2-uy*h*.6}" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M${x2} ${y2}L${x2-ux*h+px*h*.65} ${y2-uy*h+py*h*.65}L${x2-ux*h-px*h*.65} ${y2-uy*h-py*h*.65}Z" fill="${c}"/>`);});
   s.innerHTML=L.join("");});}
 function renderDetail(){const d=document.getElementById("detail");
-  if(!sel){d.innerHTML=`<p style="margin:0;color:var(--muted)">Pick a talent to see what this rank and the next one give.</p>`;return;}
+  d.hidden=!sel; if(!sel){d.innerHTML="";return;}
   const [ti,i]=sel,x=TREES[ti].t[i];
   const req=[]; if(x[2]>1) req.push(`${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]) req.push(`${x[4]} maxed`);
   d.innerHTML=`<div><h3>${esc(x[0])}</h3><div class="meta">${TREES[ti].name} · row ${x[2]} · ${pts[ti][i]} / ${x[1]} ranks${req.length?` · needs ${req.join(" and ")}`:""}</div></div>

@@ -45,6 +45,13 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .btn{font:700 13px/1 var(--f-display);letter-spacing:.05em;padding:10px 12px;border-radius:6px;border:1px solid var(--gold);background:rgba(233,180,76,.08);color:var(--gold);cursor:pointer}
 .btn:focus-visible,button:focus-visible,.node:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
 .note{font-size:14px;color:var(--muted);margin:10px 2px 0}
+.myb{margin-top:12px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:14px}
+.myb-save{display:flex;gap:8px;flex-wrap:wrap}.myb-save input{flex:1 1 200px;min-width:0;font:16px var(--f-body);padding:9px 11px;border-radius:6px;border:1px solid var(--edge);background:var(--night);color:var(--ink)}
+.myb-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.myb-list li{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--edge);border-radius:8px;background:rgba(0,0,0,.18)}
+.myb-list img{width:26px;height:26px;border-radius:50%;flex:none}.myb-list .nm{flex:1;min-width:0}.myb-list .nm b{display:block;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.myb-list .nm span{font-size:13px;color:var(--muted)}
+.myb-list button{font:700 12px/1 var(--f-display);letter-spacing:.04em;padding:8px 10px;border-radius:6px;border:1px solid var(--edge);background:none;color:var(--muted);cursor:pointer}.myb-list button.go{border-color:var(--gold);color:var(--gold)}.myb-list button.del.sure{border-color:var(--ember);color:var(--ember)}
+.myb-empty,.myb-note{font-size:14px;color:var(--muted);margin:10px 0 0}#mineN{margin-left:6px;opacity:.8}
 .note b{color:var(--ember)}
 .trees{display:grid;grid-template-columns:repeat(3,minmax(300px,1fr));gap:14px;margin-top:16px;overflow-x:auto;padding-bottom:6px}
 .tree{background:linear-gradient(180deg,rgba(11,14,21,.45),rgba(11,14,21,.72)),var(--bg,none) center top/cover no-repeat,var(--plate);border:1px solid var(--edge);border-radius:10px;padding:12px 12px 16px;min-width:300px}
@@ -52,9 +59,9 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .tree-h h2{margin:0;font:800 18px/1 var(--f-display);color:var(--gold-soft)}
 .tree-h span{font:700 15px/1 var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums}
 .tree-h button{font-size:12px;background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline}
-.grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,80px);gap:4px}
+.grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,90px);gap:4px}
 .node{position:relative;justify-self:center;align-self:start;margin-top:4px;width:44px;height:44px;border-radius:7px;border:2px solid #4a5163;background:#1a1f2b center/cover no-repeat;cursor:pointer;padding:0;transition:box-shadow .15s,border-color .15s,filter .15s}
-.node .lbl{position:absolute;top:50px;left:50%;transform:translateX(-50%);font:600 10.5px/1.45 var(--f-body);color:var(--muted);text-align:center;width:92px;pointer-events:none;z-index:2}
+.node .lbl{position:absolute;top:50px;left:50%;transform:translateX(-50%);font:600 10px/1.4 var(--f-body);color:var(--muted);text-align:center;width:88px;pointer-events:none;z-index:2}
 @media (max-width:700px){.node .lbl{width:68px;font-size:10px;line-height:1.4}}
 .node .lbl>span{background:rgba(12,10,8,.86);padding:1px 4px;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .node .rk{position:absolute;right:-9px;bottom:-7px;font:700 11px/1 var(--f-body);background:var(--night);border:1px solid #4a5163;border-radius:4px;padding:2px 4px;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -146,11 +153,17 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
     <span class="stat" id="lvl">Level <b>10</b></span>
     <span class="stat" id="split"><b>0 / 0 / 0</b></span>
     <div class="act">
+      <button type="button" class="btn" id="mine" aria-expanded="false" aria-controls="myb">My builds<span id="mineN"></span></button>
       <button type="button" class="btn" id="share">Copy build link</button>
       <button type="button" class="btn" id="reset">Reset</button>
     </div>
   </div>
   <p class="note" id="note"></p>
+  <section class="myb" id="myb" hidden aria-label="My builds">
+    <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
+    <div id="mybList"></div>
+    <p class="myb-note">Saved in this browser only – nobody else can see them. Your last build for each class is also kept automatically.</p>
+  </section>
   <div id="copyWrap" hidden><input class="copybox" id="copyBox" readonly aria-label="Build link"></div>
 
   <div class="trees" id="trees"></div>
@@ -895,17 +908,26 @@ if(canHover){
 /* share: one digit per talent, trees joined with "-" */
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
-function saveURL(){try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:""));}catch(e){}}
+function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:""));}catch(e){}}
+/* My builds: everything lives in this browser's localStorage – private to the visitor, no account */
+const ST={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+function saveLast(){ST.set("ts_last_"+cls,{b:code(),o:ordCode()});}
+function restoreLast(){const l=ST.get("ts_last_"+cls,null);if(l&&(l.b||l.o)) applyCode(l.b||"",l.o||"");}
 function load(){try{const q=new URLSearchParams(location.search);setClass(q.get("c")||"paladin");
-  const bs=q.get("b")||"",os=q.get("o")||"";
+  if(q.has("b")||q.has("o")) applyCode(q.get("b")||"",q.get("o")||""); else restoreLast();}catch(e){}}
+function applyCode(bs,os){try{pts=TREES.map(t=>t.t.map(()=>0));ord=[];
   if(os){const o=offs();let ok=true;for(const ch of os){const g=ALPH.indexOf(ch);let ti=-1;for(let k=TREES.length-1;k>=0;k--){if(g>=o[k]){ti=k;break;}}
       const i=g-(ti>=0?o[ti]:0); if(g<0||ti<0||i>=TREES[ti].t.length||!addPt(ti,i)){ok=false;break;}}
     if(ok&&(!bs||code()===bs)) return; pts=TREES.map(t=>t.t.map(()=>0)); ord=[];}
   bs.split("-").forEach((s,ti)=>{if(!TREES[ti]) return;[...s].forEach((c,i)=>{if(i<TREES[ti].t.length) pts[ti][i]=Math.min(+c||0,TREES[ti].t[i][1]);});});
   if(total()>MAXP) pts=TREES.map(t=>t.t.map(()=>0)); else if(total()) synthOrder();}catch(e){}}
+function mySplit(b){return (b||"").split("-").concat(["",""]).slice(0,3).map(s=>[...s].reduce((a,c)=>a+(+c||0),0)).join(" / ");}
+function renderMine(){const L=ST.get("ts_builds",[]);document.getElementById("mineN").textContent=L.length?"("+L.length+")":"";
+  const box=document.getElementById("mybList");if(!box) return;
+  box.innerHTML=L.length?`<ul class="myb-list">${L.map(x=>`<li><img src="img/icons/class-${esc(x.c)}.webp" alt=""><span class="nm"><b>${esc(x.n)}</b><span>${esc(CLASSES[x.c]?CLASSES[x.c].name:x.c)} · ${mySplit(x.b)}</span></span><button type="button" class="go" data-open="${x.id}">Open</button><button type="button" class="del" data-del="${x.id}">Delete</button></li>`).join("")}</ul>`:`<p class="myb-empty">No saved builds yet. Spend some points, name the build and save it.</p>`;}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800);}
 document.addEventListener("click",e=>{
-  const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); render(); window.scrollTo({top:0});} return;}
+  const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); restoreLast(); render(); window.scrollTo({top:0});} return;}
   const pb=e.target.closest("[data-pm]"); if(pb&&sel){if(pb.dataset.pm==="+") addPt(...sel); else remPt(...sel); render(); return;}
   const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i;
     if(isTouch()){/* phones: first tap only shows the talent; points come from the + / − bar */ const same=pmOpen&&sel&&sel[0]===ti&&sel[1]===i; sel=[ti,i]; pmOpen=!same; render(); return;}
@@ -915,12 +937,21 @@ document.addEventListener("click",e=>{
   if(e.target.id==="minus"&&sel){remPt(...sel); render(); return;}
   const c=e.target.closest("[data-clear]"); if(c){const k=+c.dataset.clear;pts[k]=pts[k].map(()=>0);ord=ord.filter(o=>o[0]!==k);replayOrder(); render(); return;}
     if(e.target.id==="reset"){pts=TREES.map(t=>t.t.map(()=>0)); ord=[]; sel=null; render(); return;}
+  if(e.target.closest("#mine")){const m=document.getElementById("myb"),open=m.hidden;m.hidden=!open;e.target.closest("#mine").setAttribute("aria-expanded",open);if(open){renderMine();const nm=document.getElementById("mybName");if(!nm.value) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}return;}
+  const op=e.target.closest("[data-open]"); if(op){const x=ST.get("ts_builds",[]).find(y=>y.id===op.dataset.open); if(x){setClass(x.c);applyCode(x.b,x.o);render();toast("Opened "+x.n);} return;}
+  const dl=e.target.closest("[data-del]"); if(dl){if(!dl.classList.contains("sure")){dl.classList.add("sure");dl.textContent="Sure?";return;}
+    ST.set("ts_builds",ST.get("ts_builds",[]).filter(y=>y.id!==dl.dataset.del));renderMine();return;}
   if(e.target.id==="share"){const url=location.href; try{navigator.clipboard.writeText(url).then(()=>toast("Build link copied"),()=>fallback(url));}catch(err){fallback(url);}}
 });
+document.getElementById("mybForm").addEventListener("submit",e=>{e.preventDefault();
+  if(!total()){toast("Spend some points first");return;}
+  const nm=document.getElementById("mybName"),n=(nm.value.trim()||CLASSES[cls].name+" "+mySplit(code())).slice(0,40);
+  const L=ST.get("ts_builds",[]);L.unshift({id:Date.now().toString(36),n,c:cls,b:code(),o:ordCode(),t:Date.now()});ST.set("ts_builds",L.slice(0,100));
+  nm.value="";renderMine();toast("Saved: "+n);});
 document.addEventListener("contextmenu",e=>{const n=e.target.closest(".node"); if(!n) return; e.preventDefault(); const ti=+n.dataset.t,i=+n.dataset.i; sel=[ti,i]; remPt(ti,i); render();});
 function fallback(url){const w=document.getElementById("copyWrap"),b=document.getElementById("copyBox");b.value=url;w.hidden=false;b.select();}
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
-setClass("paladin"); load(); render();
+setClass("paladin"); load(); render(); renderMine();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><!-- End Cloudflare Web Analytics --></body>
 </html>

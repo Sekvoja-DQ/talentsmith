@@ -83,3 +83,5 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - Values: every multi-rank talent takes its per-rank numbers from a curve (TraitDefinitionEffectPoints -> CurveID). Curve/CurvePoint not exported yet; Spell descriptions alone can't confirm multi-rank values.
 - Scripts: tools/gamedata/ (load.py paths point at /mnt/user-data/uploads/WOW_sucker_for_TALENTSMITH/).
 - Review 11 (race details folded + Show details button) approved and shipped.
+- Curve + CurvePoint exported (CurvePoint.Pos = "rank,value"). tools/gamedata/cv.py compares every curve value with the site texts: all classes match except hidden/internal effects, plus 2 texts missing the per-rank chance (Paladin Shield Specialization, Priest Spirit Tap) -> review 13, patch tools/review/pending/p13-values.diff.
+- Open: Paladin Vindication. Game tooltip = target's Attack Power reduced (curve 1/2/3 ÷ -3 × spell 440667 value 6) for 30 sec; site says Str/Agi -5% for 10 sec. Waiting for the owner's in-game screenshot.

@@ -110,14 +110,33 @@ ${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}`
 // ---- class pages
 const cards=[];
 for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;
+  const specLinks=trees.map(tr=>`<a class="btn ghost" href="${c}-${slug(tr.name)}.html">${esc(tr.name)}</a>`).join(' ');
   const specs=ctx.BUILDS[Cn].map(b=>{const r=bestRaces(c,b);return `<tr><td><b>${esc(b.name)}</b></td>${ctx.CTX.map(([k])=>`<td><span class="h">${esc(r.horde[k])}</span><br><span class="a">${esc(r.alliance[k])}</span></td>`).join('')}</tr>`;}).join('');
   const bl=twoCols(out.filter(b=>b.c===c),'../builds/');
   const ch=trees.flatMap(tr=>tr.t.filter(x=>x[7]).map(x=>`<tr><td>${ti(c,x[0])}</td><td class="n">${tr.name}</td><td class="new">${esc(x[6]||x[5])}</td></tr>`)).join('');
   const body=`<p class="crumb"><a href="./">Classes</a> › ${Cn}</p><h1><img src="../img/icons/class-${c}.webp" alt="">${Cn} in WoW Forever</h1>
+<p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="color:var(--muted)">Specs:</span> ${specLinks}</p>
 <p style="margin-top:14px"><a class="btn" href="../calculator.html?c=${c}">${Cn} talent calculator</a> <a class="btn ghost" href="../?class=${Cn}#picker">Race picker</a></p>
 <h2>${Cn} builds</h2>${bl}
 <h2>Best race for each ${Cn} spec</h2><p class="lede">Top-scoring race from our racial scores: <span class="h">Horde</span> first, <span class="a">Alliance</span> below. Open the race picker for the full ranking and why.</p>
 <div class="tbl" style="display:inline-block;max-width:100%"><table class="races"><thead><tr><th>Spec</th>${ctx.CTX.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${specs}</tbody></table></div>`;
+  // ---- spec pages (review 16, trial from Nov 10: check traffic Nov 18)
+  const SPECMAP={warrior:{Arms:['dps'],Fury:['dps'],Protection:['tank']},paladin:{Holy:['holy'],Protection:['prot'],Retribution:['ret']},hunter:{'Beast Mastery':['pet'],Marksmanship:['pet'],Survival:['pet']},rogue:{Assassination:['dps'],Combat:['dps'],Subtlety:['dps']},priest:{Discipline:['disc'],Holy:['holy'],Shadow:['shadow']},shaman:{Elemental:['ele'],Enhancement:['enh'],Restoration:['resto']},mage:{Arcane:['dps'],Fire:['dps'],Frost:['dps']},warlock:{Affliction:['pet'],Demonology:['pet'],Destruction:['pet']},druid:{Balance:['balance'],'Feral Combat':['cat','bear'],Restoration:['resto']}};
+  trees.forEach((tr,ti2)=>{const sn=tr.name,sfn=`classes/${c}-${slug(sn)}.html`;urls.push(sfn);
+    const key=tr.t.filter(x=>x[2]>=5).sort((x,y)=>x[2]-y[2]||x[3]-y[3]);
+    const kc=key.map(x=>`<div class="card" style="display:flex;gap:12px;align-items:flex-start"><img src="../img/talents/${icon(c,x[0])}.webp" width="40" height="40" alt="" loading="lazy" style="border-radius:6px;flex:none"><div><h3 style="margin:0 0 4px;font:800 17px var(--f-display);color:var(--gold-soft)">${esc(x[0])} <span class="pill">${x[1]} rank${x[1]>1?'s':''}</span></h3><p style="margin:0;color:#d8cfbf;font-size:15px">${esc(x[5])}</p></div></div>`).join('');
+    const pick=(SPECMAP[c]||{})[sn]||[];
+    const rr=pick.map(id=>ctx.BUILDS[Cn].find(x=>x.id===id)).filter(Boolean).map(b=>{const r=bestRaces(c,b);return `<tr><td><b>${esc(b.name)}</b></td>${ctx.CTX.map(([k])=>`<td><span class="h">${esc(r.horde[k])}</span><br><span class="a">${esc(r.alliance[k])}</span></td>`).join('')}</tr>`;}).join('');
+    const sb=out.filter(b=>b.c===c&&b.split[ti2]>=20);
+    const others=trees.filter(t=>t!==tr).map(t=>`<a href="${c}-${slug(t.name)}.html">${esc(t.name)} ${Cn}</a>`).join(' · ');
+    const sbody=`<p class="crumb"><a href="./">Classes</a> › <a href="${c}.html">${Cn}</a> › ${esc(sn)}</p><h1><img src="../img/icons/class-${c}.webp" alt="">${esc(sn)} ${Cn} in WoW Forever</h1>
+<p style="max-width:70ch;color:#d8cfbf;font-size:17px;margin-top:10px">Builds that go deep into ${esc(sn)}, the talents that define the spec, and the best race for a ${esc(sn)} ${Cn} – from the live game data.</p>
+<p style="margin-top:14px"><a class="btn" href="../calculator.html?c=${c}">${esc(sn)} ${Cn} in the calculator</a> <a class="btn ghost" href="../?class=${Cn}#picker">Race picker</a></p>
+<h2>Key ${esc(sn)} talents</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">${kc}</div>
+${rr?`<h2>Best race for ${esc(sn)} ${Cn}</h2><p class="lede">Top-scoring race from our racial scores: <span class="h">Horde</span> first, <span class="a">Alliance</span> below.</p><div class="tbl" style="display:inline-block;max-width:100%"><table class="races"><thead><tr><th>Spec</th>${ctx.CTX.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${rr}</tbody></table></div>`:''}
+<h2>${esc(sn)} builds</h2>${sb.length?twoCols(sb,'../builds/'):`<p class="old">No ${esc(sn)}-heavy build yet – see all <a href="${c}.html">${Cn} builds</a>.</p>`}
+<p style="margin-top:24px" class="old">Other ${Cn} specs: ${others}</p>`;
+    fs.writeFileSync(R+sfn,page(true,`${sn} ${Cn} Guide – Talents, Builds & Best Race | WoW Forever | Talentsmith`,`WoW Forever ${sn} ${Cn}: key ${sn} talents with live values, the best race for each faction, and ${sn} talent builds with leveling order.`,sbody,sfn));});
   const fn=`classes/${c}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${Cn} Guide – Best Race, Builds & Talents | WoW Forever | Talentsmith`,`WoW Forever ${Cn}: meta and off-meta talent builds with leveling order, and the best race for every spec.`,body,fn));
   cards.push(`<a class="card" style="text-decoration:none;color:var(--ink);display:flex;gap:12px;align-items:center" href="${c}.html"><img src="../img/icons/class-${c}.webp" alt="" width="40" height="40" style="border-radius:8px"><span><b style="color:var(--gold-soft);font-family:var(--f-display)">${Cn}</b><br><span style="color:var(--muted);font-size:15px">${out.filter(b=>b.c===c&&b.group==='meta').length} meta · ${out.filter(b=>b.c===c&&b.group==='off').length} off-meta builds · best race</span></span></a>`);}

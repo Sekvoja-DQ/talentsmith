@@ -90,3 +90,9 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - Icons: SpellMisc.SpellIconFileDataID → wowdev/wow-listfile parts/interface.csv names the icon. All 464 site talent icons match the game icons (checked image by image). Not in Gethe: Ability_Warrior_ShieldCharge (Vanguard), INV_Ability_Mage_RadiantSpark (Arcane Geometry), INV_Ability_SoulHarvesterWarlock_DemonicSoul (Demonic Pact), racials Achievement_RaidPrimalist_WindElemental (Elemental Insight), INV_GnomeToy (Eureka!) – asked owner to export them with wow.export.
 - Review board now supports text-only proposals (text:true, you:/me: lines). Proposals 14–19 (growth: GoatCounter, Search Console/Bing, 27 spec pages, per-build share images, patch-day changes page, community post) added Nov 10.
 - Proposal 14 (visitor counter) withdrawn: owner says another chat handles counting (Cloudflare Web Analytics beacon is already on the pages) and will send prompts/guides.
+
+## Analytics (from the owner's analytics chat, Nov 10)
+- Cloudflare Web Analytics beacon (token 87a25da520924d508c47601156b61bcc) is on every page and in tools/gen-pages.js. Every new hand-made page needs it. Never remove it. Checked Nov 10: all 79 pages have it.
+- Read stats through the browser on Dejan's PC (Edge, "Claude" tab group): dash.cloudflare.com/78db4a6c7c4ca1f0d972ee5cc183ee1f/web-analytics/overview/visits?excludeBots=Yes&host=talentsmith.app&time-window=10080 (minutes; swap visits→page-views). If screenshots fail, read document.body.innerText. Never open talentsmith.app while reading stats.
+- Serbia/Belgrade traffic = us (testing). Judge on outside traffic. 7 days to Nov 10: 45 visits; almost all direct, no search yet.
+- Umami Cloud planned (needs owner account) → review 21. Brag banner → review 22 is the weekly note; review 20 is the banner (patch tools/review/pending/p20-brag-banner.diff). BigDForever home page does not link to Talentsmith yet (checked Nov 10).

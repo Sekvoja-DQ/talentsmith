@@ -187,7 +187,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .ts-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--edge);max-width:1120px;margin:0 auto}
 .ts-top .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gold-soft);font:800 18px/1 var(--f-display);letter-spacing:.06em}.ts-top .brand img{width:34px;height:34px;border-radius:50%}
 .ts-top nav{display:flex;gap:14px;font-size:15px;flex-wrap:wrap}.ts-top nav a{color:var(--muted);text-decoration:none}.ts-top nav a:hover{color:var(--gold-soft)}
-@media (max-width:640px){.ts-top{flex-wrap:wrap}.ts-top nav{width:100%;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;gap:18px;padding-bottom:2px}}
+.ts-top{justify-content:flex-start}.ts-top nav{align-items:center;margin-left:auto}.nbs{display:flex;gap:10px;align-items:center}.nb{text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 3px;margin:-3px 0;font-size:13px;border:1px solid var(--edge);border-radius:999px;color:var(--ink)!important;line-height:1.2}.nb img{width:16px;height:16px;border-radius:50%;flex:none}.nb:hover{border-color:var(--gold);color:var(--gold-soft)!important}@media (max-width:640px){.ts-top nav .dsk{display:none}}@media (max-width:359px){header.ts-top nav{font-size:12.5px;gap:4px}}
+@media (max-width:640px){.ts-top{flex-wrap:wrap}.ts-top nav{width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.ts-top .nbs{margin-left:auto}}
 .calc-grid .calc-card{border-color:var(--edge);background:linear-gradient(180deg,#1b1d25,#13161e);box-shadow:inset 0 2px 0 rgba(233,180,76,.5);transition:border-color .2s,box-shadow .2s}
 .calc-grid .calc-card:hover{border-color:rgba(233,180,76,.65);box-shadow:inset 0 2px 0 var(--gold),0 0 18px rgba(255,122,47,.18)}
 .calc-grid .calc-card img{box-shadow:0 0 0 1px rgba(233,180,76,.55),0 0 0 3px rgba(0,0,0,.55)}
@@ -228,7 +229,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 </style>
 </head>
 <body>
-<div class="gut"><header class="ts-top"><a class="brand" href="./"><img src="img/avatar.webp" alt="" width="34" height="34">Talentsmith</a><nav><a href="classes/">Classes</a><a href="calculator.html">Calculator</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="#picker">Race picker</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav></header></div>
+<div class="gut"><header class="ts-top"><a class="brand" href="./"><img src="img/avatar.webp" alt="" width="34" height="34">Talentsmith</a><nav><a href="classes/">Classes</a><a href="calculator.html">Calculator</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="#picker">Race picker</a><a class="dsk" href="#races">Racials</a></nav><span class="nbs"><a class="nb" href="https://bigdforever.com/" rel="noopener"><img src="img/bigd-icon.webp" alt="" width="16" height="16">BigD</a><a class="nb" href="https://ko-fi.com/bigdforever" rel="noopener"><img src="img/coin.svg" alt="" width="16" height="16">Ko-fi</a></span></header></div>
 <header class="hero">
   <picture>
     <source media="(max-width:640px)" srcset="img/hero-tall.webp">

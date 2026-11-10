@@ -32,6 +32,7 @@ a{color:var(--gold)}
 .brand img{width:34px;height:34px;border-radius:50%}
 .top nav{display:flex;gap:14px;font-size:15px}
 .top nav a{color:var(--muted);text-decoration:none}.top nav a:hover{color:var(--gold)}
+.top{justify-content:flex-start;flex-wrap:wrap;row-gap:10px}.top nav{flex-wrap:wrap}.top nav{align-items:center;margin-left:auto}.nbs{display:flex;gap:10px;align-items:center}.nb{text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 3px;margin:-3px 0;font-size:13px;border:1px solid var(--edge);border-radius:999px;color:var(--ink)!important;line-height:1.2}.nb img{width:16px;height:16px;border-radius:50%;flex:none}.nb:hover{border-color:var(--gold);color:var(--gold-soft)!important}@media (max-width:640px){.top nav .dsk{display:none}}@media (max-width:359px){header.top nav{font-size:12.5px;gap:4px}}
 h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:var(--gold-soft);text-wrap:balance}
 .lede{margin:0 0 16px;color:var(--muted);max-width:70ch}
 .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:12px 14px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;position:sticky;top:0;z-index:5}
@@ -120,7 +121,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#24170a;font-weight:700;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .copybox{width:100%;margin-top:8px;font:13px ui-monospace,Menlo,monospace;background:var(--deep);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:8px}
-@media (max-width:640px){.act{margin-left:0}.top nav{display:none}}
+@media (max-width:640px){.act{margin-left:0}.top{flex-wrap:wrap}.top nav{display:flex;width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.top .nbs{margin-left:auto}}
 /* mobile: +/- bar and talent text on the selected talent */
 .pmpop{position:absolute;z-index:20;width:min(280px,100%);background:#0a0d14;border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.65);overflow:hidden}
 .pmbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(233,180,76,.3)}
@@ -143,7 +144,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./"><img src="img/avatar.webp" alt="">Talentsmith</a>
-    <nav><a href="classes/">Classes</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="./#picker">Race picker</a><a href="./#races">Racials</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav>
+    <nav><a href="classes/">Classes</a><a href="calculator.html" aria-current="page">Calculator</a><a href="builds/">Builds</a><a href="changes.html">Changes</a><a href="./#picker">Race picker</a><a class="dsk" href="./#races">Racials</a></nav><span class="nbs"><a class="nb" href="https://bigdforever.com/" rel="noopener"><img src="img/bigd-icon.webp" alt="" width="16" height="16">BigD</a><a class="nb" href="https://ko-fi.com/bigdforever" rel="noopener"><img src="img/coin.svg" alt="" width="16" height="16">Ko-fi</a></span>
   </header>
 
   <h1 id="h1">Paladin Talent Calculator</h1>

@@ -37,7 +37,7 @@ const CSS=`:root{color-scheme:dark;--night:#0b0e15;--deep:#11151f;--plate:#171c2
 a{color:var(--gold)}.gut{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}.wrap{max-width:1000px;margin:0 auto}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;border-bottom:1px solid var(--edge)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gold-soft);font:800 18px/1 var(--f-display);letter-spacing:.06em}.brand img{width:34px;height:34px;border-radius:50%}
-.top nav{display:flex;gap:14px;font-size:15px;flex-wrap:wrap}.top nav a{color:var(--muted);text-decoration:none}.top nav a:hover{color:var(--gold)}
+.top nav{display:flex;gap:14px;font-size:15px;flex-wrap:wrap}.top nav a{color:var(--muted);text-decoration:none}.top nav a:hover{color:var(--gold)}.top{justify-content:flex-start}.top nav{align-items:center;margin-left:auto}.nbs{display:flex;gap:10px;align-items:center}.nb{text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 3px;margin:-3px 0;font-size:13px;border:1px solid var(--edge);border-radius:999px;color:var(--ink)!important;line-height:1.2}.nb img{width:16px;height:16px;border-radius:50%;flex:none}.nb:hover{border-color:var(--gold);color:var(--gold-soft)!important}@media (max-width:640px){.top nav .dsk{display:none}}@media (max-width:359px){header.top nav{font-size:12.5px;gap:4px}}
 .crumb{font-size:14px;color:var(--muted);margin:16px 0 0}.crumb a{color:var(--muted)}
 h1{font:800 clamp(26px,5vw,38px)/1.1 var(--f-display);margin:10px 0 8px;color:var(--gold-soft);text-wrap:balance;display:flex;align-items:center;gap:12px}h1 img{width:44px;height:44px;border-radius:8px}
 h2{font:800 clamp(20px,3.6vw,26px)/1.15 var(--f-display);color:var(--gold-soft);margin:34px 0 12px}
@@ -60,7 +60,7 @@ tr:last-child td{border-bottom:0}td.n{font-variant-numeric:tabular-nums;color:va
 footer{border-top:1px solid var(--edge);margin-top:40px;padding-block:22px 36px;color:var(--muted);font-size:14px;text-align:center}
 .lvl-row td:first-child{width:70px}
 table.races{width:auto;min-width:0}table.races th,table.races td{padding-right:28px;white-space:nowrap}
-@media (max-width:640px){.top{flex-wrap:wrap}.top nav{width:100%;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;gap:18px;padding-bottom:2px}}`;
+@media (max-width:640px){.top{flex-wrap:wrap}.top nav{width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.top .nbs{margin-left:auto}}`;
 const FONTS='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Alegreya+Sans:wght@400;500;700&display=swap">';
 function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -68,7 +68,7 @@ function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype 
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}img/og.jpg"><meta name="theme-color" content="#0b0e15">
 <link rel="icon" type="image/png" href="${p}favicon.png">${FONTS}<style>${CSS}</style></head><body>
 <div class="gut"><div class="wrap"><header class="top"><a class="brand" href="${p}./"><img src="${p}img/avatar.webp" alt="">Talentsmith</a>
-<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}builds/">Builds</a><a href="${p}changes.html">Changes</a><a href="${p}./#picker">Race picker</a><a href="https://ko-fi.com/bigdforever" rel="noopener">Ko-fi</a></nav></header>
+<nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}builds/">Builds</a><a href="${p}changes.html">Changes</a><a href="${p}./#picker">Race picker</a><a class="dsk" href="${p}./#races">Racials</a></nav><span class="nbs"><a class="nb" href="https://bigdforever.com/" rel="noopener"><img src="${p}img/bigd-icon.webp" alt="" width="16" height="16">BigD</a><a class="nb" href="https://ko-fi.com/bigdforever" rel="noopener"><img src="${p}img/coin.svg" alt="" width="16" height="16">Ko-fi</a></span></header>
 ${body}</div></div>
 <footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/bigdforever" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
 <p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our own, made from the live WoW Forever talent trees.</p>

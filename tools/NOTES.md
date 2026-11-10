@@ -100,3 +100,8 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - Umami Cloud live Nov 10: website ID 514e18a2-39d1-4a61-b429-dae9f1b6f5bc, script next to the Cloudflare beacon on all pages (index, calculator, gen-pages template). One delegated click listener tracks: build-link-copied (#share), reset (#reset), class-opened {class} (data-cls), tip-click (ko-fi links), bigd-click (bigdforever links). Every new page needs both snippets.
 - Review 22 (weekly note) rejected: the analytics chat writes the reports; Talentsmith chat receives them via the owner.
 - Review 20b approved (owner: "option 3 for PC, 2 for mobile" = calculator-style full menu incl. Racials on PC, class-page menu without Racials on phones) and shipped Nov 10. Review 15 (Search Console) moved to the analytics chat.
+- Nov 10 owner requests, shipped directly ("done now"):
+  - Home: "Every race & racial" and "Latest racial changes" fold (heading button, start closed; open via #races/#changes links). #changes now full width so its heading lines up with the other sections.
+  - Changes log rewritten: one line per change with a coloured tag (Horde race red, Alliance blue, Skyborne teal, classes in class colours, gold for Talents/Talentsmith/All races). Every date is a <details>; newest open. Log HTML lives in index.html; changes.html copies it (LOGCSS in gen-pages). New log entries must follow this format.
+  - Builds page: each class folds, and inside it Meta and Off-meta fold separately.
+  - Calculator: "Meta / Off-meta" button after My builds opens a panel with a Meta row and an Off-meta row; a click loads that build. Data injected by gen-pages between /*PRESETS*/ markers (run gen-pages after editing builds). Umami event preset-loaded {build}.

@@ -80,6 +80,9 @@ const KO=['Raid','Dungeon','DPS','Tank','Healer','Leveling','PvP'];
 const bcard=(b,p)=>`<a class="card" style="text-decoration:none;color:var(--ink);display:block" href="${p}${b.c}-${b.id}.html"><span class="tag ${b.kind==='Leveling'?'lv':''}">${b.kind}</span><h3 style="margin:8px 0 4px;font:800 18px var(--f-display);color:var(--gold-soft)">${esc(b.name)}</h3><p style="margin:0;color:#d8cfbf;font-size:15.5px">${esc(b.blurb)}</p><p class="split" style="margin:8px 0 0">Split <b>${b.split.join(' / ')}</b> · level order →</p></a>`;
 const twoCols=(L,p)=>{const srt=a=>a.sort((x,y)=>KO.indexOf(x.kind)-KO.indexOf(y.kind));const m=srt(L.filter(b=>b.group!=='off')),o=srt(L.filter(b=>b.group==='off'));
   return `<div class="cols2"><div><h3 style="color:#8fc4e8">Meta <span class="pill">${m.length}</span></h3><p class="old" style="margin:-4px 0 10px">The builds most players run.</p><div class="stack">${m.map(b=>bcard(b,p)).join('')||'<p class="old">None yet.</p>'}</div></div><div><h3 style="color:var(--ember)">Off-meta <span class="pill">${o.length}</span></h3><p class="old" style="margin:-4px 0 10px">Uncommon builds that can work – try something different.</p><div class="stack">${o.map(b=>bcard(b,p)).join('')||'<p class="old">None yet.</p>'}</div></div></div>`;};
+const foldCols=(L,p)=>{const srt=a=>a.sort((x,y)=>KO.indexOf(x.kind)-KO.indexOf(y.kind));const m=srt(L.filter(b=>b.group!=='off')),o=srt(L.filter(b=>b.group==='off'));
+  const grp=(t,c,n,d,arr)=>`<details class="bgrp"><summary><span style="color:${c}">${t}</span> <span class="pill">${n}</span><span class="old">${d}</span></summary><div class="stack">${arr.map(b=>bcard(b,p)).join('')||'<p class="old">None yet.</p>'}</div></details>`;
+  return `<div class="cols2">${grp('Meta','#8fc4e8',m.length,'The builds most players run.',m)}${grp('Off-meta','var(--ember)',o.length,'Uncommon builds that can work.',o)}</div>`;};
 // race picks
 function bestRaces(cls,b){const C=ctx.CCL[cls].name;const res={};
   for(const fac of ['horde','alliance']){res[fac]={};for(const [k] of ctx.CTX){
@@ -120,10 +123,36 @@ for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;
 fs.writeFileSync(R+'classes/index.html',page(true,'WoW Forever Class Guides – Best Race & Builds | Talentsmith','Every WoW Forever class: meta and off-meta talent builds with level-by-level order, and the best race per spec.',`<h1>Class guides</h1><p class="lede">Pick a class for its meta and off-meta builds and best races.</p><div class="grid">${cards.join('')}</div>`,'classes/'));
 // ---- builds index
 {const body=`<h1>WoW Forever builds</h1><p class="lede">${out.length} talent builds for all nine classes, each with a level-by-level order from 10 to 60 and a calculator link. Meta builds are what most players run; off-meta builds are the uncommon ones that can work.</p>
-<p>${ORDER.map(c=>`<a href="#${c}">${ctx.CLASSES[c].name}</a>`).join(' · ')}</p>`+ORDER.map(c=>`<h2 id="${c}" style="display:flex;align-items:center;gap:10px"><img src="../img/icons/class-${c}.webp" alt="" width="34" height="34" style="border-radius:7px">${ctx.CLASSES[c].name}</h2>${twoCols(out.filter(b=>b.c===c),'')}`).join('');
+<p>${ORDER.map(c=>`<a href="#${c}">${ctx.CLASSES[c].name}</a>`).join(' · ')}</p>`+'<style>.bcls{margin:12px 0;border:1px solid var(--edge,#2a2f3a);border-radius:12px;background:rgba(255,255,255,.02)}.bcls>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px;font:800 22px/1.1 var(--f-display);color:var(--gold-soft)}.bcls>summary::-webkit-details-marker,.bgrp>summary::-webkit-details-marker{display:none}.bcls>summary::after,.bgrp>summary::after{content:"▾";margin-left:auto;color:var(--gold);font-size:14px;transition:transform .2s}.bcls[open]>summary::after,.bgrp[open]>summary::after{transform:rotate(180deg)}.bcls>summary .cnt{font:500 14px var(--f-body);color:var(--muted)}.bcls>.cols2{padding:0 16px 16px}.bgrp{border:1px solid var(--edge,#2a2f3a);border-radius:10px;padding:0 12px}.bgrp>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;font:800 19px/1.1 var(--f-display)}.bgrp>summary .old{font:400 14px var(--f-body);flex-basis:100%;margin:2px 0 0;order:3}.bgrp>summary::after{order:2}.bgrp>.stack{padding:0 0 12px}</style>'+ORDER.map(c=>{const L=out.filter(b=>b.c===c);return `<details class="bcls" id="${c}"><summary><img src="../img/icons/class-${c}.webp" alt="" width="34" height="34" style="border-radius:7px">${ctx.CLASSES[c].name}<span class="cnt">${L.length} builds</span></summary>${foldCols(L,'')}</details>`;}).join('')+'<script>(()=>{const o=()=>{const d=document.getElementById(location.hash.slice(1));if(d&&d.tagName==="DETAILS"){d.open=true;d.scrollIntoView();}};addEventListener("hashchange",o);o();})();</script>';
  urls.push('builds/');fs.writeFileSync(R+'builds/index.html',page(true,'WoW Forever Talent Builds – Meta & Off-meta for Every Class | Talentsmith',`${out.length} WoW Forever talent builds: meta and off-meta builds for every class and spec with level-by-level talent order.`,body,'builds/'));}
+// ---- calculator presets (Meta / Off-meta button)
+{const P={};for(const c of ORDER){const L=out.filter(b=>b.c===c).sort((x,y)=>(x.group==='off')-(y.group==='off')||KO.indexOf(x.kind)-KO.indexOf(y.kind));P[c]=L.map(b=>[b.group==='off'?'off':'meta',b.name,b.kind,b.code,b.ord,b.id]);}
+ const cp=R+'calculator.html';let h=fs.readFileSync(cp,'utf8');const re=/\/\*PRESETS\*\/[\s\S]*?\/\*\/PRESETS\*\//;
+ if(!re.test(h)) throw new Error('PRESETS marker missing in calculator.html');
+ h=h.replace(re,()=>'/*PRESETS*/const PRESETS='+JSON.stringify(P)+';/*/PRESETS*/');fs.writeFileSync(cp,h);}
 // ---- changes page
-const log=idx.slice(idx.indexOf('<ol class="log">'),idx.indexOf('</ol>')+5).replace('<ol class="log">','<ol style="padding-left:20px;display:grid;gap:12px">').replace(/<time>/g,'<b style="color:var(--gold)">').replace(/<\/time>/g,'</b>');
+const LOGCSS=`.log{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px solid #3b352f;display:flex;flex-direction:column;gap:14px}
+.log>li{position:relative}
+.log>li::before{content:"";position:absolute;left:-30px;top:5px;width:12px;height:12px;transform:rotate(45deg);background:#0b0e15;border:2px solid var(--gold)}
+.log>li:first-child::before{background:var(--ember);border-color:var(--gold-soft);box-shadow:0 0 12px var(--ember)}
+.log summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;position:relative;padding-right:26px}
+.log summary::-webkit-details-marker{display:none}
+.log summary::after{content:"▾";color:var(--gold);font-size:13px;transition:transform .2s;position:absolute;right:4px;top:0}
+.log details[open] summary::after{transform:rotate(180deg)}
+.log time{font:700 14px/1 var(--f-display);letter-spacing:.08em;color:var(--gold);min-width:52px}
+.log .gist{color:#d8cfbf;font-size:15.5px}
+.log .items{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px;max-width:80ch}
+.log .items li{display:flex;gap:10px;align-items:baseline;color:#d8cfbf;line-height:1.5}
+.tg{flex:none;font:700 11.5px/1 var(--f-body,inherit);letter-spacing:.04em;padding:4px 8px;border-radius:6px;border:1px solid;min-width:86px;text-align:center}
+.tg.h{color:#ff9a8a;border-color:rgba(255,110,90,.45);background:rgba(160,30,20,.22)}
+.tg.a{color:#9cc7ff;border-color:rgba(90,150,255,.45);background:rgba(20,60,160,.22)}
+.tg.sky{color:#9fe6d8;border-color:rgba(90,210,190,.45);background:rgba(20,120,110,.2)}
+.tg.gen{color:var(--gold-soft);border-color:rgba(233,180,76,.4);background:rgba(233,180,76,.1)}
+.tg[class*="c-"]{background:rgba(255,255,255,.04)}
+.tg.c-warrior{color:#C69B6D;border-color:#C69B6D80}.tg.c-paladin{color:#F48CBA;border-color:#F48CBA80}.tg.c-hunter{color:#AAD372;border-color:#AAD37280}.tg.c-rogue{color:#FFF468;border-color:#FFF46880}.tg.c-priest{color:#fff;border-color:#ffffff80}.tg.c-shaman{color:#4aa3ff;border-color:#4aa3ff80}.tg.c-mage{color:#3FC7EB;border-color:#3FC7EB80}.tg.c-warlock{color:#a3a4ff;border-color:#a3a4ff80}.tg.c-druid{color:#FF7C0A;border-color:#FF7C0A80}
+@media (max-width:640px){.log .items li{display:block}.tg{display:inline-block;min-width:0;margin:0 8px 0 0;vertical-align:1px}}
+.log{margin-top:8px}`;
+const log='<style>'+LOGCSS+'</style>'+idx.slice(idx.indexOf('<ol class="log">'),idx.indexOf('</ol>')+5);
 fs.writeFileSync(R+'changes.html',page(false,'WoW Forever Hotfixes & Changes Tracker | Talentsmith','WoW Forever hotfixes and racial changes, checked against the live game, plus what is coming next.',
 `<h1>Hotfixes &amp; changes</h1><p class="lede">Live WoW Forever hotfixes and racial changes, newest first. The talent calculator matches the live game (build 1.60.1.70862, checked Nov 9).</p>${log}`,'changes.html'));
 // ---- sitemap/robots

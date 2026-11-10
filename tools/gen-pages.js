@@ -39,7 +39,7 @@ a{color:var(--gold)}.gut{padding-left:max(16px,env(safe-area-inset-left));paddin
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gold-soft);font:800 18px/1 var(--f-display);letter-spacing:.06em}.brand img{width:34px;height:34px;border-radius:50%}
 .top nav{display:flex;gap:14px;font-size:15px;flex-wrap:wrap}.top nav a{color:var(--muted);text-decoration:none}.top nav a:hover{color:var(--gold)}.top{justify-content:flex-start}.top nav{align-items:center;margin-left:auto}.nbs{display:flex;gap:10px;align-items:center}.nb{text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 3px;margin:-3px 0;font-size:13px;border:1px solid var(--edge);border-radius:999px;color:var(--ink)!important;line-height:1.2}.nb img{width:16px;height:16px;border-radius:50%;flex:none}.nb:hover{border-color:var(--gold);color:var(--gold-soft)!important}@media (max-width:640px){.top nav .dsk{display:none}}@media (max-width:359px){header.top nav{font-size:12.5px;gap:4px}}
 .crumb{font-size:14px;color:var(--muted);margin:16px 0 0}.crumb a{color:var(--muted)}
-h1{font:800 clamp(26px,5vw,38px)/1.1 var(--f-display);margin:10px 0 8px;color:var(--gold-soft);text-wrap:balance;display:flex;align-items:center;gap:12px}h1 img{width:44px;height:44px;border-radius:8px}
+h1{font:800 clamp(26px,5vw,38px)/1.1 var(--f-display);margin:10px 0 8px;color:var(--gold-soft);text-wrap:balance;display:flex;align-items:center;gap:12px;overflow-wrap:anywhere}h1 img{width:44px;height:44px;border-radius:8px}
 h2{font:800 clamp(20px,3.6vw,26px)/1.15 var(--f-display);color:var(--gold-soft);margin:34px 0 12px}
 .lede{color:var(--muted);max-width:70ch;margin:0 0 8px}
 .card{background:linear-gradient(180deg,var(--plate-2),var(--plate));border:1px solid var(--edge);border-radius:10px;padding:16px}
@@ -63,10 +63,10 @@ table.races{width:auto;min-width:0}table.races th,table.races td{padding-right:2
 @media (max-width:640px){.top{flex-wrap:wrap}.top nav{width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.top .nbs{margin-left:auto}}`;
 const FONTS='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Alegreya+Sans:wght@400;500;700&display=swap">';
 function crumbs(title,canon){const parts=canon.split('/').filter(Boolean),it=[['Talentsmith',SITE]];const sec={builds:'Builds',classes:'Class guides'}[parts[0]];if(sec)it.push([sec,SITE+parts[0]+'/']);if(!sec||parts.length>1)it.push([title.split(/ [–|] /)[0],SITE+canon]);return '<script type="application/ld+json">'+JSON.stringify({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":it.map(([n,u],i)=>({"@type":"ListItem","position":i+1,"name":n,"item":u}))}).replace(/</g,'\\u003c')+'</script>';}
-function page(rel,title,desc,body,canon){const p=rel?'../':'';return `<!doctype html>
+function page(rel,title,desc,body,canon,og){const p=rel?'../':'';return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${SITE}${canon}">
-<meta property="og:url" content="${SITE}${canon}"><meta property="og:type" content="article"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}img/og.jpg"><meta name="theme-color" content="#0b0e15">${crumbs(title,canon)}
+<meta property="og:url" content="${SITE}${canon}"><meta property="og:type" content="article"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">${og?`<meta property="og:image" content="${SITE}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">`:`<meta property="og:image" content="${SITE}img/og.jpg">`}<meta name="theme-color" content="#0b0e15">${crumbs(title,canon)}
 <link rel="icon" type="image/png" href="${p}favicon.png">${FONTS}<style>${CSS}</style></head><body>
 <div class="gut"><div class="wrap"><header class="top"><a class="brand" href="${p}./"><img src="${p}img/avatar.webp" alt="">Talentsmith</a>
 <nav><a href="${p}classes/">Classes</a><a href="${p}calculator.html">Calculator</a><a href="${p}builds/">Builds</a><a href="${p}changes.html">Changes</a><a href="${p}./#picker">Race picker</a><a class="dsk" href="${p}./#races">Racials</a></nav><span class="nbs"><a class="nb" href="https://bigdforever.com/" rel="noopener"><img src="${p}img/bigd-icon.webp" alt="" width="16" height="16">BigD</a><a class="nb" href="https://ko-fi.com/bigdforever" rel="noopener"><img src="${p}img/coin.svg" alt="" width="16" height="16">Ko-fi</a></span></header>
@@ -97,7 +97,7 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
   const picked=trees.map((tr,i)=>tr.t.map((x,j)=>[x,b.pts[i][j]]).filter(([,p])=>p>0).map(([x,p])=>`<li>${ti(b.c,x[0])} <span class="pill">${p}/${x[1]}</span></li>`).join('')).map((h,i)=>h?`<div class="card"><h3 style="margin:0 0 8px;font:800 17px var(--f-display);color:var(--gold-soft)">${trees[i].name} · ${b.split[i]}</h3><ul style="list-style:none;margin:0;padding:0;display:grid;gap:6px">${h}</ul></div>`:'').join('');
   const others=out.filter(o=>o.c===b.c&&o.id!==b.id).map(o=>`<a href="${o.c}-${o.id}.html">${esc(o.name)}</a>${o.group==='off'?' <span class="pill">off-meta</span>':''}`).join(' · ');
   const body=`<p class="crumb"><a href="../classes/">Classes</a> › <a href="../classes/${b.c}.html">${C.name}</a> › Build</p>
-<h1><img src="../img/icons/class-${b.c}.webp" alt="">${esc(C.name)} – ${esc(b.name)}</h1>
+<h1><img src="../img/icons/class-${b.c}.webp" alt="">${esc(C.name)} – ${esc(b.name).replace(/\//g,'/<wbr>')}</h1>
 <p>${tags(b)} <span class="split">Split <b>${b.split.join(' / ')}</b> (${trees.map(t=>t.name).join(' / ')})</span></p>
 <p class="lede">${esc(b.blurb)}</p>${b.group==='off'?`<p class="old">Off-meta: not the usual pick, but a build that can work well in Forever. Try it, tweak it in the calculator and share your link.</p>`:''}
 <p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
@@ -106,7 +106,12 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
 <div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>
 ${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
-  fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn));}
+  fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn,fs.existsSync(R+`img/og/${b.c}-${b.id}.jpg`)?`img/og/${b.c}-${b.id}.jpg`:null));}
+// ---- data for share images (tools/og-images.js renders img/og/<class>-<id>.jpg from it)
+{const crypto=require('crypto');const og=out.map(b=>{const C=ctx.CLASSES[b.c];const d={c:b.c,id:b.id,cls:C.name,name:b.name,kind:b.kind,group:b.group,split:b.split,
+  trees:C.trees.map((tr,i)=>({name:tr.name,t:tr.t.map((x,j)=>[x[0],x[1],x[2],x[3],b.pts[i][j],icon(b.c,x[0])])}))};d.hash=crypto.createHash('sha1').update(JSON.stringify(d)).digest('hex').slice(0,12);return d;});
+  fs.writeFileSync(R+'tools/og-builds.json',JSON.stringify(og));
+  const miss=og.filter(d=>!fs.existsSync(R+`img/og/${d.c}-${d.id}.jpg`)).length;if(miss)console.log(`share images missing for ${miss} builds – run node tools/og-images.js, then gen-pages again`);}
 // ---- class pages
 const cards=[];
 for(const c of ORDER){const C=ctx.CLASSES[c],Cn=C.name,trees=C.trees;

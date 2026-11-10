@@ -108,3 +108,8 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - Patch-day kit (Nov 10): tools/gamedata/hotx.py decodes any DBCache hotfix row with the WoWDBDefs layout for 1.60.1 (Spell, SpellEffect, SpellMisc, SpellCooldowns, Trait* … ~95% of rows decode cleanly). tools/gamedata/hotdiff.py OLD NEW lists every changed record. Baseline snapshot: /home/claude/gd/snap/DBCache-2026-11-09-2306.bin (PC file from Nov 9 23:06).
 - Hotfixes reach DBCache.bin only after the owner logs in to a character once the hotfix is live, then exits the game. Then stage C:\Program Files (x86)\World of Warcraft\_forever_\Cache\ADB\enUS\DBCache.bin and diff.
 - Owner (Nov 10): EU gets class hotfixes with the Wednesday 05:00 CET restart, always. Plan: owner logs in 6:15–6:50 before school, exits the game, leaves the PC on with the Claude app open; morning check scheduled 06:40 Wed. Patch page URL: patch-nov-10.html.
+
+## 10 Nov (BigD chat): search tags
+- index.html has a `google-site-verification` meta (Google Search Console, BigD Google account). Keep it.
+- gen-pages.js `page()` now adds og:url, og:type and a BreadcrumbList JSON-LD (`crumbs()`) to every generated page. Keep them when editing the template.
+- Both sites are in Google Search Console + Bing Webmaster; the BigD Report reads search queries and Umami.

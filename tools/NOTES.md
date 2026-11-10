@@ -114,3 +114,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - gen-pages.js `page()` now adds og:url, og:type and a BreadcrumbList JSON-LD (`crumbs()`) to every generated page. Keep them when editing the template.
 - Both sites are in Google Search Console + Bing Webmaster; the BigD Report reads search queries and Umami.
 - Nov 10 16:45 CET check: no official Nov 10 WoW: Forever hotfix notes found yet (searched web + Blizzard news list; forum thread fetch failed). Next check 22:30.
+- Nov 10: the 5 missing icons exported by the owner with wow.export (Vanguard, Arcane Geometry, Demonic Pact, Elemental Insight, Eureka!) replaced the placeholders. Every talent and racial icon now comes from the game.

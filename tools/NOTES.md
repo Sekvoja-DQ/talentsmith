@@ -124,3 +124,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - Review 23 shipped Nov 11 07:50 (owner: "do the rest"). Remove the home "New: Nov 10 class hotfixes" button (centered under the two hero buttons, owner Nov 11) after Nov 18 (marked with a comment in index.html).
 - Owner Nov 11: no unverified player reports on the site (removed the Shaman tooltip heads-up until it checks out).
 - Reddit: owner posted the Nov 10 patch post on r/wowforever (flair "Addons, Apps and Websites") Nov 11 ~08:10. r/wow allows self-promotion once per 7 days; plan: crosspost to r/wow (flair WoW: Forever) Thu Nov 12 if it does well. Next self-promo post no earlier than Nov 18.
+- Nov 11 ~08:11: crossposted to r/classicwowplus (319K weekly visitors, Forever-focused). r/wowclassic skipped. r/wow crosspost planned Thu Nov 12.

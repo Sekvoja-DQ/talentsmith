@@ -109,12 +109,12 @@ const BSECCSS=`<style>details.bsec{margin:26px 0 0}details.bsec>summary{list-sty
 const NOTESCSS=`<style>.notes-h{display:flex;align-items:baseline;gap:10px}.notes-h small{font:600 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--edge);border-radius:99px;padding:2px 9px}
 .pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 22px}.pc.one{grid-template-columns:1fr}.pc>div{background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:14px 16px 10px;border-top:3px solid}.pc .pro{border-top-color:#4fae6a}.pc .con{border-top-color:#d2483c}
 .pc h3{margin:0 0 8px;font:700 16px var(--f-display);display:flex;align-items:center;gap:8px}.pc .pro h3{color:#8fd6a2}.pc .con h3{color:#f08a7e}.pc h3 i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font:800 14px/1 var(--f-body)}.pc .pro h3 i{background:#4fae6a33;color:#8fd6a2}.pc .con h3 i{background:#d2483c33;color:#f08a7e}.pc ul{margin:0;padding:0 0 0 18px}.pc li{margin:0 0 7px;line-height:1.45}
-.flx-h{margin:4px 0 4px;font:700 17px var(--f-display);color:var(--gold-soft)}.flx-sub{margin:0 0 12px;color:var(--muted)}.flx{display:grid;gap:10px;margin:0 0 10px}
-.sw{background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px 14px;align-items:start}.sw .or{align-self:center}.sw .opt{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.flx-h{margin:4px 0 4px;font:700 17px var(--f-display);color:var(--gold-soft)}.flx-sub{margin:0 0 12px;color:var(--muted)}.flx{margin:0 0 10px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:2px 14px}
+.sw{border-top:1px solid var(--edge);padding:12px 0;display:grid;grid-template-columns:1fr auto 1fr;gap:8px 14px;align-items:start}.sw .or{align-self:center}.sw .opt{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .sw .lab{font:700 11px var(--f-body);letter-spacing:.05em;text-transform:uppercase;color:var(--gold);border:1px solid #e9b44c66;border-radius:5px;padding:1px 6px}.sw .lab.alt{color:#8fd6a2;border-color:#4fae6a66}
 .sw .or{font:800 12px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;background:var(--deep);border:1px solid var(--edge);border-radius:99px;padding:4px 10px}
 .sw p{grid-column:1/-1;margin:2px 0 0;color:#d8cfbf;font-size:15px;line-height:1.45}.sw p a{white-space:nowrap}
-@media(max-width:640px){.pc{grid-template-columns:1fr}.sw{grid-template-columns:1fr}.sw .or{justify-self:start}}</style>`;
+.sw:first-child{border-top:0}@media(max-width:640px){.pc{grid-template-columns:1fr}.sw{grid-template-columns:1fr}.sw .or{justify-self:start}}</style>`;
 const ti_=(...a)=>ti(...a);
 function notesHtml(b,trees){const N=b.notes;if(!N)return '';
   const T=(ti,n)=>trees[ti].t.find(y=>y[0]===n);

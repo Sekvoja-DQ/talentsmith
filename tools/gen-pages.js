@@ -37,7 +37,7 @@ function swapList(list,drop,add){const L=list.map(x=>[...x]);
   return L.filter(x=>x[2]>0).concat(add.map(x=>[...x]));}
 for(const [c,id,name,kind,blurb,list,group='meta',notes=null] of BUILDS){
   const {seq,pts,code,ord}=encode(c,id,list);
-  if(notes&&notes.flex)for(const f of notes.flex)f.calc=encode(c,id+' (swap)',swapList(list,f.drop,f.add));
+  if(notes&&notes.flex)for(const f of notes.flex)if(!f.any)f.calc=encode(c,id+' (swap)',swapList(list,f.drop,f.add));
   out.push({c,id,name,kind,blurb,group,notes,seq,pts,code,ord,split:pts.map(p=>p.reduce((a,b)=>a+b,0))});}
 console.log('builds OK',out.length);
 // ---- shared shell
@@ -105,6 +105,7 @@ function bestRaces(cls,b){const C=ctx.CCL[cls].name;const res={};
     res[fac][k]=list[0]?list[0].race.name:'–';}}return res;}
 const urls=['','calculator.html','changes.html','classes/'];
 fs.mkdirSync(R+'classes',{recursive:true});fs.mkdirSync(R+'builds',{recursive:true});
+const BSECCSS=`<style>details.bsec{margin:26px 0 0}details.bsec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;border-radius:6px}details.bsec>summary::-webkit-details-marker{display:none}details.bsec>summary h2{margin:0}details.bsec>summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px}details.bsec>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:translateY(-3px) rotate(45deg);transition:transform .2s;flex:none}details.bsec[open]>summary::after{transform:translateY(2px) rotate(-135deg)}details.bsec>summary .bh{font:500 14px var(--f-body);color:var(--muted)}details.bsec[open]>summary{margin-bottom:12px}.anyc{font-style:italic;color:#d8cfbf}</style>`;
 const NOTESCSS=`<style>.notes-h{display:flex;align-items:baseline;gap:10px}.notes-h small{font:600 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--edge);border-radius:99px;padding:2px 9px}
 .pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 22px}.pc.one{grid-template-columns:1fr}.pc>div{background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:14px 16px 10px;border-top:3px solid}.pc .pro{border-top-color:#4fae6a}.pc .con{border-top-color:#d2483c}
 .pc h3{margin:0 0 8px;font:700 16px var(--f-display);display:flex;align-items:center;gap:8px}.pc .pro h3{color:#8fd6a2}.pc .con h3{color:#f08a7e}.pc h3 i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font:800 14px/1 var(--f-body)}.pc .pro h3 i{background:#4fae6a33;color:#8fd6a2}.pc .con h3 i{background:#d2483c33;color:#f08a7e}.pc ul{margin:0;padding:0 0 0 18px}.pc li{margin:0 0 7px;line-height:1.45}
@@ -119,16 +120,16 @@ function notesHtml(b,trees){const N=b.notes;if(!N)return '';
   const T=(ti,n)=>trees[ti].t.find(y=>y[0]===n);
   const one=(ti,n,r)=>{const x=T(ti,n);return `<span>${ti_(b.c,n,'../',{x:x[5],r,m:x[1]})} <span class="pill">${r}/${x[1]}</span></span>`;};
   const li=L=>L.map(x=>`<li>${esc(x)}</li>`).join('');
-  let h=`${NOTESCSS}<h2 class="notes-h" id="notes">Notes <small>Our take</small></h2>`;
+  let h=`${NOTESCSS}<details class="bsec" id="notes" open><summary><h2 class="notes-h">Notes <small>Our take</small></h2></summary>`;
   if(N.pros||N.cons)h+=`<div class="pc${N.pros&&N.cons?'':' one'}">${N.pros?`<div class="pro"><h3><i>+</i>Pros</h3><ul>${li(N.pros)}</ul></div>`:''}${N.cons?`<div class="con"><h3><i>−</i>Cons</h3><ul>${li(N.cons)}</ul></div>`:''}</div>`;
   if(N.flex){h+=`<h3 class="flx-h">Flexibility – your choice</h3><div class="flx">`;
-    for(const f of N.flex){const P=f.calc.pts;
+    for(const f of N.flex){const P=f.calc?f.calc.pts:null;
       const have=f.drop.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,b.pts[ti][i]);}).join('');
-      const get=f.add.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,P[ti][i]);}).join('');
-      const alt=`../calculator.html?c=${b.c}&b=${f.calc.code}&o=${f.calc.ord}`;
-      h+=`<div class="sw"><div class="opt"><span class="lab">In build</span>${have}</div><span class="or">or</span><div class="opt"><span class="lab alt">Swap to</span>${get}</div><p>${esc(f.why)} <a href="${alt}" data-umami-event="notes-swap-calc">Open this version in the calculator →</a></p></div>`;}
+      const get=f.any?`<span class="anyc">${esc(f.any)}</span>`:f.add.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,P[ti][i]);}).join('');
+      const alt=f.calc?`../calculator.html?c=${b.c}&b=${f.calc.code}&o=${f.calc.ord}`:null;
+      h+=`<div class="sw"><div class="opt"><span class="lab">In build</span>${have}</div><span class="or">or</span><div class="opt"><span class="lab alt">Swap to</span>${get}</div><p>${esc(f.why)}${alt?` <a href="${alt}" data-umami-event="notes-swap-calc">Open this version in the calculator →</a>`:''}</p></div>`;}
     h+=`</div>`;}
-  return h;}
+  return h+`</details>`;}
 const TIPJS=`<style>.ti[data-tip]{cursor:help;border-bottom:1px dotted rgba(233,180,76,.45);padding-bottom:1px;outline:none}.ti[data-tip]:focus-visible{box-shadow:0 0 0 2px var(--gold);border-radius:4px}#ttip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 16px));padding:10px 12px;background:#14161c;border:1px solid var(--gold);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.55);font-size:14.5px;line-height:1.45;color:#e8dfcf;pointer-events:none;display:none}#ttip b{display:block;font:800 15px var(--f-display);color:var(--gold-soft);margin-bottom:4px}#ttip i{font-style:normal;color:var(--muted);font-size:13px;margin-left:6px}</style><div id="ttip" role="tooltip"></div><script>(()=>{const T=document.getElementById("ttip");let cur=null;
 const show=el=>{cur=el;T.innerHTML="";const h=document.createElement("b");h.textContent=el.textContent.trim();const r=document.createElement("i");r.textContent="Rank "+el.dataset.rk;h.appendChild(r);T.appendChild(h);T.appendChild(document.createTextNode(el.dataset.tip));T.style.display="block";
 const b=el.getBoundingClientRect(),w=T.offsetWidth,hh=T.offsetHeight;let x=Math.min(Math.max(8,b.left),innerWidth-w-8),y=b.bottom+8;if(y+hh>innerHeight-8)y=Math.max(8,b.top-hh-8);T.style.left=x+"px";T.style.top=y+"px";};
@@ -150,9 +151,9 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
 <p>${tags(b)} <span class="split">Split <b>${b.split.join(' / ')}</b> (${trees.map(t=>t.name).join(' / ')})</span></p>
 <p class="lede">${esc(b.blurb)}</p>${b.group==='off'?`<p class="old">Off-meta: not the usual pick, but a build that can work well in Forever. Try it, tweak it in the calculator and share your link.</p>`:''}
 <p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
-<h2>Talents in this build</h2><p class="old" style="margin:-6px 0 12px">Hover or tap a talent to see what it does at that rank.</p><div class="grid">${picked}</div>
-<h2>Leveling order</h2><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
-<div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>${notesHtml(b,trees)}
+${BSECCSS}<details class="bsec" open><summary><h2>Talents in this build</h2></summary><p class="old" style="margin:0 0 12px">Hover or tap a talent to see what it does at that rank.</p><div class="grid">${picked}</div></details>
+<details class="bsec" id="order"><summary><h2>Leveling order</h2><span class="bh">level 10 → 60</span></summary><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
+<div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div></details>${notesHtml(b,trees)}
 ${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}${TIPJS}`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn,fs.existsSync(R+`img/og/${b.c}-${b.id}.jpg`)?`img/og/${b.c}-${b.id}.jpg`:null));}

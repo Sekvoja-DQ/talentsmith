@@ -146,7 +146,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .pmtxt .bad{color:var(--ember)}
 .pmtxt .nx .rk-l{color:var(--green)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
+#playBtn[hidden]{display:none}a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}#playBtn{background:var(--gold);color:#1a1205}@media (max-width:640px){.act{display:grid!important;grid-template-columns:repeat(4,1fr);width:100%}#playBtn{grid-column:1/-1;order:-1;padding:12px}}</style>
 </head>
 <body>
 <div class="gut">
@@ -166,6 +166,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
     <div class="act">
       <button type="button" class="btn" id="mine" aria-expanded="false" aria-controls="myb">My builds<span id="mineN"></span></button>
       <button type="button" class="btn" id="presetBtn" aria-expanded="false" aria-controls="presets">Meta / Off-meta</button>
+      <a class="btn" id="playBtn" href="play.html" data-umami-event="calc-play">▶ Play order</a>
       <button type="button" class="btn" id="share">Copy build link</button>
       <button type="button" class="btn" id="reset">Reset</button>
     </div>
@@ -922,7 +923,7 @@ if(canHover){
 /* share: one digit per talent, trees joined with "-" */
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
-function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode();history.replaceState(null,"","?c="+cls+"&b="+code()+(oc?"&o="+oc:""));}catch(e){}}
+function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode(),qs="?c="+cls+"&b="+code()+(oc?"&o="+oc:"");history.replaceState(null,"",qs);const pb=document.getElementById("playBtn");if(pb){pb.href="play.html"+qs;pb.hidden=!oc;}}catch(e){}}
 /* My builds: everything lives in this browser's localStorage – private to the visitor, no account */
 const ST={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 function saveLast(){ST.set("ts_last_"+cls,{b:code(),o:ordCode()});}

@@ -119,7 +119,7 @@ function notesHtml(b,trees){const N=b.notes;if(!N)return '';
   const T=(ti,n)=>trees[ti].t.find(y=>y[0]===n);
   const one=(ti,n,r)=>{const x=T(ti,n);return `<span>${ti_(b.c,n,'../',{x:x[5],r,m:x[1]})} <span class="pill">${r}/${x[1]}</span></span>`;};
   const li=L=>L.map(x=>`<li>${esc(x)}</li>`).join('');
-  let h=`${NOTESCSS}<h2 class="notes-h">Notes <small>Our take</small></h2>`;
+  let h=`${NOTESCSS}<h2 class="notes-h" id="notes">Notes <small>Our take</small></h2>`;
   if(N.pros||N.cons)h+=`<div class="pc${N.pros&&N.cons?'':' one'}">${N.pros?`<div class="pro"><h3><i>+</i>Pros</h3><ul>${li(N.pros)}</ul></div>`:''}${N.cons?`<div class="con"><h3><i>−</i>Cons</h3><ul>${li(N.cons)}</ul></div>`:''}</div>`;
   if(N.flex){h+=`<h3 class="flx-h">Flexibility – your choice</h3><div class="flx">`;
     for(const f of N.flex){const P=f.calc.pts;

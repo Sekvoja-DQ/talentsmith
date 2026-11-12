@@ -59,10 +59,13 @@ h1{font:800 26px/1.15 var(--f-display);color:var(--gold-soft);margin:6px 0 4px;l
 .mock{height:120px;border:1px solid var(--edge);border-radius:10px;margin-top:12px;background:rgba(255,255,255,.02);display:grid;place-items:center;color:var(--muted);font-size:14px}
 @media (max-width:640px){.top{flex-wrap:wrap}.st{margin-left:42px}.fac-btn{font-size:15px;padding:8px 10px;gap:10px;min-height:72px}.fac-btn .emb{height:42px}.fac-btn .cn{width:24px}}
 .who{margin:6px 0 0;font-size:14px;color:var(--muted,#b9b0a0)}.who b{color:var(--gold-soft,#e9c98a)}
-</style></head><body><div class="wrap" id="app"></div>
+.todo{margin:0 0 22px;padding:14px 16px;border:1px solid var(--gold);border-radius:12px;background:rgba(233,180,76,.06)}.todo h2{margin:0 0 10px;font-size:18px}.titem{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-top:1px solid var(--edge)}.titem:first-of-type{border-top:0}.titem p{margin:4px 0 0;color:var(--muted);line-height:1.45}.tdone{flex:none;font:700 14px var(--f-body);padding:8px 14px;border-radius:8px;border:1px solid #4fae6a;background:#4fae6a22;color:#bfe9c9;cursor:pointer}@media(max-width:560px){.titem{flex-direction:column}}</style></head><body><div class="wrap" id="app"></div>
 %%SPRITEDATA%%
 <script>
 /* ---------- proposals (Claude adds new batches here) ---------- */
+const TODO=[
+ {id:"todo-2026-11-12-hit",title:"Export 2 more game files for the Shockadin hit question",what:"In wow.export, export <b>SpellCategories</b> and <b>SpellClassOptions</b> as CSV into the WOW_sucker_for_TALENTSMITH folder, then tell me. I'll then say for sure which Shockadin attacks use spell hit and which use melee hit, and which spells Divine Precision covers."},
+];
 const PROPOSALS=[
 ];
 /* ---------- effects engine (same as the live site, plus the options above) ---------- */
@@ -147,13 +150,16 @@ async function save(id,patch){STATE[id]=Object.assign({},STATE[id]||{},patch,{at
 function paint(id){const card=document.querySelector(`.card[data-id="${id}"]`);if(!card) return;const st=(STATE[id]||{}).status||"";card.className="card "+st;const b=card.querySelector(".st");b.dataset.s=st;b.textContent=LABEL[st];
  const n=card.querySelector(".note");const ta=n.querySelector("textarea");if(document.activeElement!==ta) ta.value=(STATE[id]||{}).note||"";n.querySelector("label").textContent=st==="improve"?"What should change?":st==="rejected"?"Why not? (optional)":"Note (optional)";
  n.hidden=!st;updateCounts();}
-function paintAll(){PROPOSALS.forEach(p=>paint(p.id));applyFilter();}
+function paintTodo(){const box=document.getElementById("todo");if(!box) return;const L=TODO.filter(t=>(STATE[t.id]||{}).status!=="done");
+ box.hidden=!L.length;box.innerHTML=L.length?`<h2>Your to-do</h2>`+L.map(t=>`<div class="titem"><div><b>${t.title}</b><p>${t.what}</p></div><button type="button" class="tdone" data-todo="${t.id}">Done</button></div>`).join(""):"";}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-todo]");if(b){save(b.dataset.todo,{status:"done"});paintTodo();}});
+function paintAll(){PROPOSALS.forEach(p=>paint(p.id));applyFilter();paintTodo();}
 function updateCounts(){const open=PROPOSALS.filter(p=>!(STATE[p.id]||{}).status).length;const t=document.querySelector('[data-f="open"]');if(t) t.textContent="To review ("+open+")";const a=document.querySelector('[data-f="all"]');if(a) a.textContent="All ("+PROPOSALS.length+")";}
 function applyFilter(){document.querySelectorAll(".card[data-id]").forEach(c=>{const st=(STATE[c.dataset.id]||{}).status||"";c.hidden=filter==="open"&&!!st&&!c.contains(document.activeElement)&&!c.dataset.keep;});document.querySelectorAll("[data-f]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.f===filter));}
 /* ---------- views ---------- */
 function queue(){const app=document.getElementById("app");app.innerHTML=`<h1>Talentsmith review queue</h1><p class="lede">Changes I'd like to make to the site. Each one shows exactly how it would look – play with the buttons, open it on the page, then tap the status button.</p>
  <div class="legend">Status button: tap once <b style="color:#a6e3a8">Approved</b> → twice <b style="color:#f3a99e">Not approved</b> → three times <b style="color:var(--gold-soft)">Improve</b> → four times clears it. Your choice saves by itself.</div>
- <p class="banner" id="banner" hidden></p><div class="tabs"><button type="button" data-f="open">To review</button><button type="button" data-f="all">All</button></div><div id="list"></div>`;
+ <p class="banner" id="banner" hidden></p><section class="todo" id="todo"></section><div class="tabs"><button type="button" data-f="open">To review</button><button type="button" data-f="all">All</button></div><div id="list"></div>`;
  const list=app.querySelector("#list");
  PROPOSALS.forEach(p=>{const c=document.createElement("article");c.className="card";c.dataset.id=p.id;
   c.innerHTML=`<div class="top"><span class="num">${p.n}</span><div><h2>${p.title}</h2><p>${p.what}</p>${p.you?`<p class="who"><b>You:</b> ${p.you}</p>`:""}${p.me?`<p class="who"><b>Me:</b> ${p.me}</p>`:""}<div class="meta">Proposed ${p.id.slice(0,10)}</div></div><button type="button" class="st" data-s="">${LABEL[""]}</button></div>

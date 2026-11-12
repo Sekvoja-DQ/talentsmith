@@ -67,6 +67,7 @@ const TODO=[
  {id:"todo-2026-11-12-hit",title:"Export 2 more game files for the Shockadin hit question",what:"In wow.export, export <b>SpellCategories</b> and <b>SpellClassOptions</b> as CSV into the WOW_sucker_for_TALENTSMITH folder, then tell me. I'll then say for sure which Shockadin attacks use spell hit and which use melee hit, and which spells Divine Precision covers."},
 ];
 const PROPOSALS=[
+ {id:"2026-11-12-26",n:26,text:true,title:"Leveling player on every build page",what:"Your idea, built as a working prototype with your Shockadin endgame: <a href=\"https://claude.ai/artifact/2SNosYiu494YKTS2zhoL1w\" target=\"_blank\" rel=\"noopener\">open the prototype</a>. Play / pause, one level back or forward, back to the start, and a bar you can drag to any level (small ticks mark where a new talent starts, colored by tree). 2 sec per new talent, 0.5 sec per extra rank. The talent just taken has a bright particle trail around its frame and bursts when it gets a point; the next new talent has a faint, smaller trail. The tree being filled is in color, the others are toned down; on phones it switches to that tree by itself. <b>Text</b> switch shows the level list (tap a row to jump). If approved: it replaces the Leveling order section on all builds (animation by default, text on the switch)."},
 ];
 /* ---------- effects engine (same as the live site, plus the options above) ---------- */
 const IMG={};"%%SPRITES%%".split(",").forEach(k=>{const i=new Image();i.src=document.getElementById("s-"+k).textContent;IMG[k]=i;});

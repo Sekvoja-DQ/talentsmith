@@ -129,7 +129,7 @@ function notesHtml(b,trees){const N=b.notes;if(!N)return '';
   if(N.pros||N.cons)h+=`<div class="pc${N.pros&&N.cons?'':' one'}">${N.pros?`<div class="pro"><h3><i>+</i>Pros</h3><ul>${li(N.pros)}</ul></div>`:''}${N.cons?`<div class="con"><h3><i>−</i>Cons</h3><ul>${li(N.cons)}</ul></div>`:''}</div>`;
   if(N.flex){h+=`<h3 class="flx-h">Flexibility – your choice</h3><div class="flx">`;
     for(const f of N.flex){const P=f.calc?f.calc.pts:null;
-      const have=f.drop.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,b.pts[ti][i]);}).join('');
+      const have=f.drop.map(([ti,n,k])=>{const i=trees[ti].t.findIndex(y=>y[0]===n),r=b.pts[ti][i];return k<r?one(ti,n,r).replace(/<span class="pill">[^<]*<\/span>/,`<span class="pill">last ${k} pt${k>1?'s':''}</span>`):one(ti,n,r);}).join('');
       const get=f.any?`<span class="anyc">${esc(f.any)}</span>`:f.add.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,P[ti][i]);}).join('');
       const alt=f.calc?`../calculator.html?c=${b.c}&b=${f.calc.code}&o=${f.calc.ord}`:null;
       h+=`<div class="sw"><div class="opt"><span class="lab">In build</span>${have}</div><span class="or">or</span><div class="opt"><span class="lab alt">Swap to</span>${get}</div>${f.why||alt?`<p>${esc(f.why||'')}${alt?` <a href="${alt}" data-umami-event="notes-swap-calc">Open this version in the calculator →</a>`:''}</p>`:''}</div>`;}

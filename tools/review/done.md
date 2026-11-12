@@ -20,3 +20,4 @@
 - #18 Patch-day page: talent changes, straight from the game (2026-11-10-18)
 - #19 Share it where players talk (2026-11-10-19)
 - #20 BigD and Ko-fi buttons in the top row (v2) (2026-11-10-20b)
+- #25 Build notes: pros, cons and swaps (2026-11-12-25) – live on Shockadin endgame, 2026-11-12

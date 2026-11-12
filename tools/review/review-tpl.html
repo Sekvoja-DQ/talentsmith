@@ -64,7 +64,6 @@ h1{font:800 26px/1.15 var(--f-display);color:var(--gold-soft);margin:6px 0 4px;l
 <script>
 /* ---------- proposals (Claude adds new batches here) ---------- */
 const PROPOSALS=[
- {id:"2026-11-12-25",n:25,title:"Build notes: pros, cons and swaps",what:"A new <b>Notes</b> part under the leveling order on every build page (example: Shockadin leveling). <b>Pros</b> (green) and <b>Cons</b> (red) side by side, on phones one under the other. Below, <b>Flexibility – your choice</b>: each row shows the talent in the build, then OR, then a swap that costs the same points at the same level, with one line on why you would pick either. Talent names keep the hover/tap descriptions. Builds without notes look exactly as now. Notes can be written for any build, one by one, and it is fine if most builds have none.",shots:"notes"},
 ];
 /* ---------- effects engine (same as the live site, plus the options above) ---------- */
 const IMG={};"%%SPRITES%%".split(",").forEach(k=>{const i=new Image();i.src=document.getElementById("s-"+k).textContent;IMG[k]=i;});

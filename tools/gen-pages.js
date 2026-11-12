@@ -7,6 +7,7 @@ let s=calc.slice(calc.indexOf('const PALADIN='),calc.indexOf('const SOON='));
 vm.runInContext(s.replace(/\bconst (\w+)=/g,'var $1=')+';var CCL=CLASSES;',ctx);
 let t=idx.slice(idx.indexOf('const H="horde"'),idx.indexOf('const byId='));
 vm.runInContext(t.replace(/\bconst (\w+)=/g,'var $1=')+';',ctx);
+{const a=calc.indexOf('function rankText(');vm.runInContext(calc.slice(a,calc.indexOf('\n}\n',a)+2),ctx);}
 {const a=calc.indexOf('const TICON=');vm.runInContext(calc.slice(a,calc.indexOf('\n',a)).replace('const ','var '),ctx);}
 const BUILDS=require('./builds.js');ctx.CLASSES=ctx.CCL;
 const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -74,7 +75,12 @@ ${body}</div></div>
 <footer class="gut"><div class="wrap"><p><a href="https://ko-fi.com/bigdforever" rel="noopener">Support Talentsmith on Ko-fi</a> – it keeps new builds and calculators coming.</p>
 <p>Fan-made, not affiliated with Blizzard Entertainment. Builds and race picks are our own, made from the live WoW Forever talent trees.</p>
 <p style="font-size:12px;opacity:.8">World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. Game icons © Blizzard Entertainment, Inc.</p></div></footer><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --></body></html>`;}
-const ti=(c,n,p='../')=>`<span class="ti"><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;
+// tooltip text at rank r; at max rank drop the "up to" and per-rank lists the calculator uses for scaling
+const tipText=(x,r,m)=>{if(r<m||m<=1||!ctx.rankText(x,1,m).scaled)return ctx.rankText(x,r,m).t;
+  let t=x.replace(/\s*\(((?:[\d.]+\s*\/\s*)+[\d.]+)\s*(?:%|\s?sec|\s?yd)?\)/g,(a,b)=>b.split('/').length===m?'':a).replace(/\s*\([\d.]+(?:%|\s?sec)?\s+per rank\)|,\s*[\d.]+(?:%|\s?sec)?\s+per rank/g,'');
+  t=t.replace(/\b([Uu])p to\s+(?=(?:a\s+|an\s+|\+)?[\d.]+(?:%|\s?sec|\s?yd)?(?!\s*(?:more\s+|extra\s+)?(?:times|enemies|targets|target|allies|charges|stacks|members|people)\b))/g,(a,U)=>U==='U'?'\u0001':'');
+  return t.replace(/\u0001(.)/,(a,c)=>c.toUpperCase()).replace(/\s+([,.;)])/g,'$1').replace(/\s{2,}/g,' ');};
+const ti=(c,n,p='../',tip)=>`<span class="ti"${tip?` tabindex="0" data-rk="${tip.r}/${tip.m}" data-tip="${esc(tipText(tip.x,tip.r,tip.m))}"`:''}><img src="${p}img/talents/${icon(c,n)}.webp" alt="" width="26" height="26" loading="lazy">${esc(n)}</span>`;
 const calcUrl=(b,p='../')=>`${p}calculator.html?c=${b.c}&b=${b.code}&o=${b.ord}`;
 const tags=b=>`<span class="tag ${b.group}">${b.group==='off'?'Off-meta':'Meta'}</span> <span class="tag ${b.kind==='Leveling'?'lv':''}">${b.kind}</span>`;
 const KO=['Raid','Dungeon','DPS','Tank','Healer','Leveling','PvP'];
@@ -91,20 +97,31 @@ function bestRaces(cls,b){const C=ctx.CCL[cls].name;const res={};
     res[fac][k]=list[0]?list[0].race.name:'–';}}return res;}
 const urls=['','calculator.html','changes.html','classes/'];
 fs.mkdirSync(R+'classes',{recursive:true});fs.mkdirSync(R+'builds',{recursive:true});
+const TIPJS=`<style>.ti[data-tip]{cursor:help;border-bottom:1px dotted rgba(233,180,76,.45);padding-bottom:1px;outline:none}.ti[data-tip]:focus-visible{box-shadow:0 0 0 2px var(--gold);border-radius:4px}#ttip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 16px));padding:10px 12px;background:#14161c;border:1px solid var(--gold);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.55);font-size:14.5px;line-height:1.45;color:#e8dfcf;pointer-events:none;display:none}#ttip b{display:block;font:800 15px var(--f-display);color:var(--gold-soft);margin-bottom:4px}#ttip i{font-style:normal;color:var(--muted);font-size:13px;margin-left:6px}</style><div id="ttip" role="tooltip"></div><script>(()=>{const T=document.getElementById("ttip");let cur=null;
+const show=el=>{cur=el;T.innerHTML="";const h=document.createElement("b");h.textContent=el.textContent.trim();const r=document.createElement("i");r.textContent="Rank "+el.dataset.rk;h.appendChild(r);T.appendChild(h);T.appendChild(document.createTextNode(el.dataset.tip));T.style.display="block";
+const b=el.getBoundingClientRect(),w=T.offsetWidth,hh=T.offsetHeight;let x=Math.min(Math.max(8,b.left),innerWidth-w-8),y=b.bottom+8;if(y+hh>innerHeight-8)y=Math.max(8,b.top-hh-8);T.style.left=x+"px";T.style.top=y+"px";};
+const hide=()=>{cur=null;T.style.display="none";};
+const fine=matchMedia("(hover:hover)").matches;
+document.addEventListener("mouseover",e=>{if(!fine)return;const el=e.target.closest(".ti[data-tip]");if(el)show(el);else if(cur)hide();});
+let was=null;document.addEventListener("pointerdown",e=>{const el=e.target.closest(".ti[data-tip]");was=el&&cur===el?el:null;},true);
+document.addEventListener("click",e=>{const el=e.target.closest(".ti[data-tip]");if(el){if(was===el&&!fine)hide();else show(el);}else hide();});
+document.addEventListener("focusin",e=>{const el=e.target.closest&&e.target.closest(".ti[data-tip]");if(el)show(el);});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")hide();});
+addEventListener("scroll",()=>{if(cur)hide();},{passive:true});})();</script>`;
 // ---- build pages
 for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
-  const rows=b.seq.map(x=>`<tr class="lvl-row"><td class="n">${x.lvl}</td><td>${ti(b.c,x.tn)} <span class="pill">${x.rank}/${x.max}</span></td><td class="n">${trees[x.ti].name}</td></tr>`).join('');
-  const picked=trees.map((tr,i)=>tr.t.map((x,j)=>[x,b.pts[i][j]]).filter(([,p])=>p>0).map(([x,p])=>`<li>${ti(b.c,x[0])} <span class="pill">${p}/${x[1]}</span></li>`).join('')).map((h,i)=>h?`<div class="card"><h3 style="margin:0 0 8px;font:800 17px var(--f-display);color:var(--gold-soft)">${trees[i].name} · ${b.split[i]}</h3><ul style="list-style:none;margin:0;padding:0;display:grid;gap:6px">${h}</ul></div>`:'').join('');
+  const rows=b.seq.map(x=>`<tr class="lvl-row"><td class="n">${x.lvl}</td><td>${ti(b.c,x.tn,'../',{x:trees[x.ti].t.find(y=>y[0]===x.tn)[5],r:x.rank,m:x.max})} <span class="pill">${x.rank}/${x.max}</span></td><td class="n">${trees[x.ti].name}</td></tr>`).join('');
+  const picked=trees.map((tr,i)=>tr.t.map((x,j)=>[x,b.pts[i][j]]).filter(([,p])=>p>0).map(([x,p])=>`<li>${ti(b.c,x[0],'../',{x:x[5],r:p,m:x[1]})} <span class="pill">${p}/${x[1]}</span></li>`).join('')).map((h,i)=>h?`<div class="card"><h3 style="margin:0 0 8px;font:800 17px var(--f-display);color:var(--gold-soft)">${trees[i].name} · ${b.split[i]}</h3><ul style="list-style:none;margin:0;padding:0;display:grid;gap:6px">${h}</ul></div>`:'').join('');
   const others=out.filter(o=>o.c===b.c&&o.id!==b.id).map(o=>`<a href="${o.c}-${o.id}.html">${esc(o.name)}</a>${o.group==='off'?' <span class="pill">off-meta</span>':''}`).join(' · ');
   const body=`<p class="crumb"><a href="../classes/">Classes</a> › <a href="../classes/${b.c}.html">${C.name}</a> › Build</p>
 <h1><img src="../img/icons/class-${b.c}.webp" alt="">${esc(C.name)} – ${esc(b.name).replace(/\//g,'/<wbr>')}</h1>
 <p>${tags(b)} <span class="split">Split <b>${b.split.join(' / ')}</b> (${trees.map(t=>t.name).join(' / ')})</span></p>
 <p class="lede">${esc(b.blurb)}</p>${b.group==='off'?`<p class="old">Off-meta: not the usual pick, but a build that can work well in Forever. Try it, tweak it in the calculator and share your link.</p>`:''}
 <p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
-<h2>Talents in this build</h2><div class="grid">${picked}</div>
+<h2>Talents in this build</h2><p class="old" style="margin:-6px 0 12px">Hover or tap a talent to see what it does at that rank.</p><div class="grid">${picked}</div>
 <h2>Leveling order</h2><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
 <div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>
-${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}`;
+${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}${TIPJS}`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn,fs.existsSync(R+`img/og/${b.c}-${b.id}.jpg`)?`img/og/${b.c}-${b.id}.jpg`:null));}
 // ---- data for share images (tools/og-images.js renders img/og/<class>-<id>.jpg from it)

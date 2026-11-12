@@ -132,3 +132,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - 2026-11-12: build pages – talent tooltips (hover on PC, tap on mobile, keyboard focus) in "Talents in this build" and the leveling order; text per rank via calculator rankText (tipText drops "up to"/per-rank lists at max rank). TIPJS in gen-pages.js.
 - 2026-11-12: new build paladin shock-leveling "2H Shock leveling" (off-meta, Leveling) from the user's calculator link.
 - 2026-11-12: shock-leveling renamed to "Shockadin leveling" (id shockadin-leveling, new talents from user link); old URL is a noindex redirect stub.
+- 2026-11-12: STANDING RULE: keep the review board current – remove items once shipped/done (incl. things the user did himself, e.g. Reddit posts). Removed list goes to tools/review/done.md. Board now holds only #25.

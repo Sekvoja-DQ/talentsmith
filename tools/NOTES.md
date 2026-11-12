@@ -130,3 +130,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 
 - 2026-11-12: patch-nov-10.html ends with a CTA box (Open the calculator / Ready-made builds / BigD). Umami events patch-cta-calculator, patch-cta-builds; BigD click = bigd-click.
 - 2026-11-12: build pages – talent tooltips (hover on PC, tap on mobile, keyboard focus) in "Talents in this build" and the leveling order; text per rank via calculator rankText (tipText drops "up to"/per-rank lists at max rank). TIPJS in gen-pages.js.
+- 2026-11-12: new build paladin shock-leveling "2H Shock leveling" (off-meta, Leveling) from the user's calculator link.

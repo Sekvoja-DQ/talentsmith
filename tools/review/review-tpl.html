@@ -66,6 +66,8 @@ h1{font:800 26px/1.15 var(--f-display);color:var(--gold-soft);margin:6px 0 4px;l
 const TODO=[
  ];
 const PROPOSALS=[
+ {id:"2026-11-12-27",n:27,title:"Patch page: calculator button under every class",what:"From the patch report: 96% of patch-page visitors leave without opening another page. Under each class table (Shaman, Warlock, Hunter…) a gold <b>Open Shaman in the calculator →</b> button opens the calculator with that class loaded, and <b>Shaman builds</b> goes to that class's builds. On phones both buttons are full width. The same block goes on every future patch page.",shots:"patch"},
+ {id:"2026-11-12-28",n:28,title:"Your blue-gold banner as the Notes heading",what:"Uses your new blue-and-gold banner (the one with the star) behind the <b>Notes</b> heading on build pages, so notes stand out from the rest of the page. Only the Notes heading gets it; the other headings stay as they are. Your other new images: the wooden red banner, parchment, chest, coins, chalice and icon set fit BigD better than this site; the blue shield has a fake checkerboard baked into the picture (no real transparency), so it would need cleaning before any use.",shots:"notes"},
 ];
 /* ---------- effects engine (same as the live site, plus the options above) ---------- */
 const IMG={};"%%SPRITES%%".split(",").forEach(k=>{const i=new Image();i.src=document.getElementById("s-"+k).textContent;IMG[k]=i;});

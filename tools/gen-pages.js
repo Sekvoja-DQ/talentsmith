@@ -16,7 +16,7 @@ const icon=(c,n)=>c==='paladin'&&ctx.TICON[n]?ctx.TICON[n]:c+'-'+slug(n);
 const ORDER=['warrior','paladin','hunter','rogue','priest','shaman','mage','warlock','druid'];
 // ---- validate + expand builds
 const out=[];
-for(const [c,id,name,kind,blurb,list,group='meta'] of BUILDS){
+function encode(c,id,list){
   const trees=ctx.CLASSES[c].trees, pts=trees.map(tr=>tr.t.map(()=>0)), seq=[];
   const tot=()=>pts.flat().reduce((a,b)=>a+b,0);
   for(const [ti,tn,n] of list){const i=trees[ti].t.findIndex(x=>x[0]===tn); if(i<0) throw `${id}: no talent ${tn}`;
@@ -30,7 +30,15 @@ for(const [c,id,name,kind,blurb,list,group='meta'] of BUILDS){
   const code=pts.map(p=>p.join('').replace(/0+$/,'')).join('-');
   const ALPH='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',off=trees.map((_,k)=>trees.slice(0,k).reduce((a,tr)=>a+tr.t.length,0));
   const ord=seq.map(x=>ALPH[off[x.ti]+trees[x.ti].t.findIndex(y=>y[0]===x.tn)]).join('');
-  out.push({c,id,name,kind,blurb,group,seq,pts,code,ord,split:pts.map(p=>p.reduce((a,b)=>a+b,0))});}
+    return {seq,pts,code,ord};}
+// a swap in the notes: drop points (taken from the latest picks) and add new ones at the end; checked like a real build
+function swapList(list,drop,add){const L=list.map(x=>[...x]);
+  for(const [ti,tn,n] of drop){let k=n;for(let i=L.length-1;i>=0&&k>0;i--)if(L[i][0]===ti&&L[i][1]===tn){const t=Math.min(k,L[i][2]);L[i][2]-=t;k-=t;} if(k) throw `swap: cannot drop ${tn}`;}
+  return L.filter(x=>x[2]>0).concat(add.map(x=>[...x]));}
+for(const [c,id,name,kind,blurb,list,group='meta',notes=null] of BUILDS){
+  const {seq,pts,code,ord}=encode(c,id,list);
+  if(notes&&notes.flex)for(const f of notes.flex)f.calc=encode(c,id+' (swap)',swapList(list,f.drop,f.add));
+  out.push({c,id,name,kind,blurb,group,notes,seq,pts,code,ord,split:pts.map(p=>p.reduce((a,b)=>a+b,0))});}
 console.log('builds OK',out.length);
 // ---- shared shell
 const CSS=`:root{color-scheme:dark;--night:#0b0e15;--deep:#11151f;--plate:#171c28;--plate-2:#1f2533;--edge:#2c3242;--gold:#e9b44c;--gold-soft:#f6d68e;--ember:#ff7a2f;--ink:#ede4d3;--muted:#a39886;--horde:#d2483c;--alliance:#4c82db;--f-display:"Cinzel",Georgia,serif;--f-body:"Alegreya Sans",system-ui,sans-serif}
@@ -97,6 +105,30 @@ function bestRaces(cls,b){const C=ctx.CCL[cls].name;const res={};
     res[fac][k]=list[0]?list[0].race.name:'–';}}return res;}
 const urls=['','calculator.html','changes.html','classes/'];
 fs.mkdirSync(R+'classes',{recursive:true});fs.mkdirSync(R+'builds',{recursive:true});
+const NOTESCSS=`<style>.notes-h{display:flex;align-items:baseline;gap:10px}.notes-h small{font:600 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--edge);border-radius:99px;padding:2px 9px}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 22px}.pc.one{grid-template-columns:1fr}.pc>div{background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:14px 16px 10px;border-top:3px solid}.pc .pro{border-top-color:#4fae6a}.pc .con{border-top-color:#d2483c}
+.pc h3{margin:0 0 8px;font:700 16px var(--f-display);display:flex;align-items:center;gap:8px}.pc .pro h3{color:#8fd6a2}.pc .con h3{color:#f08a7e}.pc h3 i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font:800 14px/1 var(--f-body)}.pc .pro h3 i{background:#4fae6a33;color:#8fd6a2}.pc .con h3 i{background:#d2483c33;color:#f08a7e}.pc ul{margin:0;padding:0 0 0 18px}.pc li{margin:0 0 7px;line-height:1.45}
+.flx-h{margin:4px 0 4px;font:700 17px var(--f-display);color:var(--gold-soft)}.flx-sub{margin:0 0 12px;color:var(--muted)}.flx{display:grid;gap:10px;margin:0 0 10px}
+.sw{background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px 14px;align-items:start}.sw .or{align-self:center}.sw .opt{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.sw .lab{font:700 11px var(--f-body);letter-spacing:.05em;text-transform:uppercase;color:var(--gold);border:1px solid #e9b44c66;border-radius:5px;padding:1px 6px}.sw .lab.alt{color:#8fd6a2;border-color:#4fae6a66}
+.sw .or{font:800 12px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;background:var(--deep);border:1px solid var(--edge);border-radius:99px;padding:4px 10px}
+.sw p{grid-column:1/-1;margin:2px 0 0;color:#d8cfbf;font-size:15px;line-height:1.45}.sw p a{white-space:nowrap}
+@media(max-width:640px){.pc{grid-template-columns:1fr}.sw{grid-template-columns:1fr}.sw .or{justify-self:start}}</style>`;
+const ti_=(...a)=>ti(...a);
+function notesHtml(b,trees){const N=b.notes;if(!N)return '';
+  const T=(ti,n)=>trees[ti].t.find(y=>y[0]===n);
+  const one=(ti,n,r)=>{const x=T(ti,n);return `<span>${ti_(b.c,n,'../',{x:x[5],r,m:x[1]})} <span class="pill">${r}/${x[1]}</span></span>`;};
+  const li=L=>L.map(x=>`<li>${esc(x)}</li>`).join('');
+  let h=`${NOTESCSS}<h2 class="notes-h">Notes <small>Our take</small></h2>`;
+  if(N.pros||N.cons)h+=`<div class="pc${N.pros&&N.cons?'':' one'}">${N.pros?`<div class="pro"><h3><i>+</i>Pros</h3><ul>${li(N.pros)}</ul></div>`:''}${N.cons?`<div class="con"><h3><i>−</i>Cons</h3><ul>${li(N.cons)}</ul></div>`:''}</div>`;
+  if(N.flex){h+=`<h3 class="flx-h">Flexibility – your choice</h3><div class="flx">`;
+    for(const f of N.flex){const P=f.calc.pts;
+      const have=f.drop.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,b.pts[ti][i]);}).join('');
+      const get=f.add.map(([ti,n])=>{const i=trees[ti].t.findIndex(y=>y[0]===n);return one(ti,n,P[ti][i]);}).join('');
+      const alt=`../calculator.html?c=${b.c}&b=${f.calc.code}&o=${f.calc.ord}`;
+      h+=`<div class="sw"><div class="opt"><span class="lab">In build</span>${have}</div><span class="or">or</span><div class="opt"><span class="lab alt">Swap to</span>${get}</div><p>${esc(f.why)} <a href="${alt}" data-umami-event="notes-swap-calc">Open this version in the calculator →</a></p></div>`;}
+    h+=`</div>`;}
+  return h;}
 const TIPJS=`<style>.ti[data-tip]{cursor:help;border-bottom:1px dotted rgba(233,180,76,.45);padding-bottom:1px;outline:none}.ti[data-tip]:focus-visible{box-shadow:0 0 0 2px var(--gold);border-radius:4px}#ttip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 16px));padding:10px 12px;background:#14161c;border:1px solid var(--gold);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.55);font-size:14.5px;line-height:1.45;color:#e8dfcf;pointer-events:none;display:none}#ttip b{display:block;font:800 15px var(--f-display);color:var(--gold-soft);margin-bottom:4px}#ttip i{font-style:normal;color:var(--muted);font-size:13px;margin-left:6px}</style><div id="ttip" role="tooltip"></div><script>(()=>{const T=document.getElementById("ttip");let cur=null;
 const show=el=>{cur=el;T.innerHTML="";const h=document.createElement("b");h.textContent=el.textContent.trim();const r=document.createElement("i");r.textContent="Rank "+el.dataset.rk;h.appendChild(r);T.appendChild(h);T.appendChild(document.createTextNode(el.dataset.tip));T.style.display="block";
 const b=el.getBoundingClientRect(),w=T.offsetWidth,hh=T.offsetHeight;let x=Math.min(Math.max(8,b.left),innerWidth-w-8),y=b.bottom+8;if(y+hh>innerHeight-8)y=Math.max(8,b.top-hh-8);T.style.left=x+"px";T.style.top=y+"px";};
@@ -120,7 +152,7 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
 <p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
 <h2>Talents in this build</h2><p class="old" style="margin:-6px 0 12px">Hover or tap a talent to see what it does at that rank.</p><div class="grid">${picked}</div>
 <h2>Leveling order</h2><p class="lede">One talent point per level from 10 to 60. Follow it top to bottom.</p>
-<div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="tbl"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div>${notesHtml(b,trees)}
 ${others?`<p style="margin-top:20px">Other ${C.name} builds: ${others}</p>`:''}${TIPJS}`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn,fs.existsSync(R+`img/og/${b.c}-${b.id}.jpg`)?`img/og/${b.c}-${b.id}.jpg`:null));}

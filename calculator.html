@@ -967,7 +967,7 @@ function placePm(){document.querySelectorAll(".pmpop").forEach(e=>e.remove());
   const x=TREES[ti].t[i],r=pts[ti][i],pop=document.createElement("div");pop.className="pmpop";pop.setAttribute("role","group");pop.setAttribute("aria-label",x[0]+" points");
   const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
   pop.innerHTML=`<div class="pmbar"><button type="button" data-pm="-" aria-label="Remove a point" ${canRemove(ti,i)?"":"disabled"}>−</button><span class="rk"><small>${esc(x[0])}</small>${r}/${x[1]}</span><button type="button" data-pm="+" aria-label="Add a point" ${canAdd(ti,i)?"":"disabled"}>+</button></div>
-    <div class="pmtxt">${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${XP()?"":rankLines(x,r,true)}</div>`;
+    <div class="pmtxt">${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}</div>`;
   g.appendChild(pop);
   const L=n.offsetLeft,T=n.offsetTop,W=n.offsetWidth,H=n.offsetHeight,pw=pop.offsetWidth,ph=pop.offsetHeight,gw=g.clientWidth,gh=g.clientHeight;
   let left=Math.max(0,Math.min(gw-pw,L+W/2-pw/2)); pop.style.left=left+"px";
@@ -975,7 +975,7 @@ function placePm(){document.querySelectorAll(".pmpop").forEach(e=>e.remove());
   const dn=Math.round(H/3);pop.style.top=(T+H+5+dn+ph<=gh+24||T-ph-5<0?T+H+5+dn:T-ph-5)+"px";}
 function showTip(n){const tip=document.getElementById("tip"),ti=+n.dataset.t,i=+n.dataset.i,x=TREES[ti].t[i],r=pts[ti][i];
   const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
-  tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${XP()?"":rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
+  tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
   const b=n.getBoundingClientRect(),w=tip.offsetWidth||320,h=tip.offsetHeight||120;
   let left=b.right+12; if(left+w>innerWidth-8) left=b.left-w-12; if(left<8) left=Math.max(8,Math.min(innerWidth-w-8,b.left));
   let top=b.top-6; if(top+h>innerHeight-8) top=innerHeight-h-8; if(top<8) top=8;

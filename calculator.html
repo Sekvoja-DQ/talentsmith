@@ -114,7 +114,9 @@ body.expert .pmtxt:empty{display:none}
 body.expert .xp{display:block}
 .xp h2{margin:0 0 6px;font:800 21px var(--f-display);color:var(--gold-soft)}
 .xp .xlede{margin:0 0 10px;color:#d8cfbf}
-.xp ol{margin:0 0 14px;padding-left:22px;color:#d8cfbf;line-height:1.5}.xp ol li{margin:0 0 4px}.xp ol b{color:var(--ink)}
+.xp .xrules{margin:2px 0 8px;padding-left:20px;color:#d8cfbf;line-height:1.5}.xp .xrules li{margin:0 0 5px}.xp .xrules b{color:var(--ink)}
+.xstep{margin:16px 0 8px;font:800 16px var(--f-display);color:var(--gold-soft);letter-spacing:.02em}.xstep b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--gold);color:#1a1205;font:800 13px var(--f-body);margin-right:8px;vertical-align:1px}
+#xcls .cls{margin:0}
 .xp label{display:block;font:700 14px var(--f-body);color:var(--ink);margin:10px 0 4px}
 .xp label small{font-weight:500;color:var(--muted);margin-left:6px}
 .xp input,.xp select,.xp textarea{width:100%;box-sizing:border-box;font:500 16px var(--f-body);color:var(--ink);background:var(--deep);border:1px solid var(--edge);border-radius:8px;padding:10px 12px}
@@ -193,17 +195,19 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   <section class="xp" id="xp1" aria-labelledby="xpH">
     <h2 id="xpH">Class expert – send us your build</h2>
     <p class="xlede">Thanks for helping! Builds we add to Talentsmith show your name in the corner.</p>
-    <ol>
-      <li><b>Pick your class</b> below and spend all <b>51 points</b>.</li>
-      <li><b>Click the talents in the order you'd take them while leveling</b> – the calculator records it. Check it with <b>▶ Play order</b> before you send.</li>
-      <li><b>Name the build</b> and tell us if it's meta or off-meta. We may shorten the name.</li>
-      <li>At the bottom, write <b>notes</b>: what it's for, floating points, swaps and variations.</li>
-      <li>Press <b>Expert out</b>. We check every build before it goes live.</li>
-    </ol>
+    <p class="xstep"><b>1.</b> Pick your class</p>
+    <div id="xcls"></div>
+    <p class="xstep"><b>2.</b> Name it</p>
     <div class="xrow"><div><label for="xName">Build name <small>we may shorten it</small></label><input id="xName" maxlength="60" placeholder="e.g. Shockadin leveling" autocomplete="off"></div>
     <div><label for="xWho">Your name <small>shown as "by …"</small></label><input id="xWho" maxlength="40" placeholder="Reddit or in-game name" autocomplete="nickname"></div></div>
     <div class="xrow"><div><label for="xRole">Made for</label><select id="xRole"><option>Raid</option><option>Dungeon</option><option>DPS</option><option>Tank</option><option>Healer</option><option>Leveling</option><option>PvP</option></select></div>
     <div><label for="xGroup">Meta or off-meta?</label><select id="xGroup"><option value="meta">Meta</option><option value="off">Off-meta</option></select></div></div>
+    <p class="xstep"><b>3.</b> Build it below</p>
+    <ul class="xrules">
+      <li>Spend all <b>51 points</b>, clicking the talents <b>in the order you'd take them while leveling</b> – the calculator records it.</li>
+      <li>Check the order with the green <b>Play order</b> button before you send.</li>
+      <li>At the bottom, add <b>notes</b>: floating points, swaps, variations – then press <b>Expert out</b>. We check every build before it goes live.</li>
+    </ul>
     <button type="button" class="xquit" id="xquit">Leave expert mode</button>
   </section>
   <nav class="cls" id="cls" aria-label="Class"></nav>
@@ -1007,7 +1011,7 @@ function renderPresets(){const P=PRESETS[cls]||[],cur=code();
   const m=document.getElementById("pMeta");if(!m) return;m.innerHTML=chips("meta");document.getElementById("pOff").innerHTML=chips("off");}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800);}
 document.addEventListener("click",e=>{
-  const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){setClass(k.dataset.cls); restoreLast(); render(); window.scrollTo({top:0});} return;}
+  const k=e.target.closest("[data-cls]"); if(k){e.preventDefault(); if(k.dataset.cls!==cls){const y=scrollY;setClass(k.dataset.cls); restoreLast(); render(); scrollTo(0,y);} return;}
   const pb=e.target.closest("[data-pm]"); if(pb&&sel){if(pb.dataset.pm==="+") addPt(...sel); else remPt(...sel); render(); return;}
   const n=e.target.closest(".node"); if(n){const ti=+n.dataset.t,i=+n.dataset.i;
     if(isTouch()){/* phones: first tap only shows the talent; points come from the + / − bar */ const same=pmOpen&&sel&&sel[0]===ti&&sel[1]===i; sel=[ti,i]; pmOpen=!same; render(); return;}
@@ -1037,7 +1041,8 @@ setClass("paladin"); load(); render(); renderMine();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --><script>/* ---- class expert mode ---- */
 (()=>{const $=id=>document.getElementById(id),FORM="zEybbg",F=["xName","xWho","xRole","xGroup","xNotes"];
- const on=v=>{document.body.classList.toggle("expert",v);try{sessionStorage.setItem("tsExpert",v?"1":"")}catch(e){}if(v)check();};
+ const home=document.createComment("cls");$("cls").before(home);
+ const on=v=>{document.body.classList.toggle("expert",v);if(v)$("xcls").appendChild($("cls"));else home.after($("cls"));try{sessionStorage.setItem("tsExpert",v?"1":"")}catch(e){}if(v)check();};
  try{F.forEach(k=>{const v=localStorage.getItem("tsX_"+k);if(v)$(k).value=v;});}catch(e){}
  const keep=()=>{try{F.forEach(k=>localStorage.setItem("tsX_"+k,$(k).value));}catch(e){}};
  F.forEach(k=>$(k).addEventListener("input",()=>{keep();check();}));

@@ -31,7 +31,7 @@ const CSS=`.tsp{--tp-gap:12px}
 .tsp .player{position:sticky;bottom:8px;z-index:10;margin-top:14px;background:rgba(17,21,31,.96);backdrop-filter:blur(6px);border:1px solid var(--edge);border-radius:14px;padding:10px 14px 8px}
 .tsp .ctrls{display:flex;align-items:center;gap:8px}
 .tsp .ctrls button{width:42px;height:42px;border-radius:50%;border:1px solid var(--edge);background:var(--plate);color:var(--ink);display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
-.tsp .ctrls button svg{width:18px;height:18px;fill:currentColor}.tsp .ctrls button.play{width:52px;height:52px;background:var(--gold);border-color:var(--gold);color:#1a1205}.tsp .ctrls button.play svg{width:22px;height:22px}
+.tsp .ctrls button svg{width:18px;height:18px;fill:currentColor}.tsp .ctrls button.play{width:54px;height:54px;background:linear-gradient(180deg,#3fd585,#1f9d57);border:0;color:#fff;box-shadow:0 0 0 4px rgba(63,213,133,.16),0 6px 18px rgba(47,191,113,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s}.tsp .ctrls button.play:hover{transform:scale(1.05);box-shadow:0 0 0 6px rgba(63,213,133,.2),0 8px 22px rgba(47,191,113,.5)}.tsp .ctrls button.play svg{width:22px;height:22px}
 .tsp .ctrls button:focus-visible,.tsp .seg button:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
 .tsp .lvtxt{margin-left:auto;font:700 14px var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
 .tsp .bar{position:relative;margin:10px 4px 0}.tsp .bar input{width:100%;margin:0;accent-color:var(--gold);height:28px;cursor:pointer}

@@ -151,3 +151,4 @@ One array per class (`PALADIN`, `ROGUE`, …) of 3 trees `{name, t:[[name,maxRan
 - 2026-11-13: expert mode hides talent descriptions (popup, hover tip, detail panel) and all action buttons except Play order. Talent +/- popup: fixed 52px buttons, name wraps, sits H/3 lower.
 - 2026-11-13: expert panel order: 1 Pick your class (class grid moves into the panel), 2 Name it (fields), 3 Build it below (rules). Class change keeps scroll position (no jump to top). First 2 Tally submissions = user tests (Bullet Testi, Warlock).
 - 2026-11-13: correction – expert mode KEEPS talent descriptions in the +/- popup and hover tip; only the detail box under the trees is hidden.
+- 2026-11-13: Play order button always visible (dimmed, not clickable until the first point) so the layout no longer jumps.

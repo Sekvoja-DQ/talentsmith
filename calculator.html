@@ -108,6 +108,8 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .xcta small{display:block;font:500 13.5px var(--f-body);color:var(--muted);letter-spacing:0;margin-top:3px}
 .xcta:hover{background:linear-gradient(180deg,rgba(233,180,76,.3),rgba(233,180,76,.12))}
 body.expert .xcta{display:none}
+body.expert #mine,body.expert #presetBtn,body.expert #share,body.expert #reset,body.expert #presets,body.expert #myb,body.expert #copyWrap,body.expert #detail{display:none!important}
+body.expert .pmtxt:empty{display:none}
 .xp{display:none;background:var(--plate);border:1px solid var(--gold);border-radius:12px;padding:16px 18px;margin:0 0 16px}
 body.expert .xp{display:block}
 .xp h2{margin:0 0 6px;font:800 21px var(--f-display);color:var(--gold-soft)}
@@ -163,13 +165,13 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 /* mobile: +/- bar and talent text on the selected talent */
 .pmpop{position:absolute;z-index:20;width:min(280px,100%);background:#0a0d14;border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.65);overflow:hidden}
 .pmbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(233,180,76,.3)}
-.pmbar button{border:0;background:transparent;color:var(--gold);font:700 22px/1 var(--f-body);width:52px;height:38px;display:grid;place-items:center;cursor:pointer;padding:0;touch-action:manipulation}
+.pmbar button{border:0;background:transparent;color:var(--gold);font:700 22px/1 var(--f-body);width:52px;min-width:52px;flex:0 0 52px;align-self:stretch;min-height:38px;height:auto;display:grid;place-items:center;cursor:pointer;padding:0;touch-action:manipulation}
 .pmbar button:disabled{opacity:.3}
 .pmbar button:active:not(:disabled){background:rgba(233,180,76,.2)}
 .pmbar [data-pm="+"]{color:var(--green);border-left:1px solid rgba(233,180,76,.3)}
 .pmbar [data-pm="-"]{border-right:1px solid rgba(233,180,76,.3)}
-.pmbar .rk{flex:1;text-align:center;font:700 14px/1.15 var(--f-body);color:var(--ink);font-variant-numeric:tabular-nums;padding:0 4px}
-.pmbar .rk small{display:block;font:700 11px/1.2 var(--f-display);color:var(--gold-soft);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pmbar .rk{flex:1 1 auto;min-width:0;padding:5px 4px!important;text-align:center;font:700 14px/1.15 var(--f-body);color:var(--ink);font-variant-numeric:tabular-nums;padding:0 4px}
+.pmbar .rk small{display:block;font:700 11px/1.2 var(--f-display);color:var(--gold-soft);letter-spacing:.02em;white-space:normal;overflow-wrap:break-word}
 .pmtxt{padding:7px 10px 9px;font-size:13.5px;line-height:1.4;color:var(--ink);max-height:42vh;overflow-y:auto}
 .pmtxt p{margin:5px 0 0}.pmtxt p:first-child{margin-top:0}
 .pmtxt .bad{color:var(--ember)}
@@ -954,21 +956,22 @@ const isTouch=()=>touchSeen||(window.matchMedia&&matchMedia("(hover:none), (poin
 /* a finger tap marks the device as touch even if the browser reports a mouse (some tablets and phones in desktop mode) */
 for(const ev of ["touchstart","pointerdown"]) document.addEventListener(ev,e=>{if(ev==="touchstart"||e.pointerType==="touch"||e.pointerType==="pen") touchSeen=true;},{passive:true,capture:true});
 let pmOpen=false;
+const XP=()=>document.body.classList.contains("expert");
 function placePm(){document.querySelectorAll(".pmpop").forEach(e=>e.remove());
   if(!sel||!pmOpen||!isTouch()) return;
   const [ti,i]=sel,g=document.querySelector(`.grid[data-tree="${ti}"]`),n=g&&g.querySelector(`.node[data-i="${i}"]`); if(!n) return;
   const x=TREES[ti].t[i],r=pts[ti][i],pop=document.createElement("div");pop.className="pmpop";pop.setAttribute("role","group");pop.setAttribute("aria-label",x[0]+" points");
   const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
   pop.innerHTML=`<div class="pmbar"><button type="button" data-pm="-" aria-label="Remove a point" ${canRemove(ti,i)?"":"disabled"}>−</button><span class="rk"><small>${esc(x[0])}</small>${r}/${x[1]}</span><button type="button" data-pm="+" aria-label="Add a point" ${canAdd(ti,i)?"":"disabled"}>+</button></div>
-    <div class="pmtxt">${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}</div>`;
+    <div class="pmtxt">${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${XP()?"":rankLines(x,r,true)}</div>`;
   g.appendChild(pop);
   const L=n.offsetLeft,T=n.offsetTop,W=n.offsetWidth,H=n.offsetHeight,pw=pop.offsetWidth,ph=pop.offsetHeight,gw=g.clientWidth,gh=g.clientHeight;
   let left=Math.max(0,Math.min(gw-pw,L+W/2-pw/2)); pop.style.left=left+"px";
   /* below the talent; flip above for the bottom rows so the card isn't cut off */
-  pop.style.top=(T+H+5+ph<=gh+24||T-ph-5<0?T+H+5:T-ph-5)+"px";}
+  const dn=Math.round(H/3);pop.style.top=(T+H+5+dn+ph<=gh+24||T-ph-5<0?T+H+5+dn:T-ph-5)+"px";}
 function showTip(n){const tip=document.getElementById("tip"),ti=+n.dataset.t,i=+n.dataset.i,x=TREES[ti].t[i],r=pts[ti][i];
   const miss=[]; if(pointsAbove(ti,x[2])<(x[2]-1)*5) miss.push(`Needs ${(x[2]-1)*5} points in ${TREES[ti].name}`); if(x[4]){const q=byName[ti][x[4]]; if(pts[ti][q]<TREES[ti].t[q][1]) miss.push(`Needs ${x[4]} maxed`);}
-  tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
+  tip.innerHTML=`<h4>${esc(x[0])}</h4><div class="r">Rank ${r}/${x[1]} · ${TREES[ti].name}, row ${x[2]}</div>${miss.map(s=>`<p class="bad">${esc(s)}</p>`).join("")}${XP()?"":rankLines(x,r,true)}<div class="hint">${r<x[1]?"Click to add":"Maxed"}${r?" · right-click to remove":""}</div>`;
   const b=n.getBoundingClientRect(),w=tip.offsetWidth||320,h=tip.offsetHeight||120;
   let left=b.right+12; if(left+w>innerWidth-8) left=b.left-w-12; if(left<8) left=Math.max(8,Math.min(innerWidth-w-8,b.left));
   let top=b.top-6; if(top+h>innerHeight-8) top=innerHeight-h-8; if(top<8) top=8;

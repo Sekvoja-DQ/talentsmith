@@ -22,3 +22,5 @@
 - #20 BigD and Ko-fi buttons in the top row (v2) (2026-11-10-20b)
 - #25 Build notes: pros, cons and swaps (2026-11-12-25) – live on Shockadin endgame, 2026-11-12
 - #26 Leveling player (2026-11-12-26) – shipped on all build pages, play.html and the calculator, 2026-11-12
+
+- 2026-11-13 #29 Community builds — expert page + Tally form shipped and tested; credit/contributors part moved to #31 (Hall of Fame with factions).

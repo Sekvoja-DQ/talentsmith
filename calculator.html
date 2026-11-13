@@ -97,11 +97,40 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .pm{display:flex;gap:6px}
 .pm button{width:40px;height:40px;border-radius:8px;border:1px solid var(--gold);background:rgba(233,180,76,.08);color:var(--gold);font:700 20px/1 var(--f-body);cursor:pointer}
 .pm button:disabled{opacity:.35;cursor:not-allowed}
-.cls{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
-.cls a{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border:1px solid var(--edge);border-radius:999px;background:var(--plate);color:var(--muted);text-decoration:none;font:700 14px/1 var(--f-display);letter-spacing:.04em}
-.cls a img{width:26px;height:26px;border-radius:50%}
-.cls a[aria-current="page"]{border-color:var(--gold);color:var(--gold-soft);background:rgba(233,180,76,.1)}
+.cls{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;margin:4px 0 14px}
+.cls a{--c:var(--gold);display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 4px 10px;background:var(--plate);border:1px solid var(--edge);border-radius:9px;color:var(--ink);text-decoration:none;font:600 14px/1.1 var(--f-body);text-align:center;transition:border-color .15s,background .15s}
+.cls a img{width:36px;height:36px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--c) 70%,transparent);box-shadow:0 0 10px color-mix(in srgb,var(--c) 25%,transparent)}
+.cls a:hover{border-color:color-mix(in srgb,var(--c) 60%,var(--edge))}
+.cls a[aria-current="page"]{border-color:var(--c);background:linear-gradient(180deg,color-mix(in srgb,var(--c) 18%,var(--plate)),var(--plate));box-shadow:0 0 16px color-mix(in srgb,var(--c) 30%,transparent);color:#fff}
 .cls a.soon{opacity:.45;pointer-events:none}
+@media(max-width:820px){.cls{grid-template-columns:repeat(3,1fr)}.cls a{padding:11px 4px 9px;font-size:14.5px}}
+.xcta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:2px 0 14px;padding:14px 18px;border-radius:12px;border:1.5px solid var(--gold);background:linear-gradient(180deg,rgba(233,180,76,.22),rgba(233,180,76,.08));color:var(--gold-soft);font:800 19px/1.2 var(--f-display);letter-spacing:.03em;cursor:pointer;box-shadow:0 0 22px rgba(233,180,76,.18);text-align:center}
+.xcta small{display:block;font:500 13.5px var(--f-body);color:var(--muted);letter-spacing:0;margin-top:3px}
+.xcta:hover{background:linear-gradient(180deg,rgba(233,180,76,.3),rgba(233,180,76,.12))}
+body.expert .xcta{display:none}
+.xp{display:none;background:var(--plate);border:1px solid var(--gold);border-radius:12px;padding:16px 18px;margin:0 0 16px}
+body.expert .xp{display:block}
+.xp h2{margin:0 0 6px;font:800 21px var(--f-display);color:var(--gold-soft)}
+.xp .xlede{margin:0 0 10px;color:#d8cfbf}
+.xp ol{margin:0 0 14px;padding-left:22px;color:#d8cfbf;line-height:1.5}.xp ol li{margin:0 0 4px}.xp ol b{color:var(--ink)}
+.xp label{display:block;font:700 14px var(--f-body);color:var(--ink);margin:10px 0 4px}
+.xp label small{font-weight:500;color:var(--muted);margin-left:6px}
+.xp input,.xp select,.xp textarea{width:100%;box-sizing:border-box;font:500 16px var(--f-body);color:var(--ink);background:var(--deep);border:1px solid var(--edge);border-radius:8px;padding:10px 12px}
+.xp textarea{min-height:120px;resize:vertical;line-height:1.45}
+.xp input:focus,.xp select:focus,.xp textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+.xrow{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.xchk{margin:14px 0 4px;padding:10px 12px;border-radius:8px;background:var(--deep);color:#d8cfbf;font-size:15px;line-height:1.6}
+.xchk b{color:var(--ink)}.xchk .ok{color:#6fd28c}.xchk .no{color:#ff8a7a}.xchk .ok b,.xchk .no b{color:inherit}
+.xout{display:block;width:100%;margin:12px 0 4px;padding:15px;border-radius:12px;border:0;background:var(--gold);color:#1a1205;font:800 19px var(--f-display);letter-spacing:.03em;cursor:pointer}
+.xout:disabled{opacity:.45;cursor:not-allowed}
+.xquit{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:500 14px var(--f-body);padding:8px 0 0}
+.xmsg{color:#ff8a7a;font-size:14.5px;margin:6px 0 0;min-height:1em}
+.xthx{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(5,7,12,.78);padding:20px}
+.xthx[hidden]{display:none}
+.xthx>div{max-width:440px;width:100%;text-align:center;background:var(--plate);border:1.5px solid var(--gold);border-radius:14px;padding:26px 22px;box-shadow:0 0 40px rgba(233,180,76,.25)}
+.xthx h2{margin:0 0 8px;font:800 24px var(--f-display);color:var(--gold-soft)}.xthx p{margin:0 0 16px;color:#d8cfbf}
+@media(max-width:640px){.xrow{grid-template-columns:1fr}.xcta{font-size:17px}}
+
 .help{color:var(--muted);font-size:14px;margin:14px 0 0;border:1px solid var(--edge);border-radius:8px;padding:0 12px}.help summary{cursor:pointer;padding:10px 0;font-weight:600;color:var(--gold-soft)}.help p{margin:0 0 12px}
 .note{font-size:12.5px!important;opacity:.75;margin:14px 2px 0!important}
 .tree-h em{font-style:normal;font:600 12px/1 var(--f-body);color:var(--muted);margin-left:6px;opacity:.9}
@@ -157,6 +186,23 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   </header>
 
   <h1 id="h1">Paladin Talent Calculator</h1>
+  <button type="button" class="xcta" id="xcta" data-umami-event="expert-open"><span>⚔ I'm a class expert<small>Send us your build – we credit you on the site</small></span></button>
+  <section class="xp" id="xp1" aria-labelledby="xpH">
+    <h2 id="xpH">Class expert – send us your build</h2>
+    <p class="xlede">Thanks for helping! Builds we add to Talentsmith show your name in the corner.</p>
+    <ol>
+      <li><b>Pick your class</b> below and spend all <b>51 points</b>.</li>
+      <li><b>Click the talents in the order you'd take them while leveling</b> – the calculator records it. Check it with <b>▶ Play order</b> before you send.</li>
+      <li><b>Name the build</b> and tell us if it's meta or off-meta. We may shorten the name.</li>
+      <li>At the bottom, write <b>notes</b>: what it's for, floating points, swaps and variations.</li>
+      <li>Press <b>Expert out</b>. We check every build before it goes live.</li>
+    </ol>
+    <div class="xrow"><div><label for="xName">Build name <small>we may shorten it</small></label><input id="xName" maxlength="60" placeholder="e.g. Shockadin leveling" autocomplete="off"></div>
+    <div><label for="xWho">Your name <small>shown as "by …"</small></label><input id="xWho" maxlength="40" placeholder="Reddit or in-game name" autocomplete="nickname"></div></div>
+    <div class="xrow"><div><label for="xRole">Made for</label><select id="xRole"><option>Raid</option><option>Dungeon</option><option>DPS</option><option>Tank</option><option>Healer</option><option>Leveling</option><option>PvP</option></select></div>
+    <div><label for="xGroup">Meta or off-meta?</label><select id="xGroup"><option value="meta">Meta</option><option value="off">Off-meta</option></select></div></div>
+    <button type="button" class="xquit" id="xquit">Leave expert mode</button>
+  </section>
   <nav class="cls" id="cls" aria-label="Class"></nav>
 
   <div class="bar" role="region" aria-label="Build summary">
@@ -183,6 +229,15 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 
   <section class="detail" id="detail" aria-live="polite"></section>
   <details class="order" id="order" open><summary>Leveling order<span id="orderSub"></span></summary><div id="orderBody"></div></details>
+  <section class="xp" id="xp2" aria-label="Notes and send">
+    <h2>Notes</h2>
+    <label for="xNotes">What is it for, and what can change? <small>optional but very helpful</small></label>
+    <textarea id="xNotes" maxlength="1500" placeholder="Pros and cons, floating points (e.g. the last 3 points can go anywhere), swaps (e.g. Precision or Divine Intellect depending on gear), variations for leveling vs endgame…"></textarea>
+    <div class="xchk" id="xchk"></div>
+    <button type="button" class="xout" id="xout">Expert out – my work here is done</button>
+    <p class="xmsg" id="xmsg" role="alert"></p>
+  </section>
+  <div class="xthx" id="xthx" hidden role="dialog" aria-modal="true" aria-labelledby="xthxH"><div><h2 id="xthxH">Thank you!</h2><p id="xthxP"></p><button type="button" class="btn" id="xthxOk">Back to the calculator</button></div></div>
   <details class="help"><summary>How the calculator works</summary><p>Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p></details>
   <p class="note" id="note"></p>
   <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
@@ -756,6 +811,8 @@ const CLASSES={
   lede:"The Rogue talent trees as they are in the live game: Assassination, Combat and Subtlety. Tap a talent to see what every rank gives.",
   note:"Talent values checked against the live game client (build 1.60.1.70862) on Nov 9, 2026."}};
 const SOON=[];
+const CORDER=["warrior","paladin","hunter","rogue","priest","shaman","mage","warlock","druid"];
+const CCOL={warrior:"#C69B6D",paladin:"#F48CBA",hunter:"#AAD372",rogue:"#FFF468",priest:"#FFFFFF",shaman:"#0070DD",mage:"#3FC7EB",warlock:"#8788EE",druid:"#FF7C0A"};
 let cls="paladin",TREES=PALADIN;
 const MAXP=51;
 const TICON={"Spiritual Focus":"paladin-spiritual-focus","Divine Strength":"paladin-divine-strength","Healing Light":"paladin-healing-light","Reverence":"paladin-reverence","Improved Seals":"paladin-improved-seals","Purifying Power":"paladin-purifying-power","Divine Favor":"paladin-divine-favor","Illumination":"paladin-illumination","Holy Conduit":"paladin-holy-conduit","Divine Precision":"paladin-divine-precision","Infusion of Light":"paladin-infusion-of-light","Oath of Light":"paladin-oath-of-light","Consecrated Ground":"paladin-consecrated-ground","Holy Shock":"paladin-holy-shock","Boundless Light":"paladin-boundless-light","Holy Power":"paladin-holy-power","Light's Vigil":"paladin-light-s-vigil","Redoubt":"paladin-redoubt","Precision":"paladin-precision","Guardian's Favor":"paladin-guardian-s-favor","Sacred Duty":"paladin-sacred-duty","Templar's Bulwark":"paladin-templar-s-bulwark","Improved Hammer of Justice":"paladin-improved-hammer-of-justice","Shield Specialization":"paladin-shield-specialization","Toughness":"paladin-toughness","Swift Judgement":"paladin-swift-judgement","Improved Righteous Fury":"paladin-improved-righteous-fury","Anticipation":"paladin-anticipation","Stoicism":"paladin-stoicism","Holy Shield":"paladin-holy-shield","Reckoning":"paladin-reckoning","Iron Creed":"paladin-iron-creed","Shieldsworn":"paladin-shieldsworn","Deflection":"paladin-deflection","Benediction":"paladin-benediction","Improved Judgement":"paladin-improved-judgement","Conviction":"paladin-conviction","Sanctified Judgement":"paladin-sanctified-judgement","Vindication":"paladin-vindication","Unyielding Faith":"paladin-unyielding-faith","Seal of Command":"paladin-seal-of-command","Pursuit of Justice":"paladin-pursuit-of-justice","Eye for an Eye":"paladin-eye-for-an-eye","Sacred Arbiter":"paladin-sacred-arbiter","Two-Handed Weapon Specialization":"paladin-two-handed-weapon-specialization","Turn Evil":"paladin-turn-evil","Repentance":"paladin-repentance","Vengeance":"paladin-vengeance","Champion of the Light":"paladin-champion-of-the-light","Unsealed Wrath":"paladin-unsealed-wrath","Divine Intellect":"paladin-divine-intellect"};
@@ -838,7 +895,7 @@ function setClass(c){cls=CLASSES[c]?c:"paladin";TREES=CLASSES[cls].trees;pts=TRE
   const C=CLASSES[cls];document.getElementById("h1").textContent=C.name+" Talent Calculator";
   document.getElementById("note").innerHTML=C.note;
   document.title="Talentsmith – WoW Forever "+C.name+" Talent Calculator";
-  document.getElementById("cls").innerHTML=Object.entries(CLASSES).map(([k,v])=>`<a href="?c=${k}" data-cls="${k}" ${k===cls?'aria-current="page"':""}><img src="img/icons/class-${k}.webp" alt="">${v.name}</a>`).join("")+SOON.map(n=>`<a class="soon" aria-disabled="true" title="Coming soon"><img src="img/icons/class-${n.toLowerCase()}.webp" alt="">${n}</a>`).join("");}
+  document.getElementById("cls").innerHTML=CORDER.filter(k=>CLASSES[k]).map(k=>[k,CLASSES[k]]).map(([k,v])=>`<a href="?c=${k}" data-cls="${k}" style="--c:${CCOL[k]}" ${k===cls?'aria-current="page"':""}><img src="img/icons/class-${k}.webp" alt="">${v.name}</a>`).join("")+SOON.map(n=>`<a class="soon" aria-disabled="true" title="Coming soon"><img src="img/icons/class-${n.toLowerCase()}.webp" alt="">${n}</a>`).join("");}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const treeSum=ti=>pts[ti].reduce((a,b)=>a+b,0);
 const total=()=>pts.reduce((a,p)=>a+p.reduce((x,y)=>x+y,0),0);
@@ -974,5 +1031,32 @@ function fallback(url){const w=document.getElementById("copyWrap"),b=document.ge
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
 setClass("paladin"); load(); render(); renderMine();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --></body>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --><script>/* ---- class expert mode ---- */
+(()=>{const $=id=>document.getElementById(id),FORM="zEybbg",F=["xName","xWho","xRole","xGroup","xNotes"];
+ const on=v=>{document.body.classList.toggle("expert",v);try{sessionStorage.setItem("tsExpert",v?"1":"")}catch(e){}if(v)check();};
+ try{F.forEach(k=>{const v=localStorage.getItem("tsX_"+k);if(v)$(k).value=v;});}catch(e){}
+ const keep=()=>{try{F.forEach(k=>localStorage.setItem("tsX_"+k,$(k).value));}catch(e){}};
+ F.forEach(k=>$(k).addEventListener("input",()=>{keep();check();}));
+ function check(){const n=total(),name=$("xName").value.trim(),who=$("xWho").value.trim();
+  const L=[[n===51,`${n} / 51 points spent`],[!!name,name?`Build name: ${esc(name)}`:"Build name missing (top of the page)"],[!!who,who?`Credited as: ${esc(who)}`:"Your name missing (top of the page)"]];
+  $("xchk").innerHTML=L.map(([ok,t])=>`<div class="${ok?"ok":"no"}">${ok?"✔":"✘"} <b>${t}</b></div>`).join("")+`<div>Order checked? Press <b>▶ Play order</b> to watch it level by level.</div>`;
+  const all=L.every(x=>x[0]);$("xout").disabled=!all;return all;}
+ setInterval(()=>{if(document.body.classList.contains("expert"))check();},700);
+ const q=new URLSearchParams(location.search);let st="";try{st=sessionStorage.getItem("tsExpert")}catch(e){}
+ if(q.get("expert")||st)on(true);
+ $("xcta").onclick=()=>{on(true);$("xp1").scrollIntoView({behavior:"smooth",block:"start"});};
+ $("xquit").onclick=()=>on(false);
+ function thanks(who){$("xthxP").innerHTML=`Thank you, <b>${esc(who)}</b>! Your build is on its way. We check every build before it goes live – watch the Builds page for your name.`;$("xthx").hidden=false;$("xthxOk").focus();}
+ $("xthxOk").onclick=()=>{$("xthx").hidden=true;};
+ $("xout").onclick=()=>{if(!check())return;$("xmsg").textContent="";
+  const who=$("xWho").value.trim(),oc=ordCode(),link="https://talentsmith.app/calculator.html?c="+cls+"&b="+code()+(oc?"&o="+oc:"");
+  const hf={class:CLASSES[cls].name,build_name:$("xName").value.trim(),credit_name:who,role:$("xRole").value,group:$("xGroup").value,split:"("+TREES.map((_,i)=>treeSum(i)).join("/")+")",link,notes:$("xNotes").value.trim().slice(0,1500),points:String(total())};
+  if(window.umami)try{umami.track("expert-send",{class:hf.class})}catch(e){}
+  const done=()=>{thanks(who);try{["xName","xNotes"].forEach(k=>{localStorage.removeItem("tsX_"+k);$(k).value="";});}catch(e){}check();};
+  const fallback=()=>{window.open("https://tally.so/r/"+FORM+"?"+new URLSearchParams(hf).toString(),"_blank","noopener");$("xmsg").textContent="The send window opened in a new tab – press the button there to finish.";};
+  const open=()=>{try{Tally.openPopup(FORM,{layout:"modal",width:520,hiddenFields:hf,autoClose:600,onSubmit:done});}catch(e){fallback();}};
+  if(window.Tally)return open();
+  const sc=document.createElement("script");sc.src="https://tally.so/widgets/embed.js";sc.onload=open;sc.onerror=fallback;document.head.appendChild(sc);};
+})();
+</script></body>
 </html>

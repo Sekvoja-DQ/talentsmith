@@ -107,7 +107,8 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 6px;color:
 .xcta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:2px 0 14px;padding:14px 18px;border-radius:12px;border:1.5px solid var(--gold);background:linear-gradient(180deg,rgba(233,180,76,.22),rgba(233,180,76,.08));color:var(--gold-soft);font:800 19px/1.2 var(--f-display);letter-spacing:.03em;cursor:pointer;box-shadow:0 0 22px rgba(233,180,76,.18);text-align:center}
 .xcta small{display:block;font:500 13.5px var(--f-body);color:var(--muted);letter-spacing:0;margin-top:3px}
 .xcta:hover{background:linear-gradient(180deg,rgba(233,180,76,.3),rgba(233,180,76,.12))}
-body.expert .xcta{display:none}
+body.expert .xcta,body.expert .xlink{display:none}
+.xlink{margin:18px 0 6px;text-align:center;font:500 14px var(--f-body);color:var(--muted)}.xlink a{color:var(--muted);text-decoration:none}.xlink a b{color:var(--gold);font-weight:600}.xlink a:hover b{text-decoration:underline}
 body.expert #mine,body.expert #presetBtn,body.expert #share,body.expert #reset,body.expert #presets,body.expert #myb,body.expert #copyWrap,body.expert #detail{display:none!important}
 body.expert .pmtxt:empty{display:none}
 body.expert details.help{display:none}
@@ -193,7 +194,6 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   </header>
 
   <h1 id="h1">Paladin Talent Calculator</h1>
-  <button type="button" class="xcta" id="xcta" data-umami-event="expert-open"><span>⚔ I'm a class expert<small>Send us your build – we credit you on the site</small></span></button>
   <section class="xp" id="xp1" aria-labelledby="xpH">
     <h2 id="xpH">Class expert – send us your build</h2>
     <p class="xlede">Thanks for helping! Builds we add to Talentsmith show your name in the corner.</p>
@@ -248,6 +248,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
   </section>
   <div class="xthx" id="xthx" hidden role="dialog" aria-modal="true" aria-labelledby="xthxH"><div><h2 id="xthxH">Thank you!</h2><p id="xthxP"></p><button type="button" class="btn" id="xthxOk">Back to the calculator</button></div></div>
   <details class="help"><summary>How the calculator works</summary><p>Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p></details>
+  <p class="xlink"><a href="calculator.html?expert=1" id="xcta" data-umami-event="expert-open">Know your class well? <b>Send us your build</b> – we credit you on the site →</a></p>
   <p class="note" id="note"></p>
   <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 </div>
@@ -1055,7 +1056,7 @@ setClass("paladin"); load(); render(); renderMine();
  setInterval(()=>{if(document.body.classList.contains("expert"))check();},700);
  const q=new URLSearchParams(location.search);let st="";try{st=sessionStorage.getItem("tsExpert")}catch(e){}
  if(window.__tsExpert||q.get("expert")||st)on(true);
- $("xcta").onclick=()=>{on(true);$("xp1").scrollIntoView({behavior:"smooth",block:"start"});};
+ $("xcta").onclick=(ev)=>{ev.preventDefault();on(true);scrollTo(0,0);$("xp1").scrollIntoView({behavior:"smooth",block:"start"});};
  $("xquit").onclick=()=>on(false);
  function thanks(who){$("xthxP").innerHTML=`Thank you, <b>${esc(who)}</b>! Your build is on its way. We check every build before it goes live – watch the Builds page for your name.`;$("xthx").hidden=false;$("xthxOk").focus();}
  $("xthxOk").onclick=()=>{$("xthx").hidden=true;};

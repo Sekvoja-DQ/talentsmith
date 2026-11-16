@@ -76,8 +76,8 @@ table.races{width:auto;min-width:0}table.races th,table.races td{padding-right:2
 @media (max-width:640px){.top{flex-wrap:wrap}.top nav{width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.top .nbs{margin-left:auto}}`;
 const FONTS='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Alegreya+Sans:wght@400;500;700&display=swap">';
 function crumbs(title,canon){const parts=canon.split('/').filter(Boolean),it=[['Talentsmith',SITE]];const sec={builds:'Builds',classes:'Class guides'}[parts[0]];if(sec)it.push([sec,SITE+parts[0]+'/']);if(!sec||parts.length>1)it.push([title.split(/ [–|] /)[0],SITE+canon]);return '<script type="application/ld+json">'+JSON.stringify({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":it.map(([n,u],i)=>({"@type":"ListItem","position":i+1,"name":n,"item":u}))}).replace(/</g,'\\u003c')+'</script>';}
-function page(rel,title,desc,body,canon,og){const p=rel?'../':'';return `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+function page(rel,title,desc,body,canon,og,noidx){const p=rel?'../':'';return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${noidx?'<meta name="robots" content="noindex">':''}
 <title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${SITE}${canon}">
 <meta property="og:url" content="${SITE}${canon}"><meta property="og:type" content="article"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">${og?`<meta property="og:image" content="${SITE}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">`:`<meta property="og:image" content="${SITE}img/og.jpg">`}<meta name="theme-color" content="#0b0e15">${crumbs(title,canon)}
 <link rel="icon" type="image/png" href="${p}favicon.png">${FONTS}<style>${CSS}</style></head><body>
@@ -232,6 +232,44 @@ addEventListener("DOMContentLoaded",()=>{const u=new URLSearchParams(location.se
  document.title="Your "+C.name+" build – leveling player | Talentsmith";
  TSPlayer.mount(document.getElementById("lvp"),{cls:c,clsName:C.name,title:"My "+C.name+" build",trees:C.trees,seq});});</script>`;
  urls.push('play.html');fs.writeFileSync(R+'play.html',page(false,'Leveling Player – Watch Your WoW Forever Build | Talentsmith','Watch any WoW Forever talent build fill in level by level from 10 to 60: play, pause, skip and jump to any level.',body,'play.html'));}
+// ---- compare.html: two builds side by side (review #35 PROTOTYPE – noindex, not linked, not in the sitemap until approved)
+{const cmp={order:ORDER,cls:{}};for(const c of ORDER){const L=out.filter(b=>b.c===c).sort((x,y)=>(x.group==='off')-(y.group==='off')||KO.indexOf(x.kind)-KO.indexOf(y.kind));
+  cmp.cls[c]={name:ctx.CLASSES[c].name,trees:classData(c,''),builds:L.map(b=>({id:b.id,name:b.name,group:b.group==='off'?'off':'meta',kind:b.kind,code:b.code,ord:b.ord}))};}
+ const CMPCSS=`.cmp-cls{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin:14px 0}.cmp-cls button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border:1px solid var(--edge);border-radius:9px;background:var(--plate);color:var(--muted);font:700 12.5px var(--f-body);cursor:pointer}.cmp-cls button img{border-radius:6px}.cmp-cls button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-soft);box-shadow:0 0 10px rgba(233,180,76,.25)}
+.cmp-pick{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}.cmp-pick label{display:block;font:700 13px var(--f-body);color:var(--muted);margin:0 0 4px}.cmp-pick select{width:100%;font:600 15px var(--f-body);padding:10px;border-radius:9px;background:var(--plate);color:var(--ink);border:1px solid var(--edge)}.cmp-pick .pa select{border-color:#7fb2ff}.cmp-pick .pb select{border-color:#ff8a5c}
+#swap{height:42px;padding:0 14px;border-radius:9px;border:1px solid var(--edge);background:var(--plate);color:var(--gold-soft);font:700 18px var(--f-body);cursor:pointer}
+.ka,.kb{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;font:800 12px var(--f-body);color:#0b0e15;margin-right:4px;vertical-align:1px}.ka{background:#7fb2ff}.kb{background:#ff8a5c}i.a{color:#9cc7ff;font-style:normal}i.b{color:#ffab8a;font-style:normal}
+#split{margin:14px 0 4px;color:#d8cfbf;line-height:1.7}#split b{color:var(--gold-soft);margin-left:4px}#split .vs{margin:0 12px;color:var(--muted)}#sum{color:#d8cfbf;margin:0 0 12px}#sum b{color:var(--gold-soft)}
+.cmp-key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin:0 0 12px}.cmp-key span{display:inline-flex;align-items:center;gap:6px}.cmp-key em{width:14px;height:14px;border-radius:4px;border:2px solid}
+#trees{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#trees .tree{background:linear-gradient(180deg,rgba(11,14,21,.55),rgba(11,14,21,.8)),var(--bg) center top/cover no-repeat,var(--plate);border:1px solid var(--edge);border-radius:10px;padding:10px 10px 12px;min-width:0}
+#trees .th{display:flex;align-items:center;gap:8px;font:800 17px var(--f-display);color:var(--gold-soft);margin:0 0 6px}#trees .th img{width:24px;height:24px;border-radius:5px}#trees .th span{margin-left:auto;font:700 14px var(--f-body)}
+#trees .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(7,80px);gap:2px}
+#trees .cell{display:flex;flex-direction:column;align-items:center;min-width:0}
+#trees .node{position:relative;width:42px;height:42px;margin-top:4px;border-radius:7px;border:2px solid #4a5163;background:#1a1f2b center/cover no-repeat;filter:grayscale(1) brightness(.5)}
+#trees .node.both{filter:none;border-color:var(--gold);box-shadow:0 0 10px rgba(233,180,76,.4)}
+#trees .node.onlya{filter:none;border-color:#7fb2ff;box-shadow:0 0 12px rgba(127,178,255,.55)}
+#trees .node.onlyb{filter:none;border-color:#ff8a5c;box-shadow:0 0 12px rgba(255,138,92,.55)}
+#trees .node.diff{border-image:linear-gradient(90deg,#7fb2ff 50%,#ff8a5c 50%) 1;border-radius:0}
+#trees .rk{position:absolute;right:-10px;bottom:-7px;font:700 11px/1 var(--f-body);background:var(--night);border:1px solid #4a5163;border-radius:4px;padding:2px 4px;color:var(--gold-soft);white-space:nowrap}
+#trees .lbl{font:600 11px/1.15 var(--f-body);color:#bdb3a2;text-align:center;margin-top:6px;max-width:88px;overflow-wrap:anywhere}
+#diff{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}#diff h3{margin:0 0 8px;font:800 18px var(--f-display);color:var(--gold-soft)}#diff ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+#diff li{display:grid;grid-template-columns:32px 1fr auto;gap:4px 10px;align-items:center;padding:10px;border:1px solid var(--edge);border-radius:9px;background:rgba(255,255,255,.02)}#diff li img{border-radius:5px}#diff .nm{font-weight:700;min-width:0}#diff .nm small{display:block;color:var(--muted);font-weight:600;font-size:12.5px}#diff .rr{display:flex;flex-direction:column;align-items:flex-end;font:700 13px var(--f-body)}#diff li p{grid-column:1/-1;margin:2px 0 0;color:#cfc6b6;font-size:14px;line-height:1.4}
+.cmp-act{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}#paste{display:flex;gap:8px;margin:8px 0 0}#paste input{flex:1;min-width:0;font:500 15px var(--f-body);padding:10px;border-radius:9px;background:var(--plate);color:var(--ink);border:1px solid var(--edge)}#pmsg{color:#ffab8a;font-size:14px;margin:6px 0 0;min-height:1em}
+.proto{display:inline-block;font:700 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:#1a1205;background:var(--gold);border-radius:6px;padding:3px 8px;margin-bottom:8px}
+@media(max-width:820px){#trees{grid-template-columns:1fr}#diff{grid-template-columns:1fr}.cmp-cls{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:560px){.cmp-pick{grid-template-columns:1fr}#swap{justify-self:center;transform:rotate(90deg)}.cmp-cls button{font-size:11px}#split .vs{display:block;margin:0}}`;
+ const body=`<style>${CMPCSS}</style><span class="proto">Prototype</span><h1>Compare two builds</h1><p class="lede">Pick two builds of the same class and see exactly where the points differ.</p>
+<div class="cmp-cls" id="cls" role="group" aria-label="Class"></div>
+<div class="cmp-pick"><div class="pa"><label for="sa"><span class="ka">A</span>Build A</label><select id="sa"></select></div><button type="button" id="swap" title="Swap A and B" aria-label="Swap A and B">⇄</button><div class="pb"><label for="sb"><span class="kb">B</span>Build B</label><select id="sb"></select></div></div>
+<form id="paste"><input id="link" type="text" inputmode="url" autocomplete="off" placeholder="Paste your calculator link as build B" aria-label="Calculator link"><button class="btn ghost" type="submit">Use</button></form><p id="pmsg" role="status"></p>
+<p id="split"></p><p id="sum"></p>
+<div class="cmp-key"><span><em style="border-color:var(--gold)"></em>In both</span><span><em style="border-color:#7fb2ff"></em>Only in A</span><span><em style="border-color:#ff8a5c"></em>Only in B</span><span><em style="border-image:linear-gradient(90deg,#7fb2ff 50%,#ff8a5c 50%) 1"></em>Both, different ranks</span></div>
+<div id="trees"></div><div id="diff"></div>
+<p class="cmp-act"><a class="btn" id="ca" href="calculator.html">Open A in the calculator</a><a class="btn ghost" id="cb" href="calculator.html">Open B in the calculator</a></p>
+<script>const CMP=${JSON.stringify(cmp).replace(/</g,'\\u003c')};
+${fs.readFileSync(R+'tools/player/compare-src.js','utf8')}</script>`;
+ fs.writeFileSync(R+'compare.html',page(false,'Compare Two WoW Forever Builds | Talentsmith','Compare two WoW Forever talent builds side by side: shared talents, talents only in one build, and every point that differs.',body,'compare.html',null,true));}
 // ---- calculator presets (Meta / Off-meta button)
 {const P={};for(const c of ORDER){const L=out.filter(b=>b.c===c).sort((x,y)=>(x.group==='off')-(y.group==='off')||KO.indexOf(x.kind)-KO.indexOf(y.kind));P[c]=L.map(b=>[b.group==='off'?'off':'meta',b.name,b.kind,b.code,b.ord,b.id,b.specSlug]);}
  const cp=R+'calculator.html';let h=fs.readFileSync(cp,'utf8');const re=/\/\*PRESETS\*\/[\s\S]*?\/\*\/PRESETS\*\//;

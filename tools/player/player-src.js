@@ -45,7 +45,7 @@ const CSS=`.tsp{--tp-gap:12px}
 const ICO={reset:'<path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/>',prev:'<path d="M6 6h2v12H6zM9.5 12 18 6v12z"/>',play:'<path d="M8 5v14l11-7z"/>',pause:'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>',next:'<path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/>'};
 const TC=["#f6d68e","#7fb2ff","#ff8a5c"];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function mount(root,D,opt){opt=opt||{};
+function mount(root,D,opt){opt=opt||{};if(window.TSMedia)TSMedia.css();
  const saveVideo=()=>{if(!window.TSMedia)return;TSMedia.css();const m={cls:D.cls,clsName:D.clsName,title:D.title||document.title.split(" – ")[0],trees:D.trees,seq:D.seq};
   const start=(d,close)=>{const p=d.querySelector("p"),bar=d.querySelector(".tsm-bar"),row=d.querySelector(".tsm-row");p.textContent="Recording… keep this tab open for about 10 seconds.";bar.hidden=false;row.style.display="none";
    TSMedia.video(m,f=>{bar.firstChild.style.width=(f*100).toFixed(1)+"%";}).then(()=>{p.textContent="Done – your video is saved.";setTimeout(close,1400);}).catch(()=>{p.textContent="Sorry – this browser can't make videos. Try Chrome, Edge or a recent Safari.";row.style.display="";row.querySelector(".yes").hidden=true;row.querySelector(".no").textContent="Close";});};

@@ -68,7 +68,7 @@ const CSS=`.tsp{--tp-gap:12px}
 .tsp .player{position:sticky;bottom:8px;z-index:10;margin-top:14px;background:rgba(17,21,31,.96);backdrop-filter:blur(6px);border:1px solid var(--edge);border-radius:14px;padding:10px 14px 8px}
 .tsp .ctrls{display:flex;align-items:center;gap:8px}
 .tsp .ctrls button{width:42px;height:42px;border-radius:50%;border:1px solid var(--edge);background:var(--plate);color:var(--ink);display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
-.tsp .ctrls button svg{width:18px;height:18px;fill:currentColor}.tsp .ctrls button.play{width:54px;height:54px;background:linear-gradient(180deg,#3fd585,#1f9d57);border:0;color:#fff;box-shadow:0 0 0 4px rgba(63,213,133,.16),0 6px 18px rgba(47,191,113,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s}.tsp .ctrls button.play:hover{transform:scale(1.05);box-shadow:0 0 0 6px rgba(63,213,133,.2),0 8px 22px rgba(47,191,113,.5)}.tsp .ctrls button.play svg{width:22px;height:22px}
+.tsp .ctrls button svg{width:18px;height:18px;fill:currentColor}.tsp .ctrls button.vid{position:relative;border:1.5px solid #e9b44c;background:rgba(233,180,76,.14);color:#f6d68e;box-shadow:0 0 0 3px rgba(233,180,76,.12)}.tsp .ctrls button.vid:hover{background:rgba(233,180,76,.24)}@media(hover:hover){.tsp .ctrls button.vid:hover .tsm-tip{opacity:1}}.tsp .ctrls button.play{width:54px;height:54px;background:linear-gradient(180deg,#3fd585,#1f9d57);border:0;color:#fff;box-shadow:0 0 0 4px rgba(63,213,133,.16),0 6px 18px rgba(47,191,113,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s}.tsp .ctrls button.play:hover{transform:scale(1.05);box-shadow:0 0 0 6px rgba(63,213,133,.2),0 8px 22px rgba(47,191,113,.5)}.tsp .ctrls button.play svg{width:22px;height:22px}
 .tsp .ctrls button:focus-visible,.tsp .seg button:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
 .tsp .lvtxt{margin-left:auto;font:700 14px var(--f-body);color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
 .tsp .bar{position:relative;margin:10px 4px 0}.tsp .bar input{width:100%;margin:0;accent-color:var(--gold);height:28px;cursor:pointer}
@@ -83,13 +83,18 @@ const ICO={reset:'<path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/>',
 const TC=["#f6d68e","#7fb2ff","#ff8a5c"];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function mount(root,D,opt){opt=opt||{};
+ const saveVideo=()=>{if(!window.TSMedia)return;TSMedia.css();const m={cls:D.cls,clsName:D.clsName,title:D.title||document.title.split(" – ")[0],trees:D.trees,seq:D.seq};
+  const start=(d,close)=>{const p=d.querySelector("p"),bar=d.querySelector(".tsm-bar"),row=d.querySelector(".tsm-row");p.textContent="Recording… keep this tab open for about 10 seconds.";bar.hidden=false;row.style.display="none";
+   TSMedia.video(m,f=>{bar.firstChild.style.width=(f*100).toFixed(1)+"%";}).then(()=>{p.textContent="Done – your video is saved.";setTimeout(close,1400);}).catch(()=>{p.textContent="Sorry – this browser can't make videos. Try Chrome, Edge or a recent Safari.";row.style.display="";row.querySelector(".yes").hidden=true;row.querySelector(".no").textContent="Close";});};
+  const d=TSMedia.confirm("Save as video","A 10-second phone-format video of this build filling in from level 10 to 60, with talentsmith.app at the end. Download it?",start);
+  if(matchMedia("(hover:hover)").matches)d.querySelector(".yes").click();};
  if(!document.getElementById("tsp-css")){const st=document.createElement("style");st.id="tsp-css";st.textContent=CSS;document.head.appendChild(st);}
  const N=D.seq.length;let k=0,playing=false,timer=null,showTree=0,manualTab=false;
  D.seq.forEach((s,j)=>{let r=0;for(let q=0;q<=j;q++){if(D.seq[q].t===s.t&&D.seq[q].i===s.i)r++;}s.r=r;});
  root.classList.add("tsp");
  root.innerHTML=`<div class="tp-top"><div class="seg"><button type="button" data-m="anim" aria-pressed="true">Animation</button><button type="button" data-m="text" aria-pressed="false">Text</button></div></div>
  <div class="now"></div><div class="tabs"></div><div class="stage"><div class="vp"><div class="trees"></div></div><canvas class="fx"></canvas></div><div class="list"></div>
- <div class="player"><div class="ctrls"><button type="button" data-a="reset" title="Back to the start" aria-label="Back to the start"><svg viewBox="0 0 24 24">${ICO.reset}</svg></button><button type="button" data-a="prev" title="One level back" aria-label="One level back"><svg viewBox="0 0 24 24">${ICO.prev}</svg></button><button type="button" class="play" data-a="play" title="Play" aria-label="Play"><svg viewBox="0 0 24 24">${ICO.play}</svg></button><button type="button" data-a="next" title="One level forward" aria-label="One level forward"><svg viewBox="0 0 24 24">${ICO.next}</svg></button><span class="lvtxt"></span></div>
+ <div class="player"><div class="ctrls"><button type="button" data-a="reset" title="Back to the start" aria-label="Back to the start"><svg viewBox="0 0 24 24">${ICO.reset}</svg></button><button type="button" data-a="prev" title="One level back" aria-label="One level back"><svg viewBox="0 0 24 24">${ICO.prev}</svg></button><button type="button" class="play" data-a="play" title="Play" aria-label="Play"><svg viewBox="0 0 24 24">${ICO.play}</svg></button><button type="button" data-a="next" title="One level forward" aria-label="One level forward"><svg viewBox="0 0 24 24">${ICO.next}</svg></button>${(window.TSMedia&&TSMedia.canVideo()&&D.seq&&D.seq.length)?'<button type="button" class="vid" data-a="video" aria-label="Save as video" data-umami-event="save-video"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tsm-tip"><b>Save as video</b><br>The build filling in from level 10 to 60, as a 10-second video for TikTok, Shorts or Discord.</span></button>':""}<span class="lvtxt"></span></div>
  <div class="bar"><div class="marks"></div><input type="range" min="0" max="${N}" value="0" aria-label="Level"><div class="ticks"></div></div></div>`;
  const q=s=>root.querySelector(s),treesEl=q(".trees"),nodeEl=D.trees.map(()=>[]);
  const nameOf=(t,i)=>D.trees[t].t[i];
@@ -145,6 +150,7 @@ function mount(root,D,opt){opt=opt||{};
  function start(){if(k>=N)go(0,true);playing=true;paint();clearTimeout(timer);timer=setTimeout(tick,k===0?600:delay());if(window.umami)try{umami.track("player-play")}catch(e){}}
  function stop(){playing=false;clearTimeout(timer);paint();}
  q(".ctrls").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a;
+  if(a==="video"){saveVideo();return;}
   if(a==="play")playing?stop():start();else if(a==="next"){stop();go(k+1);}else if(a==="prev"){stop();go(k-1,true);}else if(a==="reset"){stop();go(0,true);}});
  seek.addEventListener("input",e=>{const v=+e.target.value;playing=false;clearTimeout(timer);go(v,true);});
  function setMode(m){root.classList.toggle("text",m==="text");q(".seg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m===m));if(m==="anim")requestAnimationFrame(()=>{FX.size();drawLinks();});}

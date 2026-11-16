@@ -168,10 +168,10 @@ for(const b of out){const C=ctx.CLASSES[b.c],trees=C.trees;
 <h1><img src="../img/specs/${b.specSlug}.webp" alt="${esc(b.spec)}" title="Mostly ${esc(b.spec)}" style="border-radius:8px">${esc(C.name)} – ${esc(b.name).replace(/\//g,'/<wbr>')}</h1>
 <p>${tags(b)} <span class="split">Split <b>${b.split.join(' / ')}</b> (${trees.map(t=>t.name).join(' / ')})</span></p>
 <p class="lede">${esc(b.blurb)}</p>${b.group==='off'?`<p class="old">Off-meta: not the usual pick, but a build that can work well in Forever. Try it, tweak it in the calculator and share your link.</p>`:''}
-<p><a class="btn" href="${calcUrl(b)}">Open in calculator</a></p>
+<p><a class="btn" href="${calcUrl(b)}">Open in calculator</a> <button type="button" class="tsm-btn" id="saveImg" aria-label="Save this build as an image" data-umami-event="share-image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg><span class="tsm-tip"><b>Save as image</b><br>A picture of this build for Discord, Reddit or your guild.</span></button></p>
 ${BSECCSS}<details class="bsec" open><summary><h2>Talents in this build</h2></summary><p class="old" style="margin:0 0 12px">Hover or tap a talent to see what it does at that rank.</p><div class="grid">${picked}</div></details>
 <details class="bsec" id="order" open><summary><h2>Leveling order</h2><span class="bh">level 10 → 60</span></summary><p class="lede">One talent point per level from 10 to 60. Press play to watch the build fill in, or switch to Text for the list.</p>
-<div id="lvp"></div><div class="tbl" id="lvtext"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div></details><script src="../js/player.js" defer></script><script>addEventListener("DOMContentLoaded",()=>{if(window.TSPlayer)TSPlayer.mount(document.getElementById("lvp"),{trees:${JSON.stringify(classData(b.c,'../')).replace(/</g,'\\u003c')},seq:${JSON.stringify(b.seq.map(x=>({t:x.ti,i:trees[x.ti].t.findIndex(y=>y[0]===x.tn)})))}},{textEl:document.getElementById("lvtext")});});</script>${notesHtml(b,trees)}
+<div id="lvp"></div><div class="tbl" id="lvtext"><table><thead><tr><th>Level</th><th>Talent</th><th>Tree</th></tr></thead><tbody>${rows}</tbody></table></div></details><script src="../js/build-media.js" defer></script><script src="../js/player.js" defer></script><script>addEventListener("DOMContentLoaded",()=>{const D={cls:"${b.c}",clsName:${JSON.stringify(C.name||b.c)},title:${JSON.stringify(b.name).replace(/</g,'\\u003c')},trees:${JSON.stringify(classData(b.c,'../')).replace(/</g,'\\u003c')},seq:${JSON.stringify(b.seq.map(x=>({t:x.ti,i:trees[x.ti].t.findIndex(y=>y[0]===x.tn)})))}};window.TSBUILD=D;if(window.TSPlayer)TSPlayer.mount(document.getElementById("lvp"),D,{textEl:document.getElementById("lvtext")});const sb=document.getElementById("saveImg");if(window.TSMedia&&sb){TSMedia.css();TSMedia.twoTap(sb,()=>TSMedia.image(D));}else if(sb)sb.hidden=true;});</script>${notesHtml(b,trees)}
 ${others}${TIPJS}`;
   const fn=`builds/${b.c}-${b.id}.html`;urls.push(fn);
   fs.writeFileSync(R+fn,page(true,`${C.name} ${b.name} Build – WoW Forever | Talentsmith`,`WoW Forever ${C.name} ${b.name.toLowerCase()} talent build (${b.split.join('/')}) with a level-by-level talent order from 10 to 60 and a calculator link.`,body,fn,fs.existsSync(R+`img/og/${b.c}-${b.id}.jpg`)?`img/og/${b.c}-${b.id}.jpg`:null));}
@@ -221,7 +221,7 @@ fs.writeFileSync(R+'classes/index.html',page(true,'WoW Forever Class Guides – 
 // ---- play.html: the leveling player for any calculator link (players' own builds)
 {const all={};for(const c of ORDER)all[c]={name:ctx.CLASSES[c].name,trees:classData(c,'')};
  const body=`<p class="crumb"><a href="calculator.html" id="back">← Back to the calculator</a></p><h1 id="ptitle">Leveling player</h1><p class="lede" id="plede">Watch a build fill in, one talent point per level from 10 to 60.</p><div id="lvp"></div><p id="pempty" hidden class="lede">This link has no talent points yet. <a href="calculator.html">Open the calculator</a>, spend some points and press <b>Play</b>.</p>
-<script src="js/player.js" defer></script><script>const ALLC=${JSON.stringify(all).replace(/</g,'\\u003c')};
+<script src="js/build-media.js" defer></script><script src="js/player.js" defer></script><script>const ALLC=${JSON.stringify(all).replace(/</g,'\\u003c')};
 addEventListener("DOMContentLoaded",()=>{const u=new URLSearchParams(location.search),c=u.get("c"),b=u.get("b")||"",o=u.get("o")||"",C=ALLC[c];
  const back=document.getElementById("back");back.href="calculator.html"+location.search;
  if(!C||!window.TSPlayer){document.getElementById("pempty").hidden=false;return;}
@@ -230,7 +230,7 @@ addEventListener("DOMContentLoaded",()=>{const u=new URLSearchParams(location.se
  if(!seq.length){document.getElementById("pempty").hidden=false;return;}
  const sp=C.trees.map((_,ti)=>seq.filter(s=>s.t===ti).length);document.getElementById("ptitle").textContent="Your "+C.name+" build ("+sp.join(" / ")+")";
  document.title="Your "+C.name+" build – leveling player | Talentsmith";
- TSPlayer.mount(document.getElementById("lvp"),{trees:C.trees,seq});});</script>`;
+ TSPlayer.mount(document.getElementById("lvp"),{cls:c,clsName:C.name,title:"My "+C.name+" build",trees:C.trees,seq});});</script>`;
  urls.push('play.html');fs.writeFileSync(R+'play.html',page(false,'Leveling Player – Watch Your WoW Forever Build | Talentsmith','Watch any WoW Forever talent build fill in level by level from 10 to 60: play, pause, skip and jump to any level.',body,'play.html'));}
 // ---- calculator presets (Meta / Off-meta button)
 {const P={};for(const c of ORDER){const L=out.filter(b=>b.c===c).sort((x,y)=>(x.group==='off')-(y.group==='off')||KO.indexOf(x.kind)-KO.indexOf(y.kind));P[c]=L.map(b=>[b.group==='off'?'off':'meta',b.name,b.kind,b.code,b.ord,b.id,b.specSlug]);}

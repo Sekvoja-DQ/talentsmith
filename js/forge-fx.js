@@ -94,14 +94,15 @@
       if (r < .74) cv = rnd(G.b[1] - .02, P.anvil[1] - .01);
       else if (r < .95) cv = rnd(G.l[1] - .03, G.b[1] - .02);
       else cv = rnd(G.top[1] - .03, G.l[1] - .03);
-      var top = map(.5, cv)[1], sp = rnd(26, 44) * s, life = Math.max(1.2, (q[1] - top) / sp);
-      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -sp, life: life, age: 0, r: rnd(2.6, 5) * s, ph: rnd(0, 6.3), fq: rnd(1.6, 3.2), amp: rnd(4, 9) * s, pop: Math.random() < .15 ? rnd(.3, life * .8) : -1, spr: Math.random() < .45 ? SPR.red : SPR.hot });
+      var top = map(.5, cv)[1], sp = rnd(15, 26) * s, life = Math.max(2.5, (q[1] - top) / sp);
+      parts.push({ k: "c", x: q[0], y: q[1], y0: q[1], top: top, bx: q[0], vy: -sp, life: life, age: 0, r: rnd(2.4, 4.4) * s, ph: rnd(0, 6.3), fq: rnd(.5, 1.1), amp: rnd(6, 14) * s,
+        fl: Math.random() < .2, op: rnd(.55, 1), br: rnd(.35, .9), spr: Math.random() < .35 ? SPR.red : SPR.hot });
     }
     function dropLeaf() {
       var a = P.anvil, sx = a[0] + rnd(-.09, .09);
       leaf = { u0: sx, v0: Math.max(.04, a[1] - .5 * (P === PTS.tall ? .55 : 1)), t: 0, dur: rnd(4.2, 5.2), ph: rnd(0, 6.3), sw: rnd(.025, .04) };
     }
-    var BURST = opt.burst || "sparks";
+    var BURST = opt.burst || "sparks", EMB = opt.embers || "drift";
     function burst(x, y) {
       var s = map.s, i, ang, sp;
       gemPulse = 1;
@@ -144,7 +145,7 @@
       acc += dt * rates[0] * I; while (acc > 1) { acc--; spawnEmber(mode !== "strike"); }
       if (rates[2]) { accM += dt * rates[2] * I * .4; while (accM > 1) { accM--; spawnMote(); } }
       if (mode === "leaf") {
-        accM += dt * 11 * I; while (accM > 1) { accM--; spawnCrackle(); }
+        accM += dt * 6 * I; while (accM > 1) { accM--; spawnCrackle(); }
         if (!leaf) { leafWait -= dt; if (leafWait <= 0) dropLeaf(); }
       }
       if (rates[1]) { nextStrike -= dt; if (nextStrike <= 0) { strike(); nextStrike = rates[1] * rnd(.8, 1.25); } }
@@ -212,10 +213,22 @@
           cx.strokeStyle = "rgba(255," + Math.round(200 - lf * 120) + "," + Math.round(110 - lf * 90) + ",1)";
           cx.lineWidth = p.r; cx.lineCap = "round"; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * (p.tl || .035), p.y - p.vy * (p.tl || .035)); cx.stroke();
         } else if (p.k === "c") {
-          p.y += p.vy * dt; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + p.age * .35) + Math.sin(p.age * p.fq * 2.7 + p.ph) * p.amp * .25;
-          var fc = .55 + .45 * Math.sin(T * 23 + p.ph * 3), ac = (p.age < .5 ? p.age / .5 : lf > .75 ? (1 - lf) / .25 : 1) * fc, rc = p.r * 3 * (1 - lf * .3);
-          if (p.pop > 0 && p.age > p.pop && p.age < p.pop + .08) { ac = 1; rc *= 1.9; }
-          cx.globalAlpha = Math.max(0, ac); cx.drawImage(p.spr, p.x - rc, p.y - rc, rc * 2, rc * 2);
+          // rising embers, drawn like the falling ember (soft halo + hot core). 80% steady, 20% with a slow flicker.
+          var fade = (p.age < .9 ? p.age / .9 : lf > .7 ? (1 - lf) / .3 : 1), core = p.r * 2.6, halo, al3, img = p.spr;
+          var flick = p.fl ? (.7 + .3 * Math.sin(p.age * 6 + p.ph) * Math.sin(p.age * 2.3 + p.ph * 2)) : 1;
+          if (EMB === "breathe") { // rise eases out like heat lifting; each ember breathes at its own pace
+            var e2 = 1 - Math.pow(1 - lf, 1.8); p.y = p.y0 + (p.top - p.y0) * e2;
+            p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp;
+            al3 = fade * p.op * (.75 + .25 * Math.sin(p.age * p.br * 3 + p.ph)) * flick; halo = core * 2.4;
+          } else if (EMB === "cool") { // starts white-hot and cools to deep red as it climbs, shrinking slowly
+            p.y += p.vy * dt; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + lf * .6);
+            img = lf < .45 ? SPR.hot : SPR.red; core *= 1.15 - lf * .45; al3 = fade * p.op * flick; halo = core * (2.8 - lf * 1.2);
+          } else { // "drift": a small copy of the falling ember – slow S-curve, gentle glow
+            p.y += p.vy * dt; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + p.age * .12);
+            al3 = fade * p.op * (.85 + .15 * Math.sin(p.age * 1.7 + p.ph)) * flick; halo = core * 2.2;
+          }
+          cx.globalAlpha = Math.max(0, al3 * .75); cx.drawImage(SPR.glow, p.x - halo, p.y - halo, halo * 2, halo * 2);
+          cx.globalAlpha = Math.max(0, al3); cx.drawImage(img, p.x - core, p.y - core, core * 2, core * 2);
         } else if (p.k === "f") {
           var dr = Math.exp(-2.6 * dt); p.vx *= dr; p.vy = p.vy * dr - 90 * s * dt;
           p.x += p.vx * dt; p.y += p.vy * dt;
@@ -249,7 +262,7 @@
     var io = window.IntersectionObserver ? new IntersectionObserver(function (es) { vis = es[0].isIntersecting && !document.hidden; }) : null; if (io) io.observe(img);
     document.addEventListener("visibilitychange", function () { vis = !document.hidden; });
     if (!reduce) raf = requestAnimationFrame(frame);
-    return { trigger: function () { if (mode === "leaf" && !leaf && map) dropLeaf(); else if (map) strike(); }, set: function (o) { if (o.intensity != null) I = o.intensity; }, stop: function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); if (io) io.disconnect(); cv.remove(); }, canvas: cv };
+    return { setStyle: function (o) { if (o.burst) BURST = o.burst; if (o.embers) { EMB = o.embers; parts = parts.filter(function (q) { return q.k !== "c"; }); } }, trigger: function () { if (mode === "leaf" && !leaf && map) dropLeaf(); else if (map) strike(); }, set: function (o) { if (o.intensity != null) I = o.intensity; }, stop: function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); if (io) io.disconnect(); cv.remove(); }, canvas: cv };
   }
   window.TSForge = { mount: mount };
 })();

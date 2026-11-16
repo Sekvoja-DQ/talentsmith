@@ -5,8 +5,8 @@
 (function () {
   "use strict";
   var PTS = {
-    wide: { anvil: [0.5, 0.655], anvilW: 0.22, gems: { top: [0.5, 0.30], l: [0.417, 0.43], r: [0.588, 0.43], b: [0.5, 0.57] }, ring: [0.5, 0.5, 0.285, 0.47], ar: 1254 / 625 },
-    tall: { anvil: [0.5, 0.492], anvilW: 0.24, gems: { top: [0.5, 0.30], l: [0.40, 0.382], r: [0.60, 0.382], b: [0.5, 0.44] }, ring: [0.5, 0.40, 0.34, 0.23], ar: 768 / 1152 }
+    wide: { anvil: [0.5, 0.655], anvilW: 0.22, base: [0.28, 0.72, 0.80, 1.0], gems: { top: [0.5, 0.30], l: [0.417, 0.43], r: [0.588, 0.43], b: [0.5, 0.57] }, ring: [0.5, 0.5, 0.285, 0.47], ar: 1254 / 625 },
+    tall: { anvil: [0.5, 0.492], anvilW: 0.24, base: [0.26, 0.74, 0.55, 0.64], gems: { top: [0.5, 0.30], l: [0.40, 0.382], r: [0.60, 0.382], b: [0.5, 0.44] }, ring: [0.5, 0.40, 0.34, 0.23], ar: 768 / 1152 }
   };
   var LINKS = [["top", "l"], ["top", "r"], ["top", "b"], ["l", "b"], ["r", "b"]];
 
@@ -88,8 +88,9 @@
     // "leaf" mode: crackling embers under the strike point + one ember drifting down like a dry leaf, then a sparkle burst
     var leaf = null, leafWait = 1.2;
     function spawnCrackle() {
-      var q = map(P.anvil[0] + rnd(-.5, .5) * P.anvilW * .8, P.anvil[1] + rnd(.005, .05)), s = map.s;
-      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -rnd(14, 34) * s, life: rnd(.7, 1.6), age: 0, r: rnd(2.5, 5) * s, ph: rnd(0, 6.3), fq: rnd(5, 9), amp: rnd(4, 10) * s, pop: Math.random() < .25 ? rnd(.2, .7) : -1, spr: Math.random() < .4 ? SPR.red : SPR.hot });
+      var B = P.base, q = map(rnd(B[0], B[1]), rnd(B[2], B[3])), s = map.s;
+      var life = .35 - Math.log(1 - Math.random() * .985) * .75; // most die low, a few climb high
+      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -rnd(45, 95) * s, life: life, age: 0, r: rnd(2.8, 5.6) * s, ph: rnd(0, 6.3), fq: rnd(4, 8), amp: rnd(5, 12) * s, pop: Math.random() < .2 ? rnd(.15, .6) : -1, spr: Math.random() < .45 ? SPR.red : SPR.hot });
     }
     function dropLeaf() {
       var a = P.anvil, sx = a[0] + rnd(-.09, .09);
@@ -97,17 +98,17 @@
     }
     function burst(x, y) {
       var s = map.s; flash = 1.2; gemPulse = 1;
-      var n = Math.round(46 * I);
-      for (var i = 0; i < n; i++) {
-        var ang = rnd(-Math.PI, 0) + (Math.random() < .2 ? rnd(0, Math.PI * .25) : 0), sp = rnd(120, 460) * s;
-        parts.push({ k: "s", x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.6, 1.3), age: 0, r: rnd(1.4, 2.8) * s });
+      var nf = Math.round(34 * I);
+      for (var f = 0; f < nf; f++) { // flames: thrown out and up, slowing, rising, swelling, fading
+        var ang = rnd(-Math.PI * .97, -Math.PI * .03), sp = rnd(70, 300) * s;
+        parts.push({ k: "f", x: x + rnd(-10, 10) * s, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp * rnd(.6, 1), life: rnd(.45, 1.05), age: 0, r: rnd(7, 15) * s, spr: Math.random() < .55 ? SPR.red : SPR.hot });
       }
-      var m = Math.round(12 * Math.min(I, 1.8));
-      for (var j = 0; j < m; j++) {
-        var an = rnd(0, Math.PI * 2), d = rnd(10, 90) * s;
-        parts.push({ k: "t", x: x + Math.cos(an) * d, y: y + Math.sin(an) * d * .6 - rnd(0, 40) * s, life: rnd(.5, 1.1), age: -rnd(0, .25), r: rnd(14, 30) * s, rot: rnd(0, 1) });
+      var n = Math.round(40 * I);
+      for (var i = 0; i < n; i++) { // embers flung off, falling back
+        var an = rnd(-Math.PI, 0), v = rnd(140, 420) * s;
+        parts.push({ k: "s", x: x, y: y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: rnd(.6, 1.4), age: 0, r: rnd(1.6, 3) * s });
       }
-      parts.push({ k: "t", x: x, y: y, life: .55, age: 0, r: 70 * s, rot: 0 });
+      for (var j = 0; j < Math.round(14 * I); j++) spawnCrackle(); // fire flares up from below
     }
     function newFlow() {
       var path = Math.random() < .5 ? ["top", "l", "b"] : (Math.random() < .5 ? ["top", "r", "b"] : ["top", "b"]);
@@ -125,7 +126,7 @@
       acc += dt * rates[0] * I; while (acc > 1) { acc--; spawnEmber(mode !== "strike"); }
       if (rates[2]) { accM += dt * rates[2] * I * .4; while (accM > 1) { accM--; spawnMote(); } }
       if (mode === "leaf") {
-        accM += dt * 5 * I; while (accM > 1) { accM--; spawnCrackle(); }
+        accM += dt * 22 * I; while (accM > 1) { accM--; spawnCrackle(); }
         if (!leaf) { leafWait -= dt; if (leafWait <= 0) dropLeaf(); }
       }
       if (rates[1]) { nextStrike -= dt; if (nextStrike <= 0) { strike(); nextStrike = rates[1] * rnd(.8, 1.25); } }
@@ -193,10 +194,16 @@
           cx.strokeStyle = "rgba(255," + Math.round(200 - lf * 120) + "," + Math.round(110 - lf * 90) + ",1)";
           cx.lineWidth = p.r; cx.lineCap = "round"; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * .035, p.y - p.vy * .035); cx.stroke();
         } else if (p.k === "c") {
-          p.y += p.vy * dt; p.vy *= .99; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + lf);
+          p.y += p.vy * dt; p.vy *= .995; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + p.age);
           var fc = .55 + .45 * Math.sin(T * 23 + p.ph * 3), ac = (lf < .15 ? lf / .15 : 1 - (lf - .15) / .85) * fc, rc = p.r * 3 * (1 - lf * .3);
           if (p.pop > 0 && p.age > p.pop && p.age < p.pop + .08) { ac = 1; rc *= 1.9; }
           cx.globalAlpha = Math.max(0, ac); cx.drawImage(p.spr, p.x - rc, p.y - rc, rc * 2, rc * 2);
+        } else if (p.k === "f") {
+          var dr = Math.exp(-2.6 * dt); p.vx *= dr; p.vy = p.vy * dr - 90 * s * dt;
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          var fr = p.r * (1 + lf * 1.6) * 3, fa = (lf < .1 ? lf / .1 : 1 - (lf - .1) / .9);
+          cx.globalAlpha = Math.max(0, fa * (.7 + .3 * Math.sin(T * 30 + p.x)));
+          cx.drawImage(p.spr, p.x - fr, p.y - fr, fr * 2, fr * 2);
         } else if (p.k === "t") {
           if (p.age < 0) continue;
           var tk = Math.sin(Math.PI * lf), tr = p.r * (0.4 + tk * .8);

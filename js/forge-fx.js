@@ -94,9 +94,9 @@
       if (r < .74) cv = rnd(G.b[1] - .02, P.anvil[1] - .01);
       else if (r < .95) cv = rnd(G.l[1] - .03, G.b[1] - .02);
       else cv = rnd(G.top[1] - .03, G.l[1] - .03);
-      var top = map(.5, cv)[1], sp = rnd(15, 26) * s, life = Math.max(2.5, (q[1] - top) / sp);
+      var top = map(.5, cv)[1], sp = rnd(15, 26) * 1.15 * s, life = Math.max(2.5, (q[1] - top) / sp);
       parts.push({ k: "c", x: q[0], y: q[1], y0: q[1], top: top, bx: q[0], vy: -sp, life: life, age: 0, r: rnd(2.4, 4.4) * s, ph: rnd(0, 6.3), fq: rnd(.5, 1.1), amp: rnd(6, 14) * s,
-        fl: Math.random() < .2, op: rnd(.55, 1), br: rnd(.35, .9), spr: Math.random() < .35 ? SPR.red : SPR.hot });
+        fl: Math.random() < .2, op: rnd(.55, 1), st: EMB !== "mix" ? EMB : (function (x) { return x < .5 ? "drift" : x < .85 ? "breathe" : "cool"; })(Math.random()), br: rnd(.35, .9), spr: Math.random() < .35 ? SPR.red : SPR.hot });
     }
     function dropLeaf() {
       var a = P.anvil, sx = a[0] + rnd(-.09, .09);
@@ -216,11 +216,12 @@
           // rising embers, drawn like the falling ember (soft halo + hot core). 80% steady, 20% with a slow flicker.
           var fade = (p.age < .9 ? p.age / .9 : lf > .7 ? (1 - lf) / .3 : 1), core = p.r * 2.6, halo, al3, img = p.spr;
           var flick = p.fl ? (.7 + .3 * Math.sin(p.age * 6 + p.ph) * Math.sin(p.age * 2.3 + p.ph * 2)) : 1;
-          if (EMB === "breathe") { // rise eases out like heat lifting; each ember breathes at its own pace
+          var ST = p.st || EMB;
+          if (ST === "breathe") { // rise eases out like heat lifting; each ember breathes at its own pace
             var e2 = 1 - Math.pow(1 - lf, 1.8); p.y = p.y0 + (p.top - p.y0) * e2;
             p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp;
             al3 = fade * p.op * (.75 + .25 * Math.sin(p.age * p.br * 3 + p.ph)) * flick; halo = core * 2.4;
-          } else if (EMB === "cool") { // starts white-hot and cools to deep red as it climbs, shrinking slowly
+          } else if (ST === "cool") { // starts white-hot and cools to deep red as it climbs, shrinking slowly
             p.y += p.vy * dt; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + lf * .6);
             img = lf < .45 ? SPR.hot : SPR.red; core *= 1.15 - lf * .45; al3 = fade * p.op * flick; halo = core * (2.8 - lf * 1.2);
           } else { // "drift": a small copy of the falling ember – slow S-curve, gentle glow

@@ -88,27 +88,45 @@
     // "leaf" mode: crackling embers under the strike point + one ember drifting down like a dry leaf, then a sparkle burst
     var leaf = null, leafWait = 1.2;
     function spawnCrackle() {
-      var B = P.base, q = map(rnd(B[0], B[1]), rnd(B[2], B[3])), s = map.s;
-      var life = .35 - Math.log(1 - Math.random() * .985) * .75; // most die low, a few climb high
-      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -rnd(45, 95) * s, life: life, age: 0, r: rnd(2.8, 5.6) * s, ph: rnd(0, 6.3), fq: rnd(4, 8), amp: rnd(5, 12) * s, pop: Math.random() < .2 ? rnd(.15, .6) : -1, spr: Math.random() < .45 ? SPR.red : SPR.hot });
+      // slow, steady embers from the fire at the base. Each gets a ceiling: most stop around the
+      // bottom gem / anvil top, some reach the two side gems, a very few the top gem.
+      var B = P.base, G = P.gems, q = map(rnd(B[0], B[1]), rnd(B[2], B[3])), s = map.s, r = Math.random(), cv;
+      if (r < .74) cv = rnd(G.b[1] - .02, P.anvil[1] - .01);
+      else if (r < .95) cv = rnd(G.l[1] - .03, G.b[1] - .02);
+      else cv = rnd(G.top[1] - .03, G.l[1] - .03);
+      var top = map(.5, cv)[1], sp = rnd(26, 44) * s, life = Math.max(1.2, (q[1] - top) / sp);
+      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -sp, life: life, age: 0, r: rnd(2.6, 5) * s, ph: rnd(0, 6.3), fq: rnd(1.6, 3.2), amp: rnd(4, 9) * s, pop: Math.random() < .15 ? rnd(.3, life * .8) : -1, spr: Math.random() < .45 ? SPR.red : SPR.hot });
     }
     function dropLeaf() {
       var a = P.anvil, sx = a[0] + rnd(-.09, .09);
       leaf = { u0: sx, v0: Math.max(.04, a[1] - .5 * (P === PTS.tall ? .55 : 1)), t: 0, dur: rnd(4.2, 5.2), ph: rnd(0, 6.3), sw: rnd(.025, .04) };
     }
+    var BURST = opt.burst || "sparks";
     function burst(x, y) {
-      var s = map.s; flash = 1.2; gemPulse = 1;
-      var nf = Math.round(34 * I);
-      for (var f = 0; f < nf; f++) { // flames: thrown out and up, slowing, rising, swelling, fading
-        var ang = rnd(-Math.PI * .97, -Math.PI * .03), sp = rnd(70, 300) * s;
-        parts.push({ k: "f", x: x + rnd(-10, 10) * s, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp * rnd(.6, 1), life: rnd(.45, 1.05), age: 0, r: rnd(7, 15) * s, spr: Math.random() < .55 ? SPR.red : SPR.hot });
+      var s = map.s, i, ang, sp;
+      gemPulse = 1;
+      if (BURST === "sparks") { // smithing spark fountain: bright streaks fan up and fall
+        flash = .7;
+        for (i = 0; i < Math.round(70 * I); i++) {
+          ang = -Math.PI / 2 + rnd(-1.25, 1.25); sp = rnd(220, 620) * s;
+          parts.push({ k: "s", x: x + rnd(-6, 6) * s, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.7, 1.6), age: 0, r: rnd(1.2, 2.6) * s, tl: rnd(.035, .06) });
+        }
+        for (i = 0; i < Math.round(10 * I); i++) parts.push({ k: "m", x: x + rnd(-30, 30) * s, y: y - rnd(0, 30) * s, vx: rnd(-10, 10) * s, vy: -rnd(10, 30) * s, life: rnd(1.5, 3), age: 0, r: rnd(1.5, 3) * s, ph: rnd(0, 6.3), fq: 1 });
+      } else if (BURST === "flare") { // flame tongue shooting up from the anvil
+        flash = 1;
+        for (i = 0; i < Math.round(55 * I); i++) {
+          ang = -Math.PI / 2 + rnd(-.38, .38); sp = rnd(140, 380) * s;
+          parts.push({ k: "f", x: x + rnd(-14, 14) * s, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.35, .8), age: 0, r: rnd(4, 9) * s, spr: Math.random() < .5 ? SPR.red : SPR.hot });
+        }
+        for (i = 0; i < Math.round(18 * I); i++) { ang = -Math.PI / 2 + rnd(-.9, .9); sp = rnd(200, 480) * s; parts.push({ k: "s", x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.6, 1.2), age: 0, r: rnd(1.2, 2.2) * s, tl: .04 }); }
+      } else { // "splash": molten drops arc out and fall, plus a ring of heat on the anvil
+        flash = .6;
+        parts.push({ k: "r", x: x, y: y, life: .55, age: 0, r: 160 * s });
+        for (i = 0; i < Math.round(26 * I); i++) {
+          ang = -Math.PI / 2 + rnd(-1.35, 1.35); sp = rnd(160, 380) * s;
+          parts.push({ k: "d", x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.9, 1.5), age: 0, r: rnd(2.2, 4.2) * s, tr: [] });
+        }
       }
-      var n = Math.round(40 * I);
-      for (var i = 0; i < n; i++) { // embers flung off, falling back
-        var an = rnd(-Math.PI, 0), v = rnd(140, 420) * s;
-        parts.push({ k: "s", x: x, y: y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: rnd(.6, 1.4), age: 0, r: rnd(1.6, 3) * s });
-      }
-      for (var j = 0; j < Math.round(14 * I); j++) spawnCrackle(); // fire flares up from below
     }
     function newFlow() {
       var path = Math.random() < .5 ? ["top", "l", "b"] : (Math.random() < .5 ? ["top", "r", "b"] : ["top", "b"]);
@@ -126,7 +144,7 @@
       acc += dt * rates[0] * I; while (acc > 1) { acc--; spawnEmber(mode !== "strike"); }
       if (rates[2]) { accM += dt * rates[2] * I * .4; while (accM > 1) { accM--; spawnMote(); } }
       if (mode === "leaf") {
-        accM += dt * 22 * I; while (accM > 1) { accM--; spawnCrackle(); }
+        accM += dt * 11 * I; while (accM > 1) { accM--; spawnCrackle(); }
         if (!leaf) { leafWait -= dt; if (leafWait <= 0) dropLeaf(); }
       }
       if (rates[1]) { nextStrike -= dt; if (nextStrike <= 0) { strike(); nextStrike = rates[1] * rnd(.8, 1.25); } }
@@ -192,10 +210,10 @@
           p.vy += 520 * s * dt; p.vx *= .985; p.x += p.vx * dt; p.y += p.vy * dt;
           var al2 = 1 - lf; cx.globalAlpha = al2;
           cx.strokeStyle = "rgba(255," + Math.round(200 - lf * 120) + "," + Math.round(110 - lf * 90) + ",1)";
-          cx.lineWidth = p.r; cx.lineCap = "round"; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * .035, p.y - p.vy * .035); cx.stroke();
+          cx.lineWidth = p.r; cx.lineCap = "round"; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * (p.tl || .035), p.y - p.vy * (p.tl || .035)); cx.stroke();
         } else if (p.k === "c") {
-          p.y += p.vy * dt; p.vy *= .995; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + p.age);
-          var fc = .55 + .45 * Math.sin(T * 23 + p.ph * 3), ac = (lf < .15 ? lf / .15 : 1 - (lf - .15) / .85) * fc, rc = p.r * 3 * (1 - lf * .3);
+          p.y += p.vy * dt; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + p.age * .35) + Math.sin(p.age * p.fq * 2.7 + p.ph) * p.amp * .25;
+          var fc = .55 + .45 * Math.sin(T * 23 + p.ph * 3), ac = (p.age < .5 ? p.age / .5 : lf > .75 ? (1 - lf) / .25 : 1) * fc, rc = p.r * 3 * (1 - lf * .3);
           if (p.pop > 0 && p.age > p.pop && p.age < p.pop + .08) { ac = 1; rc *= 1.9; }
           cx.globalAlpha = Math.max(0, ac); cx.drawImage(p.spr, p.x - rc, p.y - rc, rc * 2, rc * 2);
         } else if (p.k === "f") {
@@ -204,6 +222,14 @@
           var fr = p.r * (1 + lf * 1.6) * 3, fa = (lf < .1 ? lf / .1 : 1 - (lf - .1) / .9);
           cx.globalAlpha = Math.max(0, fa * (.7 + .3 * Math.sin(T * 30 + p.x)));
           cx.drawImage(p.spr, p.x - fr, p.y - fr, fr * 2, fr * 2);
+        } else if (p.k === "d") {
+          p.vy += 640 * s * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.tr.push(p.x, p.y); if (p.tr.length > 16) p.tr.splice(0, 2);
+          var da = 1 - lf; cx.globalAlpha = da * .8; cx.lineCap = "round";
+          for (var q2 = 2; q2 < p.tr.length; q2 += 2) { cx.strokeStyle = "rgba(255," + Math.round(120 + 100 * (q2 / p.tr.length)) + ",40,1)"; cx.lineWidth = p.r * (q2 / p.tr.length); cx.beginPath(); cx.moveTo(p.tr[q2 - 2], p.tr[q2 - 1]); cx.lineTo(p.tr[q2], p.tr[q2 + 1]); cx.stroke(); }
+          var dr2 = p.r * 2.6; cx.globalAlpha = da; cx.drawImage(SPR.hot, p.x - dr2, p.y - dr2, dr2 * 2, dr2 * 2);
+        } else if (p.k === "r") {
+          var rr2 = p.r * (.25 + lf * 1.1); cx.globalAlpha = (1 - lf) * .8; cx.strokeStyle = "rgba(255,150,50,1)"; cx.lineWidth = 6 * map.s * (1 - lf) + 1;
+          cx.beginPath(); cx.ellipse(p.x, p.y + 4 * map.s, rr2, rr2 * .22, 0, 0, Math.PI * 2); cx.stroke();
         } else if (p.k === "t") {
           if (p.age < 0) continue;
           var tk = Math.sin(Math.PI * lf), tr = p.r * (0.4 + tk * .8);

@@ -28,3 +28,4 @@
 - 2026-11-13 #28 Blue-gold banner as the Notes heading on build pages – shipped (img/notes-banner.webp).
 - 2026-11-16 #32–34 Living forge (embers / hammer strikes / forge alive) – replaced by the owner's own spec, #40 falling ember.
 - 2026-11-16 #36 hotfix badges, #37 share image, #39 save video – approved as ideas; replaced by three placement options each (#41–43, #44–46, #47–49). #38 This-week strip – not approved (owner: later, when there are visitors).
+- 2026-11-16 #40 falling ember – owner: fire burst looked bad, wants options; embers slower and height-limited. Replaced by #50–52 (three burst styles). #42/43, #45/46, #48/49 – not chosen (owner picked #41, #44, #47).

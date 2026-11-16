@@ -21,6 +21,9 @@
     red: sprite(32, [[0, "rgba(255,200,140,1)"], [0.2, "rgba(255,110,40,.9)"], [0.5, "rgba(220,50,10,.3)"], [1, "rgba(160,20,0,0)"]]),
     glow: sprite(64, [[0, "rgba(255,200,90,.55)"], [0.4, "rgba(255,130,30,.22)"], [1, "rgba(255,80,0,0)"]]),
     gem: sprite(64, [[0, "rgba(255,245,200,.9)"], [0.25, "rgba(255,205,90,.5)"], [1, "rgba(255,150,30,0)"]]),
+    star: (function () { var c = document.createElement("canvas"); c.width = c.height = 64; var g = c.getContext("2d"); g.translate(32, 32);
+      [[0, 1], [Math.PI / 2, 1], [Math.PI / 4, .45], [-Math.PI / 4, .45]].forEach(function (a) { g.save(); g.rotate(a[0]); var gr = g.createLinearGradient(-32 * a[1], 0, 32 * a[1], 0); gr.addColorStop(0, "rgba(255,210,120,0)"); gr.addColorStop(.5, "rgba(255,248,225,1)"); gr.addColorStop(1, "rgba(255,210,120,0)"); g.fillStyle = gr; g.beginPath(); g.ellipse(0, 0, 32 * a[1], 2.2, 0, 0, Math.PI * 2); g.fill(); g.restore(); });
+      var cg = g.createRadialGradient(0, 0, 0, 0, 0, 10); cg.addColorStop(0, "rgba(255,255,240,1)"); cg.addColorStop(1, "rgba(255,200,100,0)"); g.fillStyle = cg; g.fillRect(-10, -10, 20, 20); return c; })(),
     mote: sprite(16, [[0, "rgba(255,236,190,.9)"], [0.5, "rgba(255,190,110,.25)"], [1, "rgba(255,170,80,0)"]])
   };
 
@@ -54,7 +57,7 @@
       var ox = (W - iw) * px, oy = (H - ih) * py;
       map = function (u, v) { return [ox + u * iw, oy + v * ih]; };
       map.s = iw / 1000; // scale unit: 1/1000 of image width
-      if (!warm) { warm = true; for (var w = 0; w < 40 * I && mode !== "strike"; w++) { spawnEmber(true); parts[parts.length - 1].age = Math.random() * 2; } }
+      if (!warm) { warm = true; for (var w = 0; w < 40 * I && mode !== "strike" && mode !== "leaf"; w++) { spawnEmber(true); parts[parts.length - 1].age = Math.random() * 2; } }
     }
 
     function rnd(a, b) { return a + Math.random() * (b - a); }
@@ -82,12 +85,36 @@
         parts.push({ k: "s", x: a[0] + rnd(-20, 20) * s, y: a[1], vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.5, 1.1), age: 0, r: rnd(1.4, 2.6) * s });
       }
     }
+    // "leaf" mode: crackling embers under the strike point + one ember drifting down like a dry leaf, then a sparkle burst
+    var leaf = null, leafWait = 1.2;
+    function spawnCrackle() {
+      var q = map(P.anvil[0] + rnd(-.5, .5) * P.anvilW * .8, P.anvil[1] + rnd(.005, .05)), s = map.s;
+      parts.push({ k: "c", x: q[0], y: q[1], bx: q[0], vy: -rnd(14, 34) * s, life: rnd(.7, 1.6), age: 0, r: rnd(2.5, 5) * s, ph: rnd(0, 6.3), fq: rnd(5, 9), amp: rnd(4, 10) * s, pop: Math.random() < .25 ? rnd(.2, .7) : -1, spr: Math.random() < .4 ? SPR.red : SPR.hot });
+    }
+    function dropLeaf() {
+      var a = P.anvil, sx = a[0] + rnd(-.09, .09);
+      leaf = { u0: sx, v0: Math.max(.04, a[1] - .5 * (P === PTS.tall ? .55 : 1)), t: 0, dur: rnd(4.2, 5.2), ph: rnd(0, 6.3), sw: rnd(.025, .04) };
+    }
+    function burst(x, y) {
+      var s = map.s; flash = 1.2; gemPulse = 1;
+      var n = Math.round(46 * I);
+      for (var i = 0; i < n; i++) {
+        var ang = rnd(-Math.PI, 0) + (Math.random() < .2 ? rnd(0, Math.PI * .25) : 0), sp = rnd(120, 460) * s;
+        parts.push({ k: "s", x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: rnd(.6, 1.3), age: 0, r: rnd(1.4, 2.8) * s });
+      }
+      var m = Math.round(12 * Math.min(I, 1.8));
+      for (var j = 0; j < m; j++) {
+        var an = rnd(0, Math.PI * 2), d = rnd(10, 90) * s;
+        parts.push({ k: "t", x: x + Math.cos(an) * d, y: y + Math.sin(an) * d * .6 - rnd(0, 40) * s, life: rnd(.5, 1.1), age: -rnd(0, .25), r: rnd(14, 30) * s, rot: rnd(0, 1) });
+      }
+      parts.push({ k: "t", x: x, y: y, life: .55, age: 0, r: 70 * s, rot: 0 });
+    }
     function newFlow() {
       var path = Math.random() < .5 ? ["top", "l", "b"] : (Math.random() < .5 ? ["top", "r", "b"] : ["top", "b"]);
       flows.push({ path: path, t: 0, dur: path.length === 2 ? 1.1 : 1.6 });
     }
 
-    var rates = { embers: [40, 0, 0], strike: [10, 2.6, 0], alive: [22, 4.5, 10] }[mode] || [22, 4.5, 10];
+    var rates = { embers: [40, 0, 0], strike: [10, 2.6, 0], alive: [22, 4.5, 10], leaf: [0, 0, 0] }[mode] || [22, 4.5, 10];
     var acc = 0, accM = 0;
 
     function frame(now) {
@@ -97,6 +124,10 @@
       var T = (now - t0) / 1000;
       acc += dt * rates[0] * I; while (acc > 1) { acc--; spawnEmber(mode !== "strike"); }
       if (rates[2]) { accM += dt * rates[2] * I * .4; while (accM > 1) { accM--; spawnMote(); } }
+      if (mode === "leaf") {
+        accM += dt * 5 * I; while (accM > 1) { accM--; spawnCrackle(); }
+        if (!leaf) { leafWait -= dt; if (leafWait <= 0) dropLeaf(); }
+      }
       if (rates[1]) { nextStrike -= dt; if (nextStrike <= 0) { strike(); nextStrike = rates[1] * rnd(.8, 1.25); } }
       if (mode === "alive") { nextFlow -= dt; if (nextFlow <= 0) { newFlow(); nextFlow = rnd(1.2, 2.4) / Math.max(I, .4); } }
 
@@ -106,16 +137,18 @@
 
       // forge breathing glow on the anvil
       if (mode !== "embers") {
+        if (mode === "leaf" && flash <= 0) { var a0 = map(P.anvil[0], P.anvil[1] + .02), R0 = 150 * s; cx.globalAlpha = (.18 + .08 * Math.sin(T * 2.3) + .05 * Math.sin(T * 7.1)) * Math.min(I, 1.4); cx.drawImage(SPR.glow, a0[0] - R0, a0[1] - R0 * .6, R0 * 2, R0 * 1.2); }
+        else {
         var a = map(P.anvil[0], P.anvil[1]), br = .55 + .25 * Math.sin(T * 1.7) + .12 * Math.sin(T * 4.3) + flash * .9;
         var R = 260 * s * (1 + flash * .25);
         cx.globalAlpha = Math.min(1, br * .55 * Math.min(I, 1.4)); cx.drawImage(SPR.glow, a[0] - R, a[1] - R * .75, R * 2, R * 1.5);
-      }
+      }}
       // gem glow (pulse on strike, gentle shimmer otherwise)
       if (mode !== "embers") {
         var gk = ["top", "l", "r", "b"];
         for (var g = 0; g < 4; g++) {
           var gp = map(P.gems[gk[g]][0], P.gems[gk[g]][1]);
-          var sh = .25 + .15 * Math.sin(T * 2.1 + g * 1.3) + gemPulse * .6;
+          var sh = (mode === "leaf" ? 0 : .25 + .15 * Math.sin(T * 2.1 + g * 1.3)) + gemPulse * .6;
           var GR = 70 * s; cx.globalAlpha = Math.min(1, sh * Math.min(I, 1.3));
           cx.drawImage(SPR.gem, gp[0] - GR, gp[1] - GR, GR * 2, GR * 2);
         }
@@ -133,6 +166,17 @@
       }
       flash = Math.max(0, flash - dt * 3.2); gemPulse = Math.max(0, gemPulse - dt * 1.4);
 
+      if (leaf) {
+        leaf.t += dt; var k = Math.min(leaf.t / leaf.dur, 1), ease = k * k * (3 - 2 * k) * .35 + k * .65;
+        var sway = Math.sin(leaf.t * 2.2 + leaf.ph) * leaf.sw * (1 - k * .85), flut = Math.sin(leaf.t * 5.3 + leaf.ph) * .006 * (1 - k);
+        var lu = leaf.u0 + (P.anvil[0] - leaf.u0) * k * k + sway, lv = leaf.v0 + (P.anvil[1] - .005 - leaf.v0) * ease + flut;
+        var lp = map(lu, lv), LR = (7 + 3 * Math.sin(leaf.t * 9)) * s * 3 * (1 + k * .4);
+        cx.globalAlpha = Math.min(1, leaf.t / .6) * (.75 + .25 * Math.sin(leaf.t * 11));
+        cx.drawImage(SPR.glow, lp[0] - LR * 2.2, lp[1] - LR * 2.2, LR * 4.4, LR * 4.4);
+        cx.globalAlpha = Math.min(1, leaf.t / .6); cx.drawImage(SPR.hot, lp[0] - LR, lp[1] - LR, LR * 2, LR * 2);
+        if (Math.random() < .35) parts.push({ k: "m", x: lp[0], y: lp[1], vx: rnd(-6, 6) * s, vy: rnd(4, 12) * s, life: rnd(.4, .8), age: 0, r: rnd(1, 2) * s, ph: 0, fq: 1 });
+        if (k >= 1) { burst(lp[0], lp[1]); leaf = null; leafWait = rnd(5, 8); }
+      }
       // particles
       for (var i = parts.length - 1; i >= 0; i--) {
         var p = parts[i]; p.age += dt; if (p.age >= p.life) { parts.splice(i, 1); continue; }
@@ -148,6 +192,15 @@
           var al2 = 1 - lf; cx.globalAlpha = al2;
           cx.strokeStyle = "rgba(255," + Math.round(200 - lf * 120) + "," + Math.round(110 - lf * 90) + ",1)";
           cx.lineWidth = p.r; cx.lineCap = "round"; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * .035, p.y - p.vy * .035); cx.stroke();
+        } else if (p.k === "c") {
+          p.y += p.vy * dt; p.vy *= .99; p.x = p.bx + Math.sin(p.age * p.fq + p.ph) * p.amp * (1 + lf);
+          var fc = .55 + .45 * Math.sin(T * 23 + p.ph * 3), ac = (lf < .15 ? lf / .15 : 1 - (lf - .15) / .85) * fc, rc = p.r * 3 * (1 - lf * .3);
+          if (p.pop > 0 && p.age > p.pop && p.age < p.pop + .08) { ac = 1; rc *= 1.9; }
+          cx.globalAlpha = Math.max(0, ac); cx.drawImage(p.spr, p.x - rc, p.y - rc, rc * 2, rc * 2);
+        } else if (p.k === "t") {
+          if (p.age < 0) continue;
+          var tk = Math.sin(Math.PI * lf), tr = p.r * (0.4 + tk * .8);
+          cx.save(); cx.translate(p.x, p.y); cx.rotate(p.rot + lf * .6); cx.globalAlpha = tk; cx.drawImage(SPR.star, -tr, -tr, tr * 2, tr * 2); cx.restore();
         } else {
           p.x += (p.vx + Math.sin(T * p.fq + p.ph) * 8 * s) * dt; p.y += p.vy * dt;
           cx.globalAlpha = Math.sin(Math.PI * lf) * .7; var mr = p.r * 3; cx.drawImage(SPR.mote, p.x - mr, p.y - mr, mr * 2, mr * 2);
@@ -163,7 +216,7 @@
     var io = window.IntersectionObserver ? new IntersectionObserver(function (es) { vis = es[0].isIntersecting && !document.hidden; }) : null; if (io) io.observe(img);
     document.addEventListener("visibilitychange", function () { vis = !document.hidden; });
     if (!reduce) raf = requestAnimationFrame(frame);
-    return { set: function (o) { if (o.intensity != null) I = o.intensity; }, stop: function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); if (io) io.disconnect(); cv.remove(); }, canvas: cv };
+    return { trigger: function () { if (mode === "leaf" && !leaf && map) dropLeaf(); else if (map) strike(); }, set: function (o) { if (o.intensity != null) I = o.intensity; }, stop: function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); if (io) io.disconnect(); cv.remove(); }, canvas: cv };
   }
   window.TSForge = { mount: mount };
 })();

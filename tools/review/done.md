@@ -26,3 +26,4 @@
 - 2026-11-13 #29 Community builds — expert page + Tally form shipped and tested; credit/contributors part moved to #31 (Hall of Fame with factions).
 - 2026-11-13 #27 Patch page: calculator + builds buttons under every class table – shipped (patchCta in gen-pages; reuse on future patch pages).
 - 2026-11-13 #28 Blue-gold banner as the Notes heading on build pages – shipped (img/notes-banner.webp).
+- 2026-11-16 #32–34 Living forge (embers / hammer strikes / forge alive) – replaced by the owner's own spec, #40 falling ember.

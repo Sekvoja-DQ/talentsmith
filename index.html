@@ -47,6 +47,7 @@ a{color:var(--gold)}
 .lede{margin:0;max-width:56ch;color:var(--muted);font-size:19px}
 .cta{display:grid;grid-template-columns:repeat(2,minmax(0,200px));gap:10px;justify-content:center}
 .cta .btn{justify-content:center;white-space:nowrap}
+.calc-go{margin:2px 0 14px}.calc-go .btn{justify-content:center}
 .kofi-corner{position:absolute;z-index:3;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font:700 12px/1 var(--f-display);letter-spacing:.05em;color:var(--gold);text-decoration:none;padding:7px 11px;border:1px solid var(--gold);border-radius:5px;background:rgba(11,14,21,.72);backdrop-filter:blur(4px)}
 .kofi-corner:hover{background:rgba(233,180,76,.16)}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--f-display);letter-spacing:.06em;text-decoration:none;padding:14px 22px;border-radius:6px;border:1px solid var(--gold);transition:transform .15s,box-shadow .15s}
@@ -262,8 +263,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
     <p class="kicker">Free tools for World of Warcraft: Forever</p>
     <p class="lede">Find the best race for your class, with every racial ability at its live value. Re-forged after every patch.</p>
     <div class="cta">
-      <a class="btn primary" href="#picker">Find your race</a>
       <a class="btn primary" href="calculator.html">Talent calculator</a>
+      <a class="btn primary" href="#picker">Find your race</a>
     </div>
     <a class="btn primary newpatch" href="patch-nov-10.html">New: Nov 10 class hotfixes</a><!-- remove after Nov 18 -->
     <p class="stamp">Values checked against the live game, updated <b>Nov 17</b></p>
@@ -288,6 +289,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 
   <section id="calc" class="wrap" aria-labelledby="calcH">
     <div class="sec-head"><span class="gem"></span><h2 id="calcH">Talent calculator</h2></div>
+    <p class="calc-go"><a class="btn primary" href="calculator.html">Open the talent calculator</a></p>
     <p class="sub">All nine classes with the live talent trees, rank-by-rank values, required level, leveling order and shareable build links.</p>
     <p class="sub">Want a ready build? Every class has <a href="builds/">meta and off-meta builds with a level-by-level talent order</a>, and <a href="changes.html">Hotfixes &amp; changes</a> tracks every live change.</p>
     <div class="calc-grid">
@@ -317,7 +319,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   </section>
 
   <section id="changes" class="wrap" aria-labelledby="chgH">
-    <div class="sec-head"><span class="gem"></span><h2 id="chgH"><button type="button" class="sec-tog" aria-expanded="false" aria-controls="chgBody">Latest racial changes</button></h2></div>
+    <div class="sec-head"><span class="gem"></span><h2 id="chgH"><button type="button" class="sec-tog" aria-expanded="false" aria-controls="chgBody">Latest changes</button></h2></div>
     <div class="sec-body" id="chgBody" hidden>
     <ol class="log">
       <li><details open><summary><time>Nov 17</time><span class="gist">Nov 16 hotfixes – Vampiric Embrace heals the party for less; Windfury, Maelstrom Weapon and Fury fixes</span></summary><ul class="items"><li><b class="tg c-priest">Priest</b><span>Vampiric Embrace (with this week&#39;s maintenance): heals your party for 10% of your Shadow damage, was 20%. You get 100% more healing from it, so your own healing stays at 20%. Blizzard says solo play doesn&#39;t change.</span></li><li><b class="tg c-druid">Druid</b><span>Wild Growth ranks now go on cooldown correctly (they share the cooldown). Balance: Genesis now increases Pounce&#39;s bleed damage.</span></li><li><b class="tg c-rogue">Rogue</b><span>Poison ranks can no longer go above the max rank. Shank no longer removes combo points from other targets when you don&#39;t have Boot Knife.</span></li><li><b class="tg c-shaman">Shaman</b><span>Windfury Totem attacks no longer ignore armor and now have an internal cooldown; Totem extra attacks generate Rage; extra Windfury attempts from Mutilate, Execute, Shield Slam, Shield Bash and Shieldworn Holy Strike fixed. Enhancement: Maelstrom Weapon no longer benefits two casts; Thundering Strikes no longer needs a weapon for its crit chance.</span></li><li><b class="tg c-warrior">Warrior</b><span>Fury: Unbridled Wrath, Flurry and Reckless Swings now work correctly with Cleave and Heroic Strike. The Revered Champion now offers Legacy of Valor to qualified Warriors.</span></li><li><b class="tg gen">Talentsmith</b><span>Vampiric Embrace text updated in the calculator. Every build checked – none needs to change.</span></li></ul></details></li>

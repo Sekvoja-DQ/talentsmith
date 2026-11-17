@@ -34,3 +34,4 @@
 - 2026-11-16 #47 Save video – shipped: gold-ringed download button in the leveling player (build pages, play.html); hover label on PC (starts at once), phones get a Yes/No box with a description; 10 s 1080x1920 MP4 (WebM where MP4 recording isn't supported).
 - 2026-11-16 #50 A sparks (approved), #51 B flare (approved, 'use this explosion', embers flashing too much), #52 C splash (improve: embers like the falling ember, 3 ember options, choose between A and C) – replaced by #53 (burst A/C × embers 1/2/3).
 - 2026-11-16 #53 Living forge – shipped on the home page: burst A (spark fountain), rising embers 15% faster, mixed 50% drift / 35% breathe / 15% cool, intensity 1.0; off for reduced-motion visitors, pauses off screen.
+- 2026-11-17 #31 Hall of Fame – parked by the owner (no contributors page yet; revisit when real expert builds arrive).

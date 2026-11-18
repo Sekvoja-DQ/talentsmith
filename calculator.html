@@ -42,7 +42,7 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 16px;color
 .seg button[aria-pressed="true"]{background:var(--gold);color:#24170a}
 .stat{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}.stat b{color:var(--ink);font-size:17px}
 .stat.warn b{color:var(--ember)}
-.act{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.act .brk{flex-basis:100%;height:0;order:1}.act #playBtn,.act #saveImg{order:2}
+
 .btn{font:700 13px/1 var(--f-display);letter-spacing:.05em;padding:10px 12px;border-radius:6px;border:1px solid var(--gold);background:rgba(233,180,76,.08);color:var(--gold);cursor:pointer}
 .btn:focus-visible,button:focus-visible,.node:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
 .note{font-size:14px;color:var(--muted);margin:10px 2px 0}
@@ -108,7 +108,7 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 16px;color
 .xcta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:2px 0 14px;padding:14px 18px;border-radius:12px;border:1.5px solid var(--gold);background:linear-gradient(180deg,rgba(233,180,76,.22),rgba(233,180,76,.08));color:var(--gold-soft);font:800 19px/1.2 var(--f-display);letter-spacing:.03em;cursor:pointer;box-shadow:0 0 22px rgba(233,180,76,.18);text-align:center}
 .xcta small{display:block;font:500 13.5px var(--f-body);color:var(--muted);letter-spacing:0;margin-top:3px}
 .xcta:hover{background:linear-gradient(180deg,rgba(233,180,76,.3),rgba(233,180,76,.12))}
-body.expert .xcta,body.expert .xlink,body.expert #saveImg{display:none}
+body.expert .xcta,body.expert .xlink,body.expert #saveImg,body.expert #cmpBtn{display:none}
 .xlink{margin:18px 0 6px;text-align:center;font:500 14px var(--f-body);color:var(--muted)}.xlink a{color:var(--muted);text-decoration:none}.xlink a b{color:var(--gold);font-weight:600}.xlink a:hover b{text-decoration:underline}
 body.expert #mine,body.expert #presetBtn,body.expert #share,body.expert #reset,body.expert #presets,body.expert #myb,body.expert #copyWrap,body.expert #detail{display:none!important}
 body.expert .pmtxt:empty{display:none}
@@ -177,6 +177,13 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#24170a;font-weight:700;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .copybox{width:100%;margin-top:8px;font:13px ui-monospace,Menlo,monospace;background:var(--deep);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:8px}
+.act{margin-left:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,.8fr) 46px;gap:8px;width:min(660px,100%);align-items:stretch}
+.act #playBtn{grid-column:1/5;justify-content:center}.act #saveImg,.act #cmpBtn{grid-column:5;width:46px;height:auto;min-height:44px}
+.act #saveImg{grid-row:1}.act #cmpBtn{grid-row:2}
+.act #saveImg .tsm-tip,.act #cmpBtn .tsm-tip{left:auto;right:0;transform:none}
+.act #reset{background:transparent;border-color:rgba(236,228,214,.22);color:var(--muted)}.act #reset:hover{border-color:rgba(255,90,70,.6);color:#ffb3a6}
+#cmpBtn svg{width:22px;height:22px}
+@media (max-width:640px){.act{width:100%;margin-left:0}#playBtn{padding:8px 18px 8px 8px;font-size:17px}}
 @media (max-width:640px){.act{margin-left:0}.top{flex-wrap:wrap}.top nav{display:flex;width:100%;flex-wrap:nowrap;justify-content:space-between;gap:8px;font-size:14px;white-space:nowrap;padding-bottom:2px;order:3;margin-left:0}.top .nbs{margin-left:auto}}
 /* mobile: +/- bar and talent text on the selected talent */
 .pmpop{position:absolute;z-index:20;width:min(280px,100%);background:#0a0d14;border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.65);overflow:hidden}
@@ -193,7 +200,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
 .pmtxt .bad{color:var(--ember)}
 .pmtxt .nx .rk-l{color:var(--green)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-#playBtn.off{opacity:.45;pointer-events:none;box-shadow:none}a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}#playBtn{background:linear-gradient(180deg,#3fd585,#1f9d57);color:#fff;border:0;border-radius:999px;font:700 15px/1 var(--f-body);text-transform:none;letter-spacing:.01em;gap:9px;padding:6px 18px 6px 6px;box-shadow:0 4px 14px rgba(47,191,113,.35),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s}#playBtn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(47,191,113,.5),inset 0 1px 0 rgba(255,255,255,.3)}#playBtn .pi{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.24);display:grid;place-items:center;flex:none}#playBtn .pi svg{width:14px;height:14px;fill:#fff;margin-left:2px}@media (max-width:640px){.act{display:grid!important;grid-template-columns:repeat(4,1fr) 44px;width:100%}.act .brk{display:none}.act #playBtn{order:-1}.act #saveImg{order:5}#saveImg{width:44px;height:auto;min-height:44px;order:5}#saveImg .tsm-tip{left:auto;right:0;transform:none}#playBtn{grid-column:1/-1;order:-1;padding:8px 18px 8px 8px;font-size:17px;justify-content:center}}</style>
+#playBtn.off{opacity:.45;pointer-events:none;box-shadow:none}a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}#playBtn{background:linear-gradient(180deg,#3fd585,#1f9d57);color:#fff;border:0;border-radius:999px;font:700 15px/1 var(--f-body);text-transform:none;letter-spacing:.01em;gap:9px;padding:6px 18px 6px 6px;box-shadow:0 4px 14px rgba(47,191,113,.35),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s}#playBtn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(47,191,113,.5),inset 0 1px 0 rgba(255,255,255,.3)}#playBtn .pi{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.24);display:grid;place-items:center;flex:none}#playBtn .pi svg{width:14px;height:14px;fill:#fff;margin-left:2px}</style>
 <script>window.__tsExpert=/[?&]expert=1/.test(location.search);</script>
 </head>
 <body>
@@ -230,16 +237,16 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
     <span class="stat" id="lvl">Level <b>10</b></span>
     <span class="stat" id="split"><b>0 / 0 / 0</b></span>
     <div class="act">
+      <a class="btn" id="playBtn" href="play.html" data-umami-event="calc-play"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>Play order</a>
+      <button type="button" class="tsm-btn" id="saveImg" aria-label="Save this build as an image" data-umami-event="share-image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg><span class="tsm-tip"><b>Save as image</b><br>A picture of your build for Discord, Reddit or your guild.</span></button>
       <button type="button" class="btn" id="mine" aria-expanded="false" aria-controls="myb">My builds<span id="mineN"></span></button>
       <button type="button" class="btn" id="presetBtn" aria-expanded="false" aria-controls="presets">Meta / Off-meta</button>
-      <a class="btn" id="playBtn" href="play.html" data-umami-event="calc-play"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>Play order</a>
       <button type="button" class="btn" id="share">Copy build link</button>
-      <button type="button" class="tsm-btn" id="saveImg" aria-label="Save this build as an image" data-umami-event="share-image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg><span class="tsm-tip"><b>Save as image</b><br>A picture of your build for Discord, Reddit or your guild.</span></button>
       <button type="button" class="btn" id="reset">Reset</button>
-      <span class="brk" aria-hidden="true"></span>
+      <a class="tsm-btn pvx" id="cmpBtn" href="compare.html" data-umami-event="compare-open" aria-label="Compare this build with a ready build"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="6" height="14" rx="1.8" fill="#3d8bff"/><rect x="14" y="5" width="6" height="14" rx="1.8" fill="#ff3b3b"/></svg><span class="tsm-tip"><b>Compare</b><br>Put your build next to a ready build and see every point that differs.</span></a>
     </div>
   </div>
-  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div><p class="cmpgo pvx"><a id="cmpGo" href="compare.html" data-umami-event="compare-open"><span class="ab"><i class="qa"></i><i class="qb"></i></span>Compare your build with one of these</a></p></section>
+  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div></section>
   <section class="myb" id="myb" hidden aria-label="My builds">
     <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
     <div id="mybList"></div>
@@ -1002,7 +1009,7 @@ if(canHover){
   document.addEventListener("mouseout",e=>{const n=e.target.closest(".node"); if(n&&!n.contains(e.relatedTarget)){hov=null;hideTip();}});
   window.addEventListener("scroll",()=>{hov=null;hideTip();},{passive:true});}
 /* share: one digit per talent, trees joined with "-" */
-document.addEventListener("click",e=>{const a=e.target.closest("#cmpGo");if(!a)return;const cd=code();a.href="compare.html?"+new URLSearchParams(/[1-9]/.test(cd)?{c:cls,b:cd}:{c:cls});},true);
+document.addEventListener("click",e=>{const a=e.target.closest("#cmpBtn");if(!a)return;const cd=code();a.href="compare.html?"+new URLSearchParams(/[1-9]/.test(cd)?{c:cls,b:cd}:{c:cls});},true);
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
 function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode(),qs="?c="+cls+"&b="+code()+(oc?"&o="+oc:"");history.replaceState(null,"",qs);const pb=document.getElementById("playBtn");if(pb){pb.href="play.html"+qs;pb.classList.toggle("off",!oc);pb.setAttribute("aria-disabled",String(!oc));pb.tabIndex=oc?0:-1;}}catch(e){}}

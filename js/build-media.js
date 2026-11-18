@@ -147,13 +147,20 @@
     + ".tsm-bar{height:6px;border-radius:3px;background:#262c3a;overflow:hidden;margin:4px 0 12px}.tsm-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3fd585,#e9b44c)}";
   function css() { if (document.getElementById("tsm-css")) return; var s = document.createElement("style"); s.id = "tsm-css"; s.textContent = CSS; document.head.appendChild(s); }
   var touch = function () { return matchMedia("(hover:none)").matches; };
+  function fit(btn) { // keep a shown bubble inside the screen (narrow phones, wrapped button rows)
+    var t = btn.querySelector(".tsm-tip"); if (!t) return; t.style.marginLeft = "";
+    var r = t.getBoundingClientRect(), w = document.documentElement.clientWidth, dx = 0;
+    if (r.right > w - 8) dx = w - 8 - r.right; if (r.left + dx < 8) dx = 8 - r.left;
+    if (dx) t.style.marginLeft = dx + "px";
+  }
   function twoTap(btn, run) { // phones: 1st tap shows the info bubble, 2nd tap (within 5 s) runs
     var tm = 0;
     btn.addEventListener("click", function (e) {
       e.preventDefault();
-      if (touch() && !btn.classList.contains("armed")) { btn.classList.add("armed"); clearTimeout(tm); tm = setTimeout(function () { btn.classList.remove("armed"); }, 5000); return; }
+      if (touch() && !btn.classList.contains("armed")) { btn.classList.add("armed"); fit(btn); clearTimeout(tm); tm = setTimeout(function () { btn.classList.remove("armed"); }, 5000); return; }
       btn.classList.remove("armed"); clearTimeout(tm); run();
     });
+    btn.addEventListener("mouseenter", function () { fit(btn); });
     document.addEventListener("click", function (e) { if (!btn.contains(e.target)) btn.classList.remove("armed"); }, true);
   }
   function confirmBox(title, text, yes) {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><script>try{var q=location.search;if(/[?&]preview=on/.test(q))localStorage.tsPreview='1';if(/[?&]preview=off/.test(q))localStorage.removeItem('tsPreview');if(localStorage.tsPreview)document.documentElement.classList.add('pv')}catch(e){}</script><style>html:not(.pv) .pvx{display:none!important}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talentsmith – WoW Forever Talent Calculator (Paladin, Rogue, Hunter, Priest, Shaman, Warlock, Warrior, Mage, Druid)</title>
 <meta name="description" content="WoW Forever talent calculator for all 9 classes with the live talent trees, rank-by-rank values, level requirements, leveling order and shareable build links.">
@@ -239,7 +239,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <span class="brk" aria-hidden="true"></span>
     </div>
   </div>
-  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div><p class="cmpgo"><a id="cmpGo" href="compare.html" data-umami-event="compare-open"><span class="ab"><i class="qa"></i><i class="qb"></i></span>Compare your build with one of these</a></p></section>
+  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div><p class="cmpgo pvx"><a id="cmpGo" href="compare.html" data-umami-event="compare-open"><span class="ab"><i class="qa"></i><i class="qb"></i></span>Compare your build with one of these</a></p></section>
   <section class="myb" id="myb" hidden aria-label="My builds">
     <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
     <div id="mybList"></div>

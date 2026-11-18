@@ -47,3 +47,4 @@
 - 2026-11-18 #65 Home top "Adjusted" – shipped: small icons on the left (forge badge, scroll, Horde/Alliance emblems), one row on phones too (grey sublines hidden on phones), gold line "Tools for World of Warcraft: Forever", sentence removed, one line of space around the gold line. Pip tile retired. New icons to be swapped in when the ChatGPT art arrives.
 - 2026-11-18 #64 Home top "Clean" – not picked.
 - 2026-11-18 #63 Compare v2 (colours + animations) – approved ("think it's great"); notes → #66 link placement, #67 A/B marks after the build name.
+- 2026-11-18 #66 #67 #68 Compare – approved ("BUILD it") and shipped: Compare button on build pages, line on the Builds page, square Compare button in the calculator row; blue/red marks after build names; new dropdown + Custom for A and B; Prototype tag and noindex removed, compare.html in the sitemap.

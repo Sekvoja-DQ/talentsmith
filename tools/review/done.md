@@ -44,3 +44,5 @@
 - 2026-11-18 #60 Race picker faction scenes – shipped: Horde camp / Alliance hall behind the picker, lettering under the faction buttons, swaps with the faction.
 - 2026-11-18 #61 Loot-sack Ko-fi – shipped: home button (coin pops on hover / tap) + small sack on every footer Ko-fi link.
 - 2026-11-18 #54 Compare prototype – approved with notes (stronger colours, distinct animations); v2 done, re-review as #63.
+- 2026-11-18 #65 Home top "Adjusted" – shipped: small icons on the left (forge badge, scroll, Horde/Alliance emblems), one row on phones too (grey sublines hidden on phones), gold line "Tools for World of Warcraft: Forever", sentence removed, one line of space around the gold line. Pip tile retired. New icons to be swapped in when the ChatGPT art arrives.
+- 2026-11-18 #64 Home top "Clean" – not picked.

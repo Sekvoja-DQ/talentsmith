@@ -238,11 +238,39 @@ addEventListener("DOMContentLoaded",()=>{const u=new URLSearchParams(location.se
  urls.push('play.html');fs.writeFileSync(R+'play.html',page(false,'Leveling Player – Watch Your WoW Forever Build | Talentsmith','Watch any WoW Forever talent build fill in level by level from 10 to 60: play, pause, skip and jump to any level.',body,'play.html'));}
 // ---- compare.html: two builds side by side (review #35/#54/#63 – approved; linked from build pages, the builds page and the calculator's Meta / Off-meta panel)
 {const cmp={order:ORDER,cls:{}};for(const c of ORDER){const L=out.filter(b=>b.c===c).sort((x,y)=>(x.group==='off')-(y.group==='off')||KO.indexOf(x.kind)-KO.indexOf(y.kind));
-  cmp.cls[c]={name:ctx.CLASSES[c].name,trees:classData(c,''),builds:L.map(b=>({id:b.id,name:b.name,group:b.group==='off'?'off':'meta',kind:b.kind,code:b.code,ord:b.ord}))};}
+  cmp.cls[c]={name:ctx.CLASSES[c].name,trees:classData(c,''),builds:L.map(b=>({s:b.specSlug,id:b.id,name:b.name,group:b.group==='off'?'off':'meta',kind:b.kind,code:b.code,ord:b.ord}))};}
  const CMPCSS=`.cmp-cls{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin:14px 0}.cmp-cls button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border:1px solid var(--edge);border-radius:9px;background:var(--plate);color:var(--muted);font:700 12.5px var(--f-body);cursor:pointer}.cmp-cls button img{border-radius:6px}.cmp-cls button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-soft);box-shadow:0 0 10px rgba(233,180,76,.25)}
-.cmp-pick{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}.cmp-pick label{display:block;font:700 13px var(--f-body);color:var(--muted);margin:0 0 4px}.cmp-pick select{width:100%;font:600 15px var(--f-body);padding:10px;border-radius:9px;background:var(--plate);color:var(--ink);border:1px solid var(--edge)}.cmp-pick .pa select{border-color:#3d8bff}.cmp-pick .pb select{border-color:#ff3b3b}
-.cmp-pick .pa,.cmp-pick .pb{position:relative}.cmp-pick .mk{position:absolute;left:0;bottom:15px;opacity:0;transition:opacity .2s;width:6px;height:13px;border-radius:2px;pointer-events:none}.cmp-pick .pa .mk{background:#3d8bff;box-shadow:0 0 8px rgba(61,139,255,.7)}.cmp-pick .pb .mk{background:#ff3b3b;box-shadow:0 0 8px rgba(255,59,59,.7)}.cmp-pick select{padding-right:52px}
-#swap{height:42px;padding:0 14px;border-radius:9px;border:1px solid var(--edge);background:var(--plate);color:var(--gold-soft);font:700 18px var(--f-body);cursor:pointer}
+
+.cmp-pick{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;margin-top:4px}
+.slot{position:relative;min-width:0;--k:#3d8bff;--kg:rgba(61,139,255,.45)}.slot.sb{--k:#ff3b3b;--kg:rgba(255,59,59,.45)}
+.slot .lab{display:flex;align-items:center;font:700 13px var(--f-body);color:var(--muted);margin:0 0 6px}
+.combo{display:flex;gap:3px;align-items:stretch}
+.combo button{font:600 15px var(--f-body);color:var(--ink);background:linear-gradient(180deg,#1c2130,#141823);border:1px solid var(--k);cursor:pointer;min-height:48px}
+.combo .sel{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:6px 12px 6px 8px;border-radius:11px 4px 4px 11px;text-align:left}
+.combo .sel img{width:32px;height:32px;border-radius:7px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.combo .sel .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.combo .sel .mk{flex:none;width:6px;height:13px;border-radius:2px;background:var(--k);box-shadow:0 0 8px var(--kg)}
+.combo .sel .kd{flex:none;margin-left:auto;font:700 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.combo .sel .chev{flex:none;margin-left:6px;width:16px;height:16px;color:var(--gold-soft);transition:transform .2s}
+.combo .sel[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.combo .own{flex:none;padding:0 14px;border-radius:4px 11px 11px 4px;font-size:13.5px;color:var(--gold-soft)}
+.combo .own.on{background:linear-gradient(180deg,#2a2416,#1a160e);border-color:var(--gold)}
+.combo button:hover,.combo button:focus-visible{box-shadow:0 0 0 1px var(--k),0 0 14px var(--kg);outline:none}
+.pop{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#121620;border:1px solid rgba(233,180,76,.35);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4);padding:6px;max-height:min(420px,62vh);overflow:auto;overscroll-behavior:contain}
+.pop h4{margin:8px 10px 4px;font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}.pop h4.off{color:#e98a6b}
+.pop .it{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border:0;border-radius:9px;background:none;color:var(--ink);font:600 14.5px/1.25 var(--f-body);text-align:left;cursor:pointer}
+.pop .it img{width:30px;height:30px;border-radius:7px;flex:none}
+.pop .it .nm{flex:1;min-width:0}
+.pop .it .kd{flex:none;font:700 10px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--edge);border-radius:5px;padding:3px 6px}
+.pop .it:hover,.pop .it:focus-visible{background:rgba(255,255,255,.06);outline:none}
+.pop .it[aria-selected="true"]{background:linear-gradient(90deg,var(--kg),rgba(255,255,255,.03) 60%);box-shadow:inset 3px 0 0 var(--k)}
+.pop .it .ot{flex:none;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;font:800 11px var(--f-body);color:#0b0e15}
+.pop .it .ot.a{background:#3d8bff}.pop .it .ot.b{background:#ff3b3b}
+.pop .cust{padding:8px 8px 6px}.pop .cust p{margin:0 0 8px;font-size:13.5px;color:var(--muted);line-height:1.4}
+.pop .cust form{display:flex;gap:6px}.pop .cust input{flex:1;min-width:0;font:500 15px var(--f-body);padding:10px 12px;border-radius:9px;background:#0c0f16;color:var(--ink);border:1px solid var(--k)}
+.pop .cust input:focus{outline:none;box-shadow:0 0 0 2px var(--kg)}.pop .cust .err{color:#ff6b6b;margin:6px 0 0;min-height:1em}
+#swap{align-self:end;height:48px}
+#swap{height:48px;padding:0 14px;border-radius:9px;border:1px solid var(--edge);background:var(--plate);color:var(--gold-soft);font:700 18px var(--f-body);cursor:pointer}
 .ka,.kb{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;font:800 12px var(--f-body);color:#0b0e15;margin-right:4px;vertical-align:1px}.ka{background:#3d8bff}.kb{background:#ff3b3b}i.a{color:#6fa8ff;font-style:normal}i.b{color:#ff6b6b;font-style:normal}
 #split{margin:14px 0 4px;color:#d8cfbf;line-height:1.7}#split b{color:var(--gold-soft);margin-left:4px}#split .vs{margin:0 12px;color:var(--muted)}#sum{color:#d8cfbf;margin:0 0 12px}#sum b{color:var(--gold-soft)}
 .cmp-key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin:0 0 12px}.cmp-key span{display:inline-flex;align-items:center;gap:6px}.cmp-key em{width:14px;height:14px;border-radius:4px;border:2px solid}
@@ -267,21 +295,19 @@ addEventListener("DOMContentLoaded",()=>{const u=new URLSearchParams(location.se
 #trees .lbl{font:600 11px/1.15 var(--f-body);color:#bdb3a2;text-align:center;margin-top:6px;max-width:88px;overflow-wrap:anywhere}
 #diff{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}#diff h3{margin:0 0 8px;font:800 18px var(--f-display);color:var(--gold-soft)}#diff ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 #diff li{display:grid;grid-template-columns:32px 1fr auto;gap:4px 10px;align-items:center;padding:10px;border:1px solid var(--edge);border-radius:9px;background:rgba(255,255,255,.02)}#diff li img{border-radius:5px}#diff .nm{font-weight:700;min-width:0}#diff .nm small{display:block;color:var(--muted);font-weight:600;font-size:12.5px}#diff .rr{display:flex;flex-direction:column;align-items:flex-end;font:700 13px var(--f-body)}#diff li p{grid-column:1/-1;margin:2px 0 0;color:#cfc6b6;font-size:14px;line-height:1.4}
-.cmp-act{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}#paste{display:flex;gap:8px;margin:8px 0 0}#paste input{flex:1;min-width:0;font:500 15px var(--f-body);padding:10px;border-radius:9px;background:var(--plate);color:var(--ink);border:1px solid var(--edge)}#pmsg{color:#ff6b6b;font-size:14px;margin:6px 0 0;min-height:1em}
+.cmp-act{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
 .proto{display:inline-block;font:700 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:#1a1205;background:var(--gold);border-radius:6px;padding:3px 8px;margin-bottom:8px}
 @media(max-width:820px){#trees{grid-template-columns:1fr}#diff{grid-template-columns:1fr}.cmp-cls{grid-template-columns:repeat(5,1fr)}}
-@media(max-width:560px){.cmp-pick{grid-template-columns:1fr}#swap{justify-self:center;transform:rotate(90deg)}.cmp-cls button{font-size:11px}#split .vs{display:block;margin:0}}`;
+@media(max-width:560px){.cmp-pick{grid-template-columns:1fr}#swap{justify-self:center;transform:rotate(90deg);height:42px}.combo .sel .kd{display:none}.combo .sel .chev{margin-left:auto}.cmp-cls button{font-size:11px}#split .vs{display:block;margin:0}}`;
  const body=`<style>${CMPCSS}</style><span class="proto">Prototype</span><h1>Compare two builds</h1><p class="lede">Pick two builds of the same class and see exactly where the points differ.</p>
 <div class="cmp-cls" id="cls" role="group" aria-label="Class"></div>
-<div class="cmp-pick"><div class="pa"><label for="sa"><span class="ka">A</span>Build A</label><select id="sa"></select><span class="mk" aria-hidden="true"></span></div><button type="button" id="swap" title="Swap A and B" aria-label="Swap A and B">⇄</button><div class="pb"><label for="sb"><span class="kb">B</span>Build B</label><select id="sb"></select><span class="mk" aria-hidden="true"></span></div></div>
-<form id="paste"><input id="link" type="text" inputmode="url" autocomplete="off" placeholder="Paste your calculator link as build B" aria-label="Calculator link"><button class="btn ghost" type="submit">Use</button></form><p id="pmsg" role="status"></p>
+<div class="cmp-pick"><div class="slot sa" data-s="a"><span class="lab"><span class="ka">A</span>Build A</span><div class="combo"><button type="button" class="sel" aria-haspopup="listbox" aria-expanded="false"></button><button type="button" class="own" aria-expanded="false">Custom</button></div><div class="pop" hidden></div></div><button type="button" id="swap" title="Swap A and B" aria-label="Swap A and B">⇄</button><div class="slot sb" data-s="b"><span class="lab"><span class="kb">B</span>Build B</span><div class="combo"><button type="button" class="sel" aria-haspopup="listbox" aria-expanded="false"></button><button type="button" class="own" aria-expanded="false">Custom</button></div><div class="pop" hidden></div></div></div>
 <p id="split"></p><p id="sum"></p>
 <div class="cmp-key"><span><em style="border-color:var(--gold)"></em>In both</span><span><em style="border-color:#3d8bff"></em>Only in A</span><span><em style="border-color:#ff3b3b"></em>Only in B</span><span><em style="border:0;background:conic-gradient(#3d8bff 0 50%,#ff3b3b 0)"></em>Both, different ranks</span></div>
 <div id="trees"></div><div id="diff"></div>
 <p class="cmp-act"><a class="btn" id="ca" href="calculator.html">Open A in the calculator</a><a class="btn ghost" id="cb" href="calculator.html">Open B in the calculator</a></p>
 <script>const CMP=${JSON.stringify(cmp).replace(/</g,'\\u003c')};
-${fs.readFileSync(R+'tools/player/compare-src.js','utf8')}</script><script>(()=>{const cv=document.createElement('canvas').getContext('2d');function place(){for(const id of ['sa','sb']){const s=document.getElementById(id),m=s&&s.parentElement.querySelector('.mk');if(!m)continue;const o=s.options[s.selectedIndex];if(!o)continue;const cs=getComputedStyle(s);cv.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;const w=cv.measureText(o.text).width,pl=parseFloat(cs.paddingLeft)+parseFloat(cs.borderLeftWidth),max=s.offsetWidth-44;m.style.left=Math.min(s.offsetLeft+pl+w+8,s.offsetLeft+max)+'px';m.style.opacity=1;}}
-const q=()=>requestAnimationFrame(place);addEventListener('load',q);addEventListener('resize',q);document.addEventListener('change',q);document.addEventListener('click',()=>setTimeout(place,30));document.addEventListener('submit',()=>setTimeout(place,30));q();})();</script>`;
+${fs.readFileSync(R+'tools/player/compare-src.js','utf8')}</script>`;
  fs.writeFileSync(R+'compare.html',page(false,'Compare Two WoW Forever Builds | Talentsmith','Compare two WoW Forever talent builds side by side: shared talents, talents only in one build, and every point that differs.',body,'compare.html',null,true));}
 // ---- 404.html (review #62): GitHub Pages serves it for every missing path, so all links are root-absolute ('/')
 {const body=`<style>.rip{text-align:center;padding:18px 0 34px}.rip .stone{position:relative;width:min(300px,78vw);margin:0 auto}.rip .stone img{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 26px #000a)}

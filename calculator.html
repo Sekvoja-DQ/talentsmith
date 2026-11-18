@@ -1002,7 +1002,7 @@ if(canHover){
   document.addEventListener("mouseout",e=>{const n=e.target.closest(".node"); if(n&&!n.contains(e.relatedTarget)){hov=null;hideTip();}});
   window.addEventListener("scroll",()=>{hov=null;hideTip();},{passive:true});}
 /* share: one digit per talent, trees joined with "-" */
-document.addEventListener("click",e=>{const a=e.target.closest("#cmpGo");if(!a)return;a.href="compare.html?"+new URLSearchParams({c:cls,b:code()||"0"});},true);
+document.addEventListener("click",e=>{const a=e.target.closest("#cmpGo");if(!a)return;const cd=code();a.href="compare.html?"+new URLSearchParams(/[1-9]/.test(cd)?{c:cls,b:cd}:{c:cls});},true);
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
 function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode(),qs="?c="+cls+"&b="+code()+(oc?"&o="+oc:"");history.replaceState(null,"",qs);const pb=document.getElementById("playBtn");if(pb){pb.href="play.html"+qs;pb.classList.toggle("off",!oc);pb.setAttribute("aria-disabled",String(!oc));pb.tabIndex=oc?0:-1;}}catch(e){}}

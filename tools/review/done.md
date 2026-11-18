@@ -46,3 +46,4 @@
 - 2026-11-18 #54 Compare prototype – approved with notes (stronger colours, distinct animations); v2 done, re-review as #63.
 - 2026-11-18 #65 Home top "Adjusted" – shipped: small icons on the left (forge badge, scroll, Horde/Alliance emblems), one row on phones too (grey sublines hidden on phones), gold line "Tools for World of Warcraft: Forever", sentence removed, one line of space around the gold line. Pip tile retired. New icons to be swapped in when the ChatGPT art arrives.
 - 2026-11-18 #64 Home top "Clean" – not picked.
+- 2026-11-18 #63 Compare v2 (colours + animations) – approved ("think it's great"); notes → #66 link placement, #67 A/B marks after the build name.

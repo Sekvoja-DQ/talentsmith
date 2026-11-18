@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://talentsmith.app/">
 <meta property="og:url" content="https://talentsmith.app/">
-<meta property="og:image" content="https://talentsmith.app/img/og.jpg">
+<meta property="og:image" content="https://talentsmith.app/img/og-share.jpg">
 <meta name="theme-color" content="#0b0e15">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -259,7 +259,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .tile .ic{flex:none;display:flex;align-items:center;justify-content:center;gap:2px;width:54px}
 .tile .ic img{height:34px;width:auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
 .tile .ic img.av{width:34px;height:34px;border-radius:50%;box-shadow:0 0 0 1px rgba(233,180,76,.5)}
-.tile .ic img.sm{height:30px}
+.tile .ic img.sm{height:30px}.tile .ic img.nw{height:46px;width:auto;max-width:62px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.7))}
 .hero .kicker{margin:22px 0 8px}.stamp b{white-space:nowrap}
 .horn{display:flex;align-items:center;gap:14px;width:100%;max-width:684px;padding:8px 16px 8px 10px;border-radius:14px;text-decoration:none;text-align:left;background:linear-gradient(90deg,rgba(120,40,20,.35),rgba(20,16,14,.9) 60%);border:1px solid rgba(233,140,60,.55);box-shadow:0 0 22px rgba(233,120,40,.18);transition:border-color .15s}
 .horn:hover{border-color:var(--gold)}
@@ -280,7 +280,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
   .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .tile{justify-content:flex-start;gap:7px;padding:10px 8px;font-size:13.5px;min-height:58px}
   .tile .tx small{display:none}
-  .tile .ic{width:auto}.tile .ic img{height:26px}.tile .ic img.av{width:26px;height:26px}.tile .ic img.sm{height:22px}.tile .ic img.sm+img.sm{margin-left:-4px}
+  .tile .ic{width:auto}.tile .ic img{height:26px}.tile .ic img.av{width:26px;height:26px}.tile .ic img.sm{height:22px}.tile .ic img.sm+img.sm{margin-left:-4px}.tile .ic img.nw{height:28px;max-width:34px}
   .horn{gap:10px;padding:8px 12px 8px 8px}.horn img{height:48px}.horn span{font-size:13.5px}.horn b{font-size:15px}
   #picker::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/horde-bg-phone.webp)}
   #picker:has(.classes[data-fac="alliance"])::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/alliance-bg-phone.webp)}
@@ -300,9 +300,9 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
     <h1 class="sr-only">Talentsmith – best race for every class in WoW Forever</h1>
     <p class="kicker">Tools for World of Warcraft: Forever</p>
     <nav class="tiles" aria-label="Main tools">
-      <a class="tile" href="calculator.html"><span class="ic"><img class="av" src="img/avatar.webp" alt="" width="34" height="34"></span><span class="tx">Talent calculator<small>All 9 classes</small></span></a>
-      <a class="tile" href="builds/"><span class="ic"><img src="img/art/icon-scroll.webp" alt="" width="25" height="34"></span><span class="tx">Ready builds<small>Meta &amp; off-meta</small></span></a>
-      <a class="tile" href="#picker"><span class="ic"><img class="sm" src="img/emblem-horde.webp" alt="" width="20" height="30"><img class="sm" src="img/emblem-alliance.webp" alt="" width="24" height="30"></span><span class="tx">Find your race<small>Best racials per spec</small></span></a>
+      <a class="tile" href="calculator.html"><span class="ic"><img class="nw" src="img/art/tile-anvil.webp" alt="" width="62" height="40"></span><span class="tx">Talent calculator<small>All 9 classes</small></span></a>
+      <a class="tile" href="builds/"><span class="ic"><img class="nw" src="img/art/tile-scroll.webp" alt="" width="43" height="46"></span><span class="tx">Ready builds<small>Meta &amp; off-meta</small></span></a>
+      <a class="tile" href="#picker"><span class="ic"><img class="nw" src="img/art/tile-banners.webp" alt="" width="41" height="46"></span><span class="tx">Find your race<small>Best racials per spec</small></span></a>
     </nav>
     <!--HORN--><a class="horn" href="changes.html"><img src="img/art/icon-war-horn.webp" alt="" width="46" height="58"><span><b>New hotfix · Nov 17</b>Shaman Flurry no longer loses stacks to Windfury Totem; Upper Blackrock Spire is back to full strength. <i>What changed →</i></span></a><!--/HORN-->
     <p class="stamp">Values checked against the live game, updated <b>Nov 18</b></p>

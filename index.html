@@ -271,7 +271,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 #picker::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;background:linear-gradient(180deg,rgba(11,14,21,.35),rgba(11,14,21,.86) 62%,rgba(11,14,21,.97)),url(img/art/horde-bg-desktop.webp) center top/cover;transition:opacity .4s}
 #picker:has(.classes[data-fac="alliance"])::before{background-image:linear-gradient(180deg,rgba(11,14,21,.35),rgba(11,14,21,.86) 62%,rgba(11,14,21,.97)),url(img/art/alliance-bg-desktop.webp)}
 .fletter{display:block;margin:-2px auto 12px;height:52px;width:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
-.fletter.al{display:none}#picker:has(.classes[data-fac="alliance"]) .fletter.al{display:block}#picker:has(.classes[data-fac="alliance"]) .fletter.ho{display:none}
+.fletter.al{display:none}img.fletter.al{height:72px;filter:drop-shadow(0 0 .7px #f3d27a) drop-shadow(0 0 .7px #f3d27a) drop-shadow(0 0 .5px #ffe9a8) drop-shadow(0 4px 10px rgba(0,0,0,.7))}#picker:has(.classes[data-fac="alliance"]) .fletter.al{display:block}#picker:has(.classes[data-fac="alliance"]) .fletter.ho{display:none}
 .sackbtn{position:relative}.sackbtn img.sack{height:34px;width:auto;margin:-8px 0}
 .sackbtn .coin{position:absolute;left:30px;top:6px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3b0,#e9b44c 55%,#9a6a14);opacity:0;pointer-events:none}
 .sackbtn:hover .coin,.sackbtn.pop .coin{animation:coinPop .7s ease-out}
@@ -279,12 +279,13 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 @media (max-width:640px){
   .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .tile{justify-content:flex-start;gap:7px;padding:10px 8px;font-size:13.5px;min-height:58px}
+  .tile .tx{font-size:clamp(9.5px,2.9vw,12.5px);letter-spacing:0}
   .tile .tx small{display:none}
   .tile .ic{width:auto}.tile .ic img{height:26px}.tile .ic img.av{width:26px;height:26px}.tile .ic img.sm{height:22px}.tile .ic img.sm+img.sm{margin-left:-4px}.tile .ic img.nw{height:28px;max-width:34px}
   .horn{gap:10px;padding:8px 12px 8px 8px}.horn img{height:48px}.horn span{font-size:13.5px}.horn b{font-size:15px}
   #picker::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/horde-bg-phone.webp)}
   #picker:has(.classes[data-fac="alliance"])::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/alliance-bg-phone.webp)}
-  .fletter{height:42px}
+  .fletter{height:42px}img.fletter.al{height:62px}
 }
 @media(prefers-reduced-motion:reduce){.horn:hover img,.sackbtn:hover .coin,.sackbtn.pop .coin{animation:none}}
 </style>

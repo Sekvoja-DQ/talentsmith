@@ -46,6 +46,7 @@ h1{font:800 clamp(24px,4.5vw,36px)/1.1 var(--f-display);margin:22px 0 16px;color
 .btn{font:700 13px/1 var(--f-display);letter-spacing:.05em;padding:10px 12px;border-radius:6px;border:1px solid var(--gold);background:rgba(233,180,76,.08);color:var(--gold);cursor:pointer}
 .btn:focus-visible,button:focus-visible,.node:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
 .note{font-size:14px;color:var(--muted);margin:10px 2px 0}
+.cmpgo{margin:2px 0 0;font-size:14px}.cmpgo a{color:var(--gold-soft);text-decoration:none;display:inline-flex;align-items:center;gap:8px}.cmpgo a:hover{text-decoration:underline}.ab{display:inline-flex;gap:2px}.ab i{display:block;width:5px;height:11px;border-radius:2px}.ab .qa{background:#3d8bff}.ab .qb{background:#ff3b3b}
 .presets{margin-top:12px;background:var(--plate);border:1px solid var(--edge);border-radius:10px;padding:12px 14px;display:grid;gap:10px}
 .prow{display:flex;gap:10px;align-items:flex-start}
 .plbl{flex:none;width:72px;padding-top:7px;font:800 15px/1 var(--f-display);letter-spacing:.02em}.plbl.meta{color:#8fc4e8}.plbl.off{color:var(--ember)}
@@ -238,7 +239,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <span class="brk" aria-hidden="true"></span>
     </div>
   </div>
-  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div></section>
+  <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div><p class="cmpgo"><a id="cmpGo" href="compare.html" data-umami-event="compare-open"><span class="ab"><i class="qa"></i><i class="qb"></i></span>Compare your build with one of these</a></p></section>
   <section class="myb" id="myb" hidden aria-label="My builds">
     <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
     <div id="mybList"></div>
@@ -1001,6 +1002,7 @@ if(canHover){
   document.addEventListener("mouseout",e=>{const n=e.target.closest(".node"); if(n&&!n.contains(e.relatedTarget)){hov=null;hideTip();}});
   window.addEventListener("scroll",()=>{hov=null;hideTip();},{passive:true});}
 /* share: one digit per talent, trees joined with "-" */
+document.addEventListener("click",e=>{const a=e.target.closest("#cmpGo");if(!a)return;a.href="compare.html?"+new URLSearchParams({c:cls,b:code()||"0"});},true);
 function code(){return pts.map(p=>p.join("").replace(/0+$/,"")).join("-");}
 function ordCode(){const o=offs();return ord.map(([ti,i])=>ALPH[o[ti]+i]).join("");}
 function saveURL(){saveLast();{const nm=document.getElementById("mybName");if(nm) nm.placeholder=CLASSES[cls].name+" "+mySplit(code());}try{const oc=ordCode(),qs="?c="+cls+"&b="+code()+(oc?"&o="+oc:"");history.replaceState(null,"",qs);const pb=document.getElementById("playBtn");if(pb){pb.href="play.html"+qs;pb.classList.toggle("off",!oc);pb.setAttribute("aria-disabled",String(!oc));pb.tabIndex=oc?0:-1;}}catch(e){}}

@@ -51,3 +51,4 @@
 - 2026-11-18 #69 Painted home-button icons (anvil, sealed scroll, red/blue banners) – shipped.
 - 2026-11-18 #71 Share card B (hammer on anvil) – shipped as img/og-share.jpg on all general pages (was img/og.jpg). #70 card A kept in the BigD library and img/og-share-a.jpg "for something else".
 - 2026-11-18 #68 note (fill the build boxes with an almost invisible tint/glow) – done; #67 note (mark right after the name) – already so.
+- 2026-11-19: Live (direct instruction): calculator phone button labels in body font; video tooltip hidden on touch (no sideways scroll at 360px); Tally send window dark theme + dark popup frame/loading circle. Site audit -> board cards #77 (done) and #78–88 (tidy-up proposals behind ?preview=on).

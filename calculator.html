@@ -1095,6 +1095,7 @@ setClass("paladin"); load(); render(); renderMine();
  $("xquit").onclick=()=>on(false);
  function thanks(who){$("xthxH").textContent="Sealed! Thank you, "+who;$("xthxP").innerHTML=`Your build is on its way. We check every build before it goes live – watch the Builds page for your name.`;$("xthx").hidden=false;$("xthxOk").focus();}
  $("xthxOk").onclick=()=>{$("xthx").hidden=true;};
+ if(/[?&]sealdemo/.test(location.search)&&document.documentElement.classList.contains("pv"))setTimeout(()=>thanks("Dejan"),400);
  $("xout").onclick=()=>{if(!check())return;$("xmsg").textContent="";
   const who=$("xWho").value.trim(),oc=ordCode(),link="https://talentsmith.app/calculator.html?c="+cls+"&b="+code()+(oc?"&o="+oc:"");
   const hf={class:CLASSES[cls].name,build_name:$("xName").value.trim(),credit_name:who,role:$("xRole").value,group:$("xGroup").value,split:"("+TREES.map((_,i)=>treeSum(i)).join("/")+")",link,notes:$("xNotes").value.trim().slice(0,1500),points:String(total())};

@@ -360,6 +360,47 @@ const run=()=>{const w=q.value.toLowerCase().trim().split(/\\s+/).filter(Boolean
 let tm;q.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(run,120);});B.forEach(b=>b.addEventListener("click",()=>{cls=b.dataset.c;run();if(window.umami)umami.track("talents-class",{class:cls||"all"});}));
 q.addEventListener("change",()=>{if(q.value.trim()&&window.umami)umami.track("talents-search");});run();})();</script>`;
  fs.writeFileSync(R+'talents.html',page(false,'Every WoW Forever Talent A–Z – Search All Classes | Talentsmith',`Search all ${rows.length} WoW Forever talents for every class: live max-rank values, tree row, required talents and the builds that use them.`,body,'talents.html',null,true));}
+// ---- vs-classic.html: roadmap 2 – tree layout Forever vs Classic (nightly Nov 19 prototype – hidden: noindex, not linked, not in the sitemap until the owner approves)
+// Classic layout: tools/gamedata/classic-talents.json (wowsims/classic, MIT). Only names, ranks, rows and trees are compared – never values.
+{const CL=JSON.parse(fs.readFileSync(__dirname+'/gamedata/classic-talents.json','utf8'));
+ const key=n=>n.toLowerCase().replace(/[^a-z]/g,'');
+ const SMALL=new Set(['of','the','and']);const FIX={faerieFireFeral:'Faerie Fire (Feral)',improvedPowerWordFortitude:'Improved Power Word: Fortitude',twoHandedAxesAndMaces:'Two-Handed Axes and Maces',oneHandedWeaponSpecialization:'One-Handed Weapon Specialization',improvedLashOfPain:'Improved Lash of Pain',improvedLayOnHands:'Improved Lay on Hands',improvedHuntersMark:"Improved Hunter's Mark",naturesGuidance:"Nature's Guidance",naturesGrasp:"Nature's Grasp",improvedNaturesGrasp:"Improved Nature's Grasp"};
+ const human=f=>FIX[f]||f.replace(/([A-Z])/g,' $1').split(' ').map((w,i)=>i&&SMALL.has(w.toLowerCase())?w.toLowerCase():w[0].toUpperCase()+w.slice(1)).join(' ');
+ const COL={warrior:'#c69b6d',paladin:'#f48cba',hunter:'#aad372',rogue:'#fff468',priest:'#fff',shaman:'#0070dd',mage:'#3fc7eb',warlock:'#8788ee',druid:'#ff7c0a'};
+ const lvl=r=>10+(r-1)*5;const S=[];let tot={n:0,g:0,c:0};
+ for(const c of ORDER){const C=ctx.CLASSES[c],cm={},fm={};
+  CL[c].forEach(([tn,L],i)=>L.forEach(([f,row,col,max])=>cm[key(f)]={i,tn,f,row,max}));
+  C.trees.forEach((tr,i)=>tr.t.forEach(x=>fm[key(x[0])]={i,tn:tr.name,x,row:x[2],max:x[1]}));
+  const nw=Object.keys(fm).filter(k=>!cm[k]).map(k=>fm[k]).sort((a,b)=>a.i-b.i||a.row-b.row);
+  const gone=Object.keys(cm).filter(k=>!fm[k]).map(k=>cm[k]).sort((a,b)=>a.i-b.i||a.row-b.row);
+  const chg=Object.keys(fm).filter(k=>cm[k]).map(k=>{const a=cm[k],b=fm[k],d=[];
+   if(a.i!==b.i)d.push(`moved from ${esc(a.tn)} to ${esc(b.tn)}`);
+   if(a.max!==b.max)d.push(`${a.max} → ${b.max} rank${b.max>1?'s':''}`);
+   if(a.row!==b.row)d.push(`row ${a.row} → ${b.row} (${b.row<a.row?'earlier':'later'}: level ${lvl(b.row)}+)`);
+   return d.length?{b,d}:null;}).filter(Boolean).sort((a,b)=>a.b.i-b.b.i||a.b.row-b.b.row);
+  tot.n+=nw.length;tot.g+=gone.length;tot.c+=chg.length;
+  const nwL=nw.map(t=>`<li><span class="ti"><img src="img/talents/${icon(c,t.x[0])}.webp" alt="" width="26" height="26" loading="lazy">${esc(t.x[0])}</span><span class="m">${esc(t.tn)} · row ${t.row} · ${t.max} rank${t.max>1?'s':''}</span><p>${esc(tipText(t.x[5],t.max,t.max))}</p></li>`).join('');
+  const chL=chg.map(({b,d})=>`<li><span class="ti"><img src="img/talents/${icon(c,b.x[0])}.webp" alt="" width="26" height="26" loading="lazy">${esc(b.x[0])}</span><span class="m">${esc(b.tn)}</span><p>${d.join(' · ')}</p></li>`).join('');
+  const gL=gone.map(t=>`<li><b>${esc(human(t.f))}</b> <span class="m">${esc(t.tn)}</span></li>`).join('');
+  S.push(`<details class="vc" id="${c}"><summary><h2 style="color:${COL[c]}">${C.name}</h2><span class="vn"><b>${nw.length}</b> new · <b>${chg.length}</b> changed · <b>${gone.length}</b> gone</span></summary>
+<h3>New in Forever <small>${nw.length}</small></h3><ul class="vl">${nwL}</ul>
+<h3>Changed place or ranks <small>${chg.length}</small></h3>${chL?`<ul class="vl">${chL}</ul>`:'<p class="m">None.</p>'}
+<h3>Classic talents not in Forever <small>${gone.length}</small></h3><ul class="vg">${gL}</ul>
+<p class="vcta"><a class="btn" href="calculator.html?c=${c}">Open ${C.name} in the calculator</a><a class="btn ghost" href="builds/#${c}">${C.name} builds</a></p></details>`);}
+ const VCSS=`.proto{display:inline-block;font:700 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:#1a1205;background:var(--gold);border-radius:6px;padding:3px 8px;margin-bottom:8px}
+.vsum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 22px}.vsum div{text-align:center;padding:12px 6px;border:1px solid var(--edge);border-radius:10px;background:linear-gradient(180deg,var(--plate-2),var(--plate))}.vsum b{display:block;font:800 26px var(--f-display);color:var(--gold-soft)}.vsum span{font-size:13.5px;color:var(--muted)}
+details.vc{border:1px solid var(--edge);border-radius:12px;background:var(--deep);padding:0 14px;margin:0 0 10px}details.vc>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;padding:14px 0}details.vc>summary::-webkit-details-marker{display:none}
+details.vc>summary h2{margin:0;font-size:21px}details.vc>summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:translateY(-3px) rotate(45deg);transition:transform .2s;flex:none}details.vc[open]>summary::after{transform:translateY(2px) rotate(-135deg)}
+.vn{font-size:14px;color:var(--muted)}.vn b{color:var(--ink)}details.vc h3{margin:14px 0 8px;font:700 16px var(--f-display);color:var(--gold)}details.vc h3 small{font:600 12px var(--f-body);color:var(--muted);border:1px solid var(--edge);border-radius:99px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+.vl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:8px}.vl li{padding:10px 12px;border:1px solid var(--edge);border-radius:9px;background:var(--plate);min-width:0}.vl .ti{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--gold-soft)}.vl .ti img{border-radius:5px;flex:none}.vl .m{display:block;margin-top:3px}.vl p{margin:4px 0 0;font-size:14.5px;color:#d8cfbf;overflow-wrap:anywhere}
+.m{font-size:13px;color:var(--muted)}.vg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}.vg li{padding:5px 10px;border:1px dashed var(--edge);border-radius:99px;font-size:14px;color:#cfc6b4}.vg li b{font-weight:600;text-decoration:line-through;text-decoration-color:rgba(210,72,60,.7)}
+.vcta{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 16px}@media(max-width:640px){.vcta .btn{flex:1 1 100%;justify-content:center}}.vnote{font-size:14px;color:var(--muted);margin-top:22px}`;
+ const body=`<style>${VCSS}</style><span class="proto">Prototype</span><h1>WoW Forever vs Classic talents</h1><p class="lede">How the Forever talent trees differ from the Classic (1.12) trees for all 9 classes: brand-new talents, talents that moved or changed their ranks, and Classic talents that are gone.</p>
+<div class="vsum"><div><b>${tot.n}</b><span>new talents</span></div><div><b>${tot.c}</b><span>moved or re-ranked</span></div><div><b>${tot.g}</b><span>Classic talents gone</span></div></div>
+${S.join('\n')}
+<p class="vnote">This page compares tree layout only – names, ranks, rows and trees. Many kept talents also have different numbers in Forever; the calculator always shows the live values. A talent counts as kept when its name is the same in both games, so a renamed talent shows up as one gone and one new. Classic layout data: <a href="https://github.com/wowsims/classic" rel="noopener">wowsims</a> (MIT licence).</p>
+<script>(()=>{const h=location.hash.slice(1);const d=h&&document.getElementById(h);if(d&&d.tagName==="DETAILS"){d.open=true;}document.querySelectorAll("details.vc").forEach(d=>d.addEventListener("toggle",()=>{if(d.open&&window.umami)umami.track("vsclassic-open",{class:d.id});}));})();</script>`;
+ fs.writeFileSync(R+'vs-classic.html',page(false,'WoW Forever vs Classic Talents – Every Change | Talentsmith',`WoW Forever vs Classic talent trees: ${tot.n} new talents, ${tot.c} moved or re-ranked and ${tot.g} Classic talents removed, class by class.`,body,'vs-classic.html',null,true));}
 // ---- 404.html (review #62): GitHub Pages serves it for every missing path, so all links are root-absolute ('/')
 {const body=`<style>.rip{text-align:center;padding:18px 0 34px}.rip .stone{position:relative;width:min(300px,78vw);margin:0 auto}.rip .stone img{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 26px #000a)}
 .rip .ep{position:absolute;left:24%;right:24%;top:30%;margin:0;color:#e6e1d8;text-shadow:0 2px 3px #000,0 0 12px #000c}.rip h1{margin:0;font:700 clamp(19px,5.6vw,24px)/1.25 var(--f-display);color:#e6e1d8}.rip .d{display:block;margin-top:10px;font:500 clamp(13px,3.6vw,15px) var(--f-body);color:#b9b2a6;letter-spacing:.03em}

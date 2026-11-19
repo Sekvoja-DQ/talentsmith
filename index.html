@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><script>try{var q=location.search;if(/[?&]preview=on/.test(q))localStorage.tsPreview='1';if(/[?&]preview=off/.test(q))localStorage.removeItem('tsPreview');if(localStorage.tsPreview)document.documentElement.classList.add('pv')}catch(e){}</script><style>html:not(.pv) .pvx{display:none!important}</style>
 <meta name="google-site-verification" content="r0-r96gMwhJH2_-14oqqnnTfwIhLMG3po8NN6wT5RKI">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talentsmith – Best Race for Every Class in WoW Forever (Racials, Nov 2026)</title>
@@ -271,6 +271,12 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 #picker::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;background:linear-gradient(180deg,rgba(11,14,21,.35),rgba(11,14,21,.86) 62%,rgba(11,14,21,.97)),url(img/art/horde-bg-desktop.webp) center top/cover;transition:opacity .4s}
 #picker:has(.classes[data-fac="alliance"])::before{background-image:linear-gradient(180deg,rgba(11,14,21,.35),rgba(11,14,21,.86) 62%,rgba(11,14,21,.97)),url(img/art/alliance-bg-desktop.webp)}
 .fletter{display:block;margin:-2px auto 12px;height:52px;width:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.fban{position:relative;width:min(420px,88%);margin:-2px auto 14px;display:none}
+html.pv .fban.ho{display:block}html.pv #picker:has(.classes[data-fac="alliance"]) .fban.ho{display:none}html.pv #picker:has(.classes[data-fac="alliance"]) .fban.al{display:block}
+html.pv .fletter{display:none!important}
+.fban img{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}
+.fban span{position:absolute;left:12%;right:12%;top:50%;transform:translateY(-50%);text-align:center;font:800 clamp(24px,7.4vw,38px)/1 var(--f-display);letter-spacing:.12em;padding-left:.12em;background:linear-gradient(180deg,#fff3c4 0%,#f2c75a 45%,#b8811f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #2a1608) drop-shadow(0 0 1px #2a1608) drop-shadow(0 3px 6px rgba(0,0,0,.8))}
+.fban.ho span{top:47%}.fban.al span{top:53%;width:auto}
 .fletter.al{display:none}img.fletter.al{height:72px;filter:drop-shadow(0 0 .7px #f3d27a) drop-shadow(0 0 .7px #f3d27a) drop-shadow(0 0 .5px #ffe9a8) drop-shadow(0 4px 10px rgba(0,0,0,.7))}#picker:has(.classes[data-fac="alliance"]) .fletter.al{display:block}#picker:has(.classes[data-fac="alliance"]) .fletter.ho{display:none}
 .sackbtn{position:relative}.sackbtn img.sack{height:34px;width:auto;margin:-8px 0}
 .sackbtn .coin{position:absolute;left:30px;top:6px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3b0,#e9b44c 55%,#9a6a14);opacity:0;pointer-events:none}
@@ -317,7 +323,7 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
       <button type="button" class="fac-btn" data-fac="horde" aria-pressed="true"><span class="scene" style="background-image:url(img/fx/bg-square.webp)"></span><canvas aria-hidden="true"></canvas><img class="claw" src="img/fx/claws.webp" alt=""><img class="cn tl" src="img/fx/iron-corner.webp" alt="" width="30" height="39"><img class="cn tr" src="img/fx/iron-corner.webp" alt="" width="30" height="39"><img class="cn bl" src="img/fx/iron-corner.webp" alt="" width="30" height="39"><img class="cn br" src="img/fx/iron-corner.webp" alt="" width="30" height="39"><img class="emb" src="img/emblem-horde.webp" alt="" width="32" height="48"><span class="nm">Horde</span></button>
       <button type="button" class="fac-btn" data-fac="alliance" aria-pressed="false"><span class="scene" style="background-image:url(img/fx/bg-hall.webp)"></span><span class="fx shafts"></span><canvas aria-hidden="true"></canvas><img class="cn tl" src="img/fx/gold-corner.webp" alt="" width="30" height="39"><img class="cn tr" src="img/fx/gold-corner.webp" alt="" width="30" height="39"><img class="cn bl" src="img/fx/gold-corner.webp" alt="" width="30" height="39"><img class="cn br" src="img/fx/gold-corner.webp" alt="" width="30" height="39"><img class="emb" src="img/emblem-alliance.webp" alt="" width="38" height="48"><span class="nm">Alliance</span></button>
     </div>
-    <img class="fletter ho" src="img/art/horde-lettering.webp" alt="" width="152" height="52"><img class="fletter al" src="img/art/alliance-lettering.webp" alt="" width="149" height="52">
+    <div class="fban ho pvx" aria-hidden="true"><img src="img/art/banner-horde.webp" alt="" width="900" height="301"><span>HORDE</span></div><div class="fban al pvx" aria-hidden="true"><img src="img/art/banner-alliance.webp" alt="" width="900" height="282"><span>ALLIANCE</span></div><img class="fletter ho" src="img/art/horde-lettering.webp" alt="" width="152" height="52"><img class="fletter al" src="img/art/alliance-lettering.webp" alt="" width="149" height="52">
     <div class="classes" id="classBtns" data-fac="horde" role="group" aria-label="Class"></div>
     <div class="step-lbl">Spec / role</div>
     <div class="builds" id="buildBtns" role="group" aria-label="Spec or role"></div>

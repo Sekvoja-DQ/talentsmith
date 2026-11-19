@@ -47,7 +47,7 @@ function render(){const C=CMP.cls[cls];
  $('#sum').innerHTML=diffs.length?`<b>${same}</b> of ${tot} points are the same. <b>${moved}</b> point${moved===1?'':'s'} differ${moved===1?'s':''}.`:'These two builds are identical.';
  const row=d=>`<li><img src="${d.x.i}" alt="" width="32" height="32"><span class="nm">${esc(d.x.n)}<small>${esc(C.trees[d.ti].name)}</small></span><span class="rr"><i class="a">A ${d.a}/${d.x.m}</i><i class="b">B ${d.b}/${d.x.m}</i></span><p>${esc(d.x.x)}</p></li>`;
  const onlyA=diffs.filter(d=>d.a>d.b),onlyB=diffs.filter(d=>d.b>d.a);
- $('#diff').innerHTML=diffs.length?`<div class="col"><h3><span class="ka">A</span> <span class="pvo">has more in</span><span class="pvx">has more points in</span></h3><ul>${onlyA.map(row).join('')}</ul></div><div class="col"><h3><span class="kb">B</span> <span class="pvo">has more in</span><span class="pvx">has more points in</span></h3><ul>${onlyB.map(row).join('')}</ul></div>`:'';
+ $('#diff').innerHTML=diffs.length?`<div class="col"><h3><span class="ka">A</span> has more points in</h3><ul>${onlyA.map(row).join('')}</ul></div><div class="col"><h3><span class="kb">B</span> has more points in</h3><ul>${onlyB.map(row).join('')}</ul></div>`:'';
  const calc=v=>{const b=C.builds.find(x=>x.id===v);return `calculator.html?c=${cls}&b=${b?b.code:v}${b?'&o='+b.ord:''}`;};
  $('#ca').href=calc(pick.a);$('#cb').href=calc(pick.b);
  syncUrl();}

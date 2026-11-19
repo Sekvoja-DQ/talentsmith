@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><script>try{var q=location.search;if(/[?&]preview=on/.test(q))localStorage.tsPreview='1';if(/[?&]preview=off/.test(q))localStorage.removeItem('tsPreview');if(localStorage.tsPreview)document.documentElement.classList.add('pv')}catch(e){}</script><style>html:not(.pv) .pvx{display:none!important}</style><style>/* tidy-up proposals (preview) */html.pv body{background-repeat:no-repeat}html.pv .pvo{display:none!important}@media(max-width:640px){html.pv .top nav a,html.pv .ts-top nav a{padding:7px 0}html.pv .tree-h button{padding:8px 6px;margin:-8px -6px}}</style>
+<meta charset="utf-8"><script>try{var q=location.search;if(/[?&]preview=on/.test(q))localStorage.tsPreview='1';if(/[?&]preview=off/.test(q))localStorage.removeItem('tsPreview');if(localStorage.tsPreview)document.documentElement.classList.add('pv')}catch(e){}</script><style>html:not(.pv) .pvx{display:none!important}</style><style>/* tidy-up proposals (preview) */body{background-repeat:no-repeat}@media(max-width:640px){.top nav a,.ts-top nav a{padding:7px 0}.tree-h button{padding:8px 6px;margin:-8px -6px}}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talentsmith – WoW Forever Talent Calculator (Paladin, Rogue, Hunter, Priest, Shaman, Warlock, Warrior, Mage, Druid)</title>
 <meta name="description" content="WoW Forever talent calculator for all 9 classes with the live talent trees, rank-by-rank values, level requirements, leveling order and shareable build links.">
@@ -136,20 +136,14 @@ body.expert .xp{display:block}
 .xthx{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(5,7,12,.78);padding:20px}
 .xthx[hidden]{display:none}
 .xthx>div{max-width:440px;width:100%;text-align:center;background:var(--plate);border:1.5px solid var(--gold);border-radius:14px;padding:26px 22px;box-shadow:0 0 40px rgba(233,180,76,.25)}
-.xthx .scr{position:relative;width:132px;margin:-6px auto 6px}.xthx .scr>img{display:block;width:100%;filter:drop-shadow(0 8px 16px rgba(0,0,0,.6))}
-.xthx .scr .wax{position:absolute;left:45.6%;top:49.4%;width:25%;filter:none}
-.xthx:not([hidden]) .scr{animation:scrDrop .55s cubic-bezier(.2,.9,.3,1.2) both}
-.xthx:not([hidden]) .scr .wax{animation:waxStamp .5s .5s cubic-bezier(.3,1.6,.5,1) both}
 .xthx:not([hidden])>div{animation:xthxThump .25s .72s ease-out}
 @keyframes scrDrop{from{transform:translateY(-70px) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
-@keyframes waxStamp{0%{transform:scale(2.4);opacity:0}60%{transform:scale(.88);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes xthxThump{50%{transform:scale(1.015) translateY(2px)}}
 /* Tally send window in site colors (no white flash) */
 .tally-popup{border-radius:14px!important;box-shadow:0 0 0 1.5px #e9b44c,0 0 40px rgba(233,180,76,.25)!important}
 .tally-popup>div,.tally-popup iframe{border-radius:14px!important;background:#171c28!important}
 .tally-loading-indicator{background:#171c28!important;color:#e9b44c!important;box-shadow:0 0 0 1.5px #e9b44c}
 /* #75 three-frame seal (preview) */
-html.pv .xthx .scr{display:none}
 .xthx .seal{position:relative;width:180px;aspect-ratio:360/343;margin:-8px auto 4px}
 .xthx .seal img{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 8px 16px rgba(0,0,0,.6))}
 .xthx .seal .f2,.xthx .seal .f3{opacity:0}
@@ -160,8 +154,8 @@ html.pv .xthx .scr{display:none}
 .xthx:not([hidden]) .seal .f3{animation:fIn .12s 1.25s forwards}
 @keyframes fIn{to{opacity:1}}@keyframes fOut{to{opacity:0}}
 @keyframes sealThump{50%{transform:scale(.95) translateY(3px)}}
-html.pv .xthx:not([hidden])>div{animation-delay:1.05s}
-@media(prefers-reduced-motion:reduce){.xthx .scr,.xthx .scr .wax,.xthx .seal,.xthx .seal img,.xthx>div{animation:none!important}}
+.xthx:not([hidden])>div{animation-delay:1.05s}
+@media(prefers-reduced-motion:reduce){.xthx .seal,.xthx .seal img,.xthx>div{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.xthx .seal .f1,.xthx .seal .f2{opacity:0}.xthx .seal .f3{opacity:1}}
 .xlink a{display:inline-flex;align-items:center;gap:10px}.xlink a img{height:38px;width:auto;flex:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .xthx h2{margin:0 0 8px;font:800 24px var(--f-display);color:var(--gold-soft)}.xthx p{margin:0 0 16px;color:#d8cfbf}
@@ -285,7 +279,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
     <button type="button" class="xout" id="xout">Expert out – my work here is done</button>
     <p class="xmsg" id="xmsg" role="alert"></p>
   </section>
-  <div class="xthx" id="xthx" hidden role="dialog" aria-modal="true" aria-labelledby="xthxH"><div><div class="seal pvx" aria-hidden="true"><img class="f1" src="img/art/seal-f1.webp" alt="" width="180" height="172"><img class="f2" src="img/art/seal-f2.webp" alt=""><img class="f3" src="img/art/seal-f3.webp" alt=""></div><div class="scr" aria-hidden="true"><img src="img/art/icon-scroll.webp" alt="" width="132" height="181"><img class="wax" src="img/art/seal-wax.webp" alt=""></div><h2 id="xthxH">Sealed!</h2><p id="xthxP"></p><button type="button" class="btn" id="xthxOk">Back to the calculator</button></div></div>
+  <div class="xthx" id="xthx" hidden role="dialog" aria-modal="true" aria-labelledby="xthxH"><div><div class="seal" aria-hidden="true"><img class="f1" src="img/art/seal-f1.webp" alt="" width="180" height="172"><img class="f2" src="img/art/seal-f2.webp" alt=""><img class="f3" src="img/art/seal-f3.webp" alt=""></div><h2 id="xthxH">Sealed!</h2><p id="xthxP"></p><button type="button" class="btn" id="xthxOk">Back to the calculator</button></div></div>
   <details class="help"><summary>How the calculator works</summary><p>Tap a talent to see what this rank and the next one give, then use + and − to spend points (on a computer, click adds a point, right-click removes one, and hovering shows a quick tooltip). Rows open every 5 points in a tree; lines mean the earlier talent must be maxed. The order you spend points is saved in the build link as a leveling order.</p></details>
   <p class="xlink"><a href="calculator.html?expert=1" id="xcta" data-umami-event="expert-open"><img src="img/art/icon-scroll.webp" alt="" width="28" height="38" loading="lazy"><span>Know your class well? <b>Send us your build</b> – we credit you on the site →</span></a></p>
   <p class="note" id="note"></p>
@@ -1100,7 +1094,6 @@ setClass("paladin"); load(); render(); renderMine();
  $("xquit").onclick=()=>on(false);
  function thanks(who){$("xthxH").textContent="Sealed! Thank you, "+who;$("xthxP").innerHTML=`Your build is on its way. We check every build before it goes live – watch the Builds page for your name.`;$("xthx").hidden=false;$("xthxOk").focus();}
  $("xthxOk").onclick=()=>{$("xthx").hidden=true;};
- if(/[?&]sealdemo/.test(location.search)&&document.documentElement.classList.contains("pv"))setTimeout(()=>thanks("Dejan"),400);
  $("xout").onclick=()=>{if(!check())return;$("xmsg").textContent="";
   const who=$("xWho").value.trim(),oc=ordCode(),link="https://talentsmith.app/calculator.html?c="+cls+"&b="+code()+(oc?"&o="+oc:"");
   const hf={class:CLASSES[cls].name,build_name:$("xName").value.trim(),credit_name:who,role:$("xRole").value,group:$("xGroup").value,split:"("+TREES.map((_,i)=>treeSum(i)).join("/")+")",link,notes:$("xNotes").value.trim().slice(0,1500),points:String(total())};

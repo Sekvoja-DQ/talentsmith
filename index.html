@@ -265,6 +265,8 @@ footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:center;text
 .horn:hover{border-color:var(--gold)}
 .horn img{height:58px;width:auto;flex:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6));transform-origin:70% 60%}
 .horn:hover img{animation:hornBlow .6s ease-in-out}
+/* #74 new horn (preview) */
+html.pv .horn img.hold{display:none}.horn img.hnew{height:58px;width:76px;transform-origin:20% 80%}
 @keyframes hornBlow{30%{transform:rotate(-8deg) scale(1.06)}60%{transform:rotate(3deg)}}
 .horn span{font:500 14px/1.4 var(--f-body);color:#cfc6b4}.horn b{display:block;font:700 16px var(--f-display);color:var(--gold-soft);letter-spacing:.03em}.horn i{font-style:normal;color:var(--gold);white-space:nowrap}
 #picker{position:relative;isolation:isolate}
@@ -288,7 +290,7 @@ html.pv .fletter{display:none!important}
   .tile .tx{font:700 clamp(9.5px,calc(8.3vw - 20px),13.5px)/1.15 var(--f-body);letter-spacing:0}
   .tile .tx small{display:none}
   .tile .ic{width:auto}.tile .ic img{height:26px}.tile .ic img.av{width:26px;height:26px}.tile .ic img.sm{height:22px}.tile .ic img.sm+img.sm{margin-left:-4px}.tile .ic img.nw{height:28px;max-width:34px}
-  .horn{gap:10px;padding:8px 12px 8px 8px}.horn img{height:48px}.horn span{font-size:13.5px}.horn b{font-size:15px}
+  .horn{gap:10px;padding:8px 12px 8px 8px}.horn img{height:48px}.horn img.hnew{height:48px;width:63px}.horn span{font-size:13.5px}.horn b{font-size:15px}
   #picker::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/horde-bg-phone.webp)}
   #picker:has(.classes[data-fac="alliance"])::before{background-image:linear-gradient(180deg,rgba(11,14,21,.3),rgba(11,14,21,.86) 55%,rgba(11,14,21,.97)),url(img/art/alliance-bg-phone.webp)}
   .fletter{height:42px}img.fletter.al{height:62px}
@@ -311,7 +313,7 @@ html.pv .fletter{display:none!important}
       <a class="tile" href="builds/"><span class="ic"><img class="nw" src="img/art/tile-scroll.webp" alt="" width="43" height="46"></span><span class="tx">Ready builds<small>Meta &amp; off-meta</small></span></a>
       <a class="tile" href="#picker"><span class="ic"><img class="nw" src="img/art/tile-banners.webp" alt="" width="41" height="46"></span><span class="tx">Find your race<small>Best racials per spec</small></span></a>
     </nav>
-    <!--HORN--><a class="horn" href="changes.html"><img src="img/art/icon-war-horn.webp" alt="" width="46" height="58"><span><b>New hotfix · Nov 17</b>Shaman Flurry no longer loses stacks to Windfury Totem; Upper Blackrock Spire is back to full strength. <i>What changed →</i></span></a><!--/HORN-->
+    <!--HORN--><a class="horn" href="changes.html"><img class="hold" src="img/art/icon-war-horn.webp" alt="" width="46" height="58"><img class="hnew pvx" src="img/art/horn-new.webp" alt="" width="76" height="58"><span><b>New hotfix · Nov 17</b>Shaman Flurry no longer loses stacks to Windfury Totem; Upper Blackrock Spire is back to full strength. <i>What changed →</i></span></a><!--/HORN-->
     <p class="stamp">Values checked against the live game, updated <b>Nov 18</b></p>
   </div>
 </header>

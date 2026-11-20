@@ -143,6 +143,13 @@ body.expert .xp{display:block}
 .tally-popup{border-radius:14px!important;box-shadow:0 0 0 1.5px #e9b44c,0 0 40px rgba(233,180,76,.25)!important}
 .tally-popup>div,.tally-popup iframe{border-radius:14px!important;background:#171c28!important}
 .tally-loading-indicator{background:#171c28!important;color:#e9b44c!important;box-shadow:0 0 0 1.5px #e9b44c}
+/* done bar (preview #96) */
+.donebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:4px 0 16px;padding:10px 12px;border:1.5px solid rgba(233,180,76,.7);border-radius:12px;background:linear-gradient(180deg,rgba(233,180,76,.12),rgba(233,180,76,.04));box-shadow:0 0 22px rgba(233,180,76,.12)}
+.donebar[hidden]{display:none!important}.donebar .dt{flex:1 1 auto;color:var(--ink,#ede4d3);font:500 15.5px/1.3 var(--f-body)}.donebar .dt b{color:#7fd08a}
+.donebar .btn{min-height:40px;font:700 15px/1 var(--f-body);letter-spacing:0;padding:9px 14px}.donebar .dgo{background:#e9b44c;color:#0b0e15;border-color:#e9b44c}
+.donebar.in{animation:dbIn .45s cubic-bezier(.2,.9,.3,1.15)}@keyframes dbIn{from{opacity:0;transform:translateY(-8px)}}
+body.expert .donebar{display:none!important}
+@media(max-width:640px){.donebar .dt{flex-basis:100%}.donebar .btn{flex:1 1 0}}
 /* #75 three-frame seal (preview) */
 .xthx .seal{position:relative;width:180px;aspect-ratio:360/343;margin:-8px auto 4px}
 .xthx .seal img{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 8px 16px rgba(0,0,0,.6))}
@@ -259,6 +266,7 @@ footer{border-top:1px solid var(--edge);margin-top:32px;padding-block:22px 36px;
       <a class="tsm-btn" id="cmpBtn" href="compare.html" data-umami-event="compare-open" aria-label="Compare this build with a ready build"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="6" height="14" rx="1.8" fill="#3d8bff"/><rect x="14" y="5" width="6" height="14" rx="1.8" fill="#ff3b3b"/></svg><span class="tsm-tip"><b>Compare</b><br>Put your build next to a ready build and see every point that differs.</span></a>
     </div>
   </div>
+  <div class="donebar pvx" id="doneBar" hidden><span class="dt"><b>✓ Build complete.</b> Keep it or share it:</span><button type="button" class="btn dgo" id="doneCopy" data-umami-event="done-copy">Copy link to share</button><button type="button" class="btn ghost" id="doneImg" data-umami-event="done-image">Save picture</button></div>
   <section class="presets" id="presets" hidden aria-label="Meta and off-meta builds"><div class="prow"><span class="plbl meta">Meta</span><div class="pchips" id="pMeta"></div></div><div class="prow"><span class="plbl off">Off-meta</span><div class="pchips" id="pOff"></div></div></section>
   <section class="myb" id="myb" hidden aria-label="My builds">
     <form class="myb-save" id="mybForm"><input id="mybName" maxlength="40" placeholder="Name this build" aria-label="Build name"><button type="submit" class="btn">Save build</button></form>
@@ -966,6 +974,7 @@ function render(){
   document.querySelector("#lvl b").textContent=t?t+9:10;
   document.querySelector("#split b").textContent=pts.map((_,i)=>treeSum(i)).join(" / ");
   document.getElementById("spent").classList.toggle("warn",t>=MAXP);
+  {const db=document.getElementById("doneBar"); if(db){const was=!db.hidden; db.hidden=t<MAXP; if(!was&&!db.hidden){db.classList.remove("in");void db.offsetWidth;db.classList.add("in");}}}
   renderDetail(); renderOrder(); placePm(); saveURL(); if(hov){const n=document.querySelector(`.node[data-t="${hov[0]}"][data-i="${hov[1]}"]`); if(n) showTip(n); else hideTip();}}
 function drawLinks(){document.querySelectorAll(".grid").forEach(g=>{const ti=+g.dataset.tree,s=g.querySelector("svg"),gb=g.getBoundingClientRect();
   const L=[];TREES[ti].t.forEach((x,i)=>{if(!x[4]) return;const r=byName[ti][x[4]];
@@ -1064,6 +1073,8 @@ document.addEventListener("click",e=>{
   const op=e.target.closest("[data-open]"); if(op){const x=ST.get("ts_builds",[]).find(y=>y.id===op.dataset.open); if(x){setClass(x.c);applyCode(x.b,x.o);render();toast("Opened "+x.n);} return;}
   const dl=e.target.closest("[data-del]"); if(dl){if(!dl.classList.contains("sure")){dl.classList.add("sure");dl.textContent="Sure?";return;}
     ST.set("ts_builds",ST.get("ts_builds",[]).filter(y=>y.id!==dl.dataset.del));renderMine();return;}
+  if(e.target.id==="doneCopy"){document.getElementById("share").click();return;}
+  if(e.target.id==="doneImg"){document.getElementById("saveImg").click();return;}
   if(e.target.id==="share"){const url=location.href; try{navigator.clipboard.writeText(url).then(()=>toast("Build link copied"),()=>fallback(url));}catch(err){fallback(url);}}
 });
 document.getElementById("mybForm").addEventListener("submit",e=>{e.preventDefault();

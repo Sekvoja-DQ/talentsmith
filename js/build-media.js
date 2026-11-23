@@ -59,7 +59,7 @@
       cover(g, A.trees[ti].bg, x, y, cw, h); g.fillStyle = "rgba(11,14,21,.62)"; g.fillRect(x, y, cw, h); g.restore();
       g.lineWidth = 2; g.strokeStyle = "rgba(233,180,76,.28)"; rr(g, x, y, cw, h, 18); g.stroke();
       if (A.trees[ti].icon) g.drawImage(A.trees[ti].icon, x + 16, y + 16, 40, 40);
-      g.font = "700 28px " + FD; g.fillStyle = GOLD2; g.fillText(t.name.length > 13 ? t.name.slice(0, 12) + "…" : t.name, x + 66, y + 37);
+      g.font = "800 30px " + FB; var cntW = g.measureText(String(sums[ti])).width, nmax = cw - 66 - 16 - cntW - 14, nfs = 28; do { g.font = "700 " + nfs + "px " + FD; } while (g.measureText(t.name).width > nmax && --nfs > 18); g.fillStyle = GOLD2; g.fillText(t.name, x + 66, y + 37);
       g.textAlign = "right"; g.font = "800 30px " + FB; g.fillStyle = sums[ti] ? INK : MUTED; g.fillText(String(sums[ti]), x + cw - 16, y + 37); g.textAlign = "left";
       var rows = t.t.reduce(function (a, q) { return Math.max(a, q.r); }, 1), gy = y + 76, gh = h - 92, cell = Math.min(cw / 4, gh / rows), node = Math.min(66, cell * .72);
       var gx = x + (cw - cell * 4) / 2;

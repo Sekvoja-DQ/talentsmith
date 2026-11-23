@@ -512,7 +512,7 @@ const RULES={
  "Stoneform":(b,c)=>[b.role==="tank"?pick(c,1,3,4):pick(c,1,1,4),pick(c,"Clears poisons and diseases from mobs.","Tank cooldown: 10% less physical damage, clears bleeds.","Clears Rogue poisons and Warrior bleeds.")],
  "Find Treasure":(b,c)=>[pick(c,1,0,0),"Finds extra chests while leveling."],
  "Artisan's Precision":(b,c)=>[b.role==="healer"?0:b.role==="tank"?pick(c,1,3,2):pick(c,1,4,2),b.role==="healer"?"Heals don't miss.":"1% hit: raid bosses need hit to stop misses."],
- "Big Game Hunter":(b,c)=>[pick(c,3,1,1),"Passive: +5% damage against Beasts."],
+ "Big Game Hunter":(b,c)=>[pick(c,3,1,0),"Passive: +5% damage against Beasts."],
  "Elune's Light":(b,c)=>[b.role==="tank"?pick(c,1,1,1):b.role==="healer"?pick(c,1,2,2):pick(c,2,3,3),"+10% crit for 15 sec. Cooldown not confirmed."],
  "Shadowmeld":(b,c)=>[pick(c,2,0,3),pick(c,"Hide to drink or skip mobs.","No use in instances.","Drop out of sight to reset or ambush.")],
  "Quickness":(b,c)=>[b.role==="tank"?pick(c,1,2,2):pick(c,1,0,2),"1% dodge and 2% run speed."],
@@ -548,7 +548,9 @@ const OVR={
  "Mage|dps|lvl":{"Berserking":3,"Regeneration":1},
  "Priest|shadow|pve":{"Dark Sacrifice":3},"Priest|smite|pve":{"Dark Sacrifice":3},
  "Priest|shadow|pvp":{"Rapid Regeneration":1},"Priest|smite|pvp":{"Rapid Regeneration":1},
- "Priest|disc|pve":{"Dark Sacrifice":4,"Shadowguard":0,"Hex of Weakness":0,"Beast Slaying":0}
+ "Priest|disc|pve":{"Dark Sacrifice":4,"Shadowguard":0,"Hex of Weakness":0,"Beast Slaying":0},
+ "Priest|holy|pve":{"Dark Sacrifice":4,"Shadowguard":0,"Hex of Weakness":0,"Beast Slaying":0},
+ "Mage|dps|pvp":{"Touch of the Grave":3}
 };
 function racialsFor(race,cls){return race.r.concat(cls==="Priest"?(PRIEST_SPELLS[race.id]||[]):[]);}
 function scoreRace(race,cls,b,ctx){

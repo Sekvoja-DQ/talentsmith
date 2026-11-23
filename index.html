@@ -470,7 +470,7 @@ const CTX=[["lvl","Leveling"],["pve","Dungeons & raids"],["pvp","PvP"]];
 /* Priest race-only spells (Blizzard Priest deep dive; cooldowns not published) */
 const PRIEST_SPELLS={
  troll:[["Hex of Weakness","Priest only","Target's melee attack power −43 and healing received −20% for 2 min."],["Shadowguard","Priest only","3 charges for 10 min: things that hit you take 34 Shadow damage."]],
- undead:[["Dark Sacrifice","Priest only","Turns 532 health into 440 mana over 15 sec."],["Touch of Weakness","Priest only","The next melee hit on you deals 20 Shadow damage back and lowers the attacker's attack power by 43."]],
+ undead:[["Dark Sacrifice","Priest only","Turns 532 health into 440 mana over 15 sec."],["Touch of Weakness","Priest only","The first melee to hit you takes 20 Shadow damage and gets a debuff: attack power −43 that stays on the attacker for a long time (exact duration not confirmed)."]],
  human:[["Divine Grace","Priest only","Instant 220–257 heal on an ally below 50% health; removes Weakened Soul. Not on yourself."],["Feedback","Priest only","For 15 sec, spells cast on you burn the caster's mana and deal Shadow damage."]],
  dwarf:[["Chastise","Priest only","50–57 Holy damage and a root of up to 2 sec. Humanoids only."],["Desperate Prayer","Priest only","Instant 220–257 self-heal."]],
  nightelf:[["Elune's Grace","Priest only","For 15 sec or 3 misses, melee and ranged attacks are 50% less likely to hit you."],["Starshards","Priest only","216 Arcane damage over 6 sec."]],
@@ -527,7 +527,7 @@ const RULES={
  "Hex of Weakness":(b,c)=>[pick(c,1,1,3),"Cuts a melee's damage and the healing they receive."],
  "Shadowguard":(b,c)=>[pick(c,3,1,2),"Free damage while mobs hit you."],
  "Dark Sacrifice":(b,c)=>[b.role==="healer"?pick(c,2,3,1):pick(c,2,2,1),"Trade health for mana in long fights."],
- "Touch of Weakness":(b,c)=>[pick(c,2,0,2),"Weakens the next melee to hit you."],
+ "Touch of Weakness":(b,c)=>[pick(c,2,0,2),"Debuffs the melee who hits you – it stays on them for a long time."],
  "Divine Grace":(b,c)=>[b.role==="healer"?pick(c,1,3,3):pick(c,1,1,2),"Emergency instant heal on an ally."],
  "Feedback":(b,c)=>[pick(c,0,0,3),"Punishes casters who target you."],
  "Chastise":(b,c)=>[pick(c,1,0,3),"Short root on humanoids."],
@@ -545,7 +545,10 @@ const OVR={
  "Paladin|ret|lvl":{"Touch of the Grave":4,"The Human Spirit":1,"Will to Survive":1},
  "Paladin|holy|pvp":{"Big Game Hunter":0},"Paladin|shock|pvp":{"Big Game Hunter":0},
  "Paladin|prot|pvp":{"Big Game Hunter":0,"The Human Spirit":0},"Paladin|ret|pvp":{"Big Game Hunter":0},
- "Mage|dps|lvl":{"Berserking":3,"Regeneration":1}
+ "Mage|dps|lvl":{"Berserking":3,"Regeneration":1},
+ "Priest|shadow|pve":{"Dark Sacrifice":3},"Priest|smite|pve":{"Dark Sacrifice":3},
+ "Priest|shadow|pvp":{"Rapid Regeneration":1},"Priest|smite|pvp":{"Rapid Regeneration":1},
+ "Priest|disc|pve":{"Dark Sacrifice":4,"Shadowguard":0,"Hex of Weakness":0,"Beast Slaying":0}
 };
 function racialsFor(race,cls){return race.r.concat(cls==="Priest"?(PRIEST_SPELLS[race.id]||[]):[]);}
 function scoreRace(race,cls,b,ctx){

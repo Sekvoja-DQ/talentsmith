@@ -141,18 +141,24 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Mon 23 Nov 2026, 07:30";
+const UPDATED="Mon 23 Nov 2026, 09:55";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
 const TEST={name:"Build complete bar (calculator)",start:"2026-11-20T15:35:00Z",end:"2026-11-27T16:00:00Z",
   rows:[["Pictures saved","4","37"],["Links copied","4","0"]],
   note:"Same length of time before and after (2.5 days). Pictures 9× more (14 from the new bar, 23 from the small button). Nobody copied a link. Early – verdict on Friday."};
+const GOOGLE="Google (7 days to 21 Nov): 1,310 times shown, 10 clicks, average position 30 (page 3). Top searches: warrior best professions, shadow priest, holy priest guide, holy paladin talents, discipline priest, protection paladin. 53 pages indexed, 72 waiting.";
 const STATS=[["354","visitors (167 week before)"],["49%","bounce (55%)"],["2:20","min per visit (1:40)"],["6","from Google"]];
 const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones live)"],["Tue–Thu","Test keeps running, no site changes"],["Fri 27","Test verdict + new numbers",1],["From 28","To-do below starts"]];
 
 /* ---------- DECIDE ---------- */
 const DEC=[
+ {id:"d-spec-guides",t:"Make the spec pages real guides (Google already shows them)",s:"Priest, Paladin, Warrior first",
+  b:`<p>Google shows our spec pages 1,310 times a week for searches like <b>holy priest guide</b>, <b>shadow priest</b>, <b>holy paladin talents</b>, <b>discipline priest</b> and <b>protection paladin</b> – but on page 3, so almost nobody clicks. The pages are thin (about 400 words: a few key talents, best race, builds).</p>
+<p><b>Plan, per spec page:</b></p><ul class="plain"><li>A short intro: what the spec does in WoW Forever and which build to start with.</li><li><b>What's new in Forever vs Classic</b> for that spec – the new and changed talents (unique: nobody else has this).</li><li>Every talent in the tree with its live text, not just five.</li><li>A small FAQ answered from our own data (best race, best leveling build, PvP build).</li></ul>
+<p>Order: Holy, Shadow and Discipline Priest; Holy and Protection Paladin; then Warrior; then the rest. Only confirmed facts, as always. Google takes 2–4 weeks to react.</p>
+<p><b>Approve</b> = I build Holy Priest first and show it to you here before anything else. (“warrior best professions” needs a professions page we don't have – separate idea, later.)</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",
@@ -182,7 +188,6 @@ const DL=[{t:"Talentsmith share card",s:"For Reddit, Discord or forum posts",img
 const TD=[
  {who:"Claude",g:1,t:"Test verdict: Build complete bar",s:"Fri 27 Nov",b:"Read Umami for the full week: pictures saved and links copied, from the bar and from the small button. If the bar takes nearly all picture saves, I'll suggest removing the small button."},
  {who:"You",g:2,t:"Make the 3 header pictures",s:"Prompts section above",b:"Builds, Class guides and Changes headers. Put them in the asset library; I'll show you the result on phone and PC before anything goes live."},
- {who:"You",g:2,t:"Set up Google Search Console (5 min)",s:"After Friday – I'll guide you step by step",b:"Google sends only 6 visits a week. Search Console tells Google about all our pages and shows which searches find us. It needs your Google account, so it's yours to click; I'll prepare every step."},
  {who:"Claude",g:3,t:"Short Shockadin guide",s:"Proposal with pictures first",b:"Five Shockadin pages are in the top 15. A short guide – when to take what, which weapon, which race – for the people who already come for it."},
  {who:"Claude",g:3,t:"New art on the site",s:"Waiting on headers + your podium/stocks decision",b:"Headers on Builds, Class guides and Changes; your new podium and stocks if approved."},
  {who:"Claude",g:4,t:"Check whether Google finds the spec pages",s:"Around 8 Dec",b:"The 27 spec pages had almost no visits so far. Check again once Google has had time."}
@@ -199,7 +204,7 @@ $("nowBody").innerHTML=`<div class="test"><h3>Test running: ${esc(TEST.name)}</h
 <table><thead><tr><th></th><th class="n">Before</th><th class="n">With the bar</th></tr></thead><tbody>${TEST.rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n"><b>${r[2]}</b></td></tr>`).join("")}</tbody></table>
 <p style="margin:0;font-size:15px">${esc(TEST.note)}</p></div>
 <p class="grp">Last 7 days (Serbia left out)</p><div class="stats">${STATS.map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div>
-<p class="grp">Next days</p><div class="week">${WEEK.map(w=>`<div class="wk${w[2]?" hot":""}"><b>${w[0]}</b><span>${w[1]}</span></div>`).join("")}</div>`;
+<p class="grp">Google</p><p style="margin:0;font-size:15.5px">${esc(GOOGLE)}</p><p class="grp">Next days</p><div class="week">${WEEK.map(w=>`<div class="wk${w[2]?" hot":""}"><b>${w[0]}</b><span>${w[1]}</span></div>`).join("")}</div>`;
 
 const ST={};let db=null;
 const pillFor=d=>{const v=ST[d.id]&&ST[d.id].status;return v==="approved"?'<span class="pill p-ok">Approved</span>':v==="improve"?'<span class="pill p-imp">Change it</span>':v==="rejected"?'<span class="pill p-no">Rejected</span>':d.ice?'<span class="pill p-ice">On ice</span>':'<span class="pill p-wait">Waiting</span>';};

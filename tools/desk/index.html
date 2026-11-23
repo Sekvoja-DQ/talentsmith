@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Mon 23 Nov 2026, 00:50";
+const UPDATED="Mon 23 Nov 2026, 01:25";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -153,6 +153,8 @@ const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones liv
 
 /* ---------- DECIDE ---------- */
 const DEC=[
+ {id:"d-share-name",t:"Site name on saved build pictures",s:"3 versions – pick A or B",
+  b:`<div class="trio" style="flex-wrap:nowrap"><figure style="margin:0;flex:1"><img src="art/share-now.jpg" alt="Now" style="height:auto;width:100%;max-width:none;padding:0"><figcaption style="font-size:13.5px;color:var(--muted)">Now</figcaption></figure><figure style="margin:0;flex:1"><img src="art/share-a.jpg" alt="Version A" style="height:auto;width:100%;max-width:none;padding:0"><figcaption style="font-size:13.5px;color:var(--muted)">A – site name big</figcaption></figure><figure style="margin:0;flex:1"><img src="art/share-b.jpg" alt="Version B" style="height:auto;width:100%;max-width:none;padding:0"><figcaption style="font-size:13.5px;color:var(--muted)">B – plus BigD</figcaption></figure></div><p>The real Shockadin picture a visitor gets when they save it. <b>A:</b> a gold band at the bottom with the logo and a big TALENTSMITH.APP, plus “Make your own build, free”. <b>B:</b> the same, with a small bigdforever.com link on the right. The video gets the same ending.</p><p><b>Approve</b> and write A or B in the note. It goes live after Friday's test verdict.</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",
@@ -183,7 +185,7 @@ const TD=[
  {who:"Claude",g:1,t:"Test verdict: Build complete bar",s:"Fri 27 Nov",b:"Read Umami for the full week: pictures saved and links copied, from the bar and from the small button. If the bar takes nearly all picture saves, I'll suggest removing the small button."},
  {who:"You",g:2,t:"Make the 3 header pictures",s:"Prompts section above",b:"Builds, Class guides and Changes headers. Put them in the asset library; I'll show you the result on phone and PC before anything goes live."},
  {who:"You",g:2,t:"Set up Google Search Console (5 min)",s:"After Friday – I'll guide you step by step",b:"Google sends only 6 visits a week. Search Console tells Google about all our pages and shows which searches find us. It needs your Google account, so it's yours to click; I'll prepare every step."},
- {who:"Claude",g:2,t:"Put talentsmith.app clearly on every saved picture",s:"After the verdict",b:"Pictures are what people share now (37 saves vs 0 links). The site name and build name should be easy to read in Discord, so every shared picture brings people back."},
+ {who:"Claude",g:2,t:"Put talentsmith.app clearly on every saved picture",s:"After the verdict – version A or B in Decide",b:"Pictures are what people share now (37 saves vs 0 links). The site name and build name should be easy to read in Discord, so every shared picture brings people back."},
  {who:"Claude",g:3,t:"Short Shockadin guide",s:"Proposal with pictures first",b:"Five Shockadin pages are in the top 15. A short guide – when to take what, which weapon, which race – for the people who already come for it."},
  {who:"Claude",g:3,t:"New art on the site",s:"Waiting on headers + your podium/stocks decision",b:"Headers on Builds, Class guides and Changes; your new podium and stocks if approved."},
  {who:"Claude",g:4,t:"Check whether Google finds the spec pages",s:"Around 8 Dec",b:"The 27 spec pages had almost no visits so far. Check again once Google has had time."}

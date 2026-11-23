@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Mon 23 Nov 2026, 07:35";
+const UPDATED="Mon 23 Nov 2026, 07:30";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -153,11 +153,6 @@ const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones liv
 
 /* ---------- DECIDE ---------- */
 const DEC=[
- {id:"d-card-bg",t:"Saved build pictures: a signature background",s:"Plain now – pick A, B or C (or keep plain)",
-  b:`<div class="pair"><figure style="margin:0"><img src="art/card-now.jpg" alt="Now – plain dark" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">Now – plain dark</figcaption></figure><figure style="margin:0"><img src="art/card-bga.jpg" alt="A – Forge" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">A – Forge</figcaption></figure><figure style="margin:0"><img src="art/card-bgb.jpg" alt="B – Class colour" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">B – Class colour</figcaption></figure><figure style="margin:0"><img src="art/card-bgc.jpg" alt="C – Forge fire" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">C – Forge fire</figcaption></figure></div>
-<figure style="margin:0"><img src="art/card-b-all.jpg" alt="Option B for all 9 classes" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">B for all 9 classes</figcaption></figure><p><b>A – Forge:</b> our forge emblem painted softly behind the title, dark edges, a few embers at the bottom, small gold corners. <b>B – Class colour:</b> the class colour glows from the top-left corner (pink for Paladin, orange for Druid…) inside a thin gold frame – every class looks different. <b>C – Forge fire:</b> a faint emblem watermark, warm fire glow and embers rising from the bottom, small iron corners.</p>
-<p>Nothing moves or grows: same layout, same size. The talent trees keep their own backgrounds, so the build stays the star. The video gets the same background.</p>
-<p><b>Approve</b> and write A, B or C in the note (mixes are fine, e.g. “A with class colour”).</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",
@@ -194,7 +189,7 @@ const TD=[
 ];
 
 /* ---------- DONE ---------- */
-const DONE=[["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
+const DONE=[["23 Nov","Saved pictures and videos: class-colour glow + thin gold frame (option B, stronger for Warrior and Priest); tree names no longer overlap the points"],["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
 
 /* ---------- render ---------- */
 const $=id=>document.getElementById(id);

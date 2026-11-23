@@ -40,6 +40,10 @@
     // background
     g.fillStyle = "#0b0e15"; g.fillRect(0, 0, W, H);
     var gr = g.createRadialGradient(W / 2, H * .55, 50, W / 2, H * .55, H * .7); gr.addColorStop(0, "rgba(233,120,40,.10)"); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    // class colour glow (option B, Nov 23); pale class colours get a stronger glow
+    var strong = m.cls === "warrior" || m.cls === "priest", ga = strong ? "77" : "55", gb = strong ? "3c" : "2a";
+    var cg = g.createRadialGradient(0, 0, 10, 0, 0, 900); cg.addColorStop(0, col + ga); cg.addColorStop(1, col + "00"); g.fillStyle = cg; g.fillRect(0, 0, W, H);
+    var cg2 = g.createRadialGradient(W, H, 10, W, H, 700); cg2.addColorStop(0, col + gb); cg2.addColorStop(1, col + "00"); g.fillStyle = cg2; g.fillRect(0, 0, W, H);
     // header
     if (A.logo) g.drawImage(A.logo, 48, 52, 64, 64);
     g.font = "700 34px " + FD; g.fillStyle = GOLD2; g.textBaseline = "middle"; g.fillText("Talentsmith", 128, 86);
@@ -94,6 +98,7 @@
     g.globalAlpha = .7; g.textAlign = "right"; g.font = "600 24px " + FB; g.fillStyle = MUTED; var bw = g.measureText("bigdforever.com").width;
     g.fillText("bigdforever.com", W - 48, cy); if (A.bigd) g.drawImage(A.bigd, W - 48 - bw - 42, cy - 16, 32, 32);
     g.globalAlpha = 1; g.textAlign = "left";
+    g.lineWidth = 2; g.strokeStyle = "rgba(233,180,76,.5)"; rr(g, 14, 14, W - 28, H - 28, 16); g.stroke();
     if (endT != null) { g.fillStyle = "rgba(11,14,21," + (.0 + .35 * endT) + ")"; g.fillRect(0, 0, W, H); }
   }
 

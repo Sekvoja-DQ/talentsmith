@@ -486,8 +486,9 @@ const today=new Date().toISOString().slice(0,10);
   const nw=T.filter(x=>!cl[kk(x[0])]);
   const ch=T.map(x=>{const a=cl[kk(x[0])];if(!a)return null;const d=[];if(a.i!==ti)d.push(`was in ${esc(a.tn)}`);if(a.max!==x[1])d.push(`${a.max} → ${x[1]} rank${x[1]>1?'s':''}`);if(a.row!==x[2])d.push(`now level ${lvl(x[2])}+ (was ${lvl(a.row)}+)`);return d.length?{x,d}:null;}).filter(Boolean);
   const fk=new Set(C.trees.flatMap(t=>t.t.map(x=>kk(x[0]))));const gone=Object.values(cl).filter(a=>a.i===ti&&!fk.has(kk(a.f)));
-  const ti2=ti,L=out.filter(b=>b.c===c&&b.split[ti2]>=20),all=out.filter(b=>b.c===c);
-  const main=L.find(b=>b.group!=='off')||L[0],off=L.filter(b=>b.group==='off'),lev=all.find(b=>b.kind==='Leveling'),pvp=all.find(b=>b.kind==='PvP');
+  const ti2=ti,L=out.filter(b=>b.c===c&&b.split[ti2]>=20).sort((x,y)=>y.split[ti2]-x.split[ti2]||x.name.localeCompare(y.name)),all=out.filter(b=>b.c===c);
+  // Nov 23 owner: the spec's own build leads – most points in THIS tree first (Holy healer before Discipline healer)
+  const main=L.find(b=>b.group!=='off'&&b.split[ti2]===Math.max(...b.split))||L.find(b=>b.group!=='off')||L[0],off=L.filter(b=>b.group==='off'),lev=all.find(b=>b.kind==='Leveling'),pvp=all.find(b=>b.kind==='PvP');
   const role=ctx.BUILDS[Cn].find(x=>x.id===(main?raceRole(main):''));const R0=role?bestRaces(c,role):null;
   const blink=b=>`<a href="../builds/${b.c}-${b.id}.html">${esc(b.name)}</a>`;
   const tal=x=>`<li><img src="../img/talents/${icon(c,x[0])}.webp" alt="" width="36" height="36" loading="lazy"><div><b>${esc(x[0])}</b> <span class="gm">Level ${lvl(x[2])} · ${x[1]} rank${x[1]>1?'s':''}${B||cl[kk(x[0])]?'':' · <em>new in Forever</em>'}</span><p>${esc(tipText(x[5],x[1],x[1]))}</p></div></li>`;

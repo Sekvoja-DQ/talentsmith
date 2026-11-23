@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Mon 23 Nov 2026, 01:35";
+const UPDATED="Mon 23 Nov 2026, 01:55";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -153,6 +153,11 @@ const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones liv
 
 /* ---------- DECIDE ---------- */
 const DEC=[
+ {id:"d-card-bg",t:"Saved build pictures: a signature background",s:"Plain now – pick A, B or C (or keep plain)",
+  b:`<div class="pair"><figure style="margin:0"><img src="art/card-now.jpg" alt="Now – plain dark" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">Now – plain dark</figcaption></figure><figure style="margin:0"><img src="art/card-bga.jpg" alt="A – Forge" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">A – Forge</figcaption></figure><figure style="margin:0"><img src="art/card-bgb.jpg" alt="B – Class colour" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">B – Class colour</figcaption></figure><figure style="margin:0"><img src="art/card-bgc.jpg" alt="C – Forge fire" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">C – Forge fire</figcaption></figure></div>
+<p><b>A – Forge:</b> our forge emblem painted softly behind the title, dark edges, a few embers at the bottom, small gold corners. <b>B – Class colour:</b> the class colour glows from the top-left corner (pink for Paladin, orange for Druid…) inside a thin gold frame – every class looks different. <b>C – Forge fire:</b> a faint emblem watermark, warm fire glow and embers rising from the bottom, small iron corners.</p>
+<p>Nothing moves or grows: same layout, same size. The talent trees keep their own backgrounds, so the build stays the star. The video gets the same background.</p>
+<p><b>Approve</b> and write A, B or C in the note (mixes are fine, e.g. “A with class colour”).</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",

@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Mon 23 Nov 2026, 01:40";
+const UPDATED="Mon 23 Nov 2026, 01:30";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -153,8 +153,6 @@ const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones liv
 
 /* ---------- DECIDE ---------- */
 const DEC=[
- {id:"d-share-name",t:"Saved build pictures: new bottom + BigD line",s:"Your layout – pick line 1, 2 or 3",
-  b:`<figure style="margin:0"><img src="art/share-c.jpg" alt="New layout with line 1" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">New layout with line 1</figcaption></figure><p>Level and points moved up next to the split. Bottom: gold band with the logo, <b>TALENTSMITH.APP</b> (between the old and the big size) and “Free talent calculator and builds for WoW Forever”. Under it a dark-red BigD strip with one line:</p><figure style="margin:0"><img src="art/share-line1.jpg" alt="Line 1 – Won a fight with this build? Brag about it on bigdforever.com" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">Line 1 – Won a fight with this build? Brag about it on bigdforever.com</figcaption></figure><figure style="margin:0"><img src="art/share-line2.jpg" alt="Line 2 – Clipped a big play with this build? Get it featured on bigdforever.com" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">Line 2 – Clipped a big play with this build? Get it featured on bigdforever.com</figcaption></figure><figure style="margin:0"><img src="art/share-line3.jpg" alt="Line 3 – Horde or Alliance? Show who’s really winning on bigdforever.com" style="width:100%;border-radius:8px;border:1px solid var(--line)"><figcaption style="font-size:13.5px;color:var(--muted)">Line 3 – Horde or Alliance? Show who’s really winning on bigdforever.com</figcaption></figure><p><b>Approve</b> and write 1, 2 or 3 in the note (or your own line). Goes live after Friday's verdict; the saved video gets the same bottom.</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",
@@ -185,14 +183,13 @@ const TD=[
  {who:"Claude",g:1,t:"Test verdict: Build complete bar",s:"Fri 27 Nov",b:"Read Umami for the full week: pictures saved and links copied, from the bar and from the small button. If the bar takes nearly all picture saves, I'll suggest removing the small button."},
  {who:"You",g:2,t:"Make the 3 header pictures",s:"Prompts section above",b:"Builds, Class guides and Changes headers. Put them in the asset library; I'll show you the result on phone and PC before anything goes live."},
  {who:"You",g:2,t:"Set up Google Search Console (5 min)",s:"After Friday – I'll guide you step by step",b:"Google sends only 6 visits a week. Search Console tells Google about all our pages and shows which searches find us. It needs your Google account, so it's yours to click; I'll prepare every step."},
- {who:"Claude",g:2,t:"Put talentsmith.app clearly on every saved picture",s:"After the verdict – line 1, 2 or 3 in Decide",b:"Pictures are what people share now (37 saves vs 0 links). The site name and build name should be easy to read in Discord, so every shared picture brings people back."},
  {who:"Claude",g:3,t:"Short Shockadin guide",s:"Proposal with pictures first",b:"Five Shockadin pages are in the top 15. A short guide – when to take what, which weapon, which race – for the people who already come for it."},
  {who:"Claude",g:3,t:"New art on the site",s:"Waiting on headers + your podium/stocks decision",b:"Headers on Builds, Class guides and Changes; your new podium and stocks if approved."},
  {who:"Claude",g:4,t:"Check whether Google finds the spec pages",s:"Around 8 Dec",b:"The 27 spec pages had almost no visits so far. Check again once Google has had time."}
 ];
 
 /* ---------- DONE ---------- */
-const DONE=[["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
+const DONE=[["23 Nov","Saved build pictures and videos: your new bottom (talentsmith.app band + BigD line 2)"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
 
 /* ---------- render ---------- */
 const $=id=>document.getElementById(id);

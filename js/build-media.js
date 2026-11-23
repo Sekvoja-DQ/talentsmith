@@ -18,9 +18,9 @@
     return (cache[src] = new Promise(function (res) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = function () { res(null); }; im.src = src; }));
   }
   function preload(m) {
-    var all = [load(BASE + "img/apple-touch-icon.png")];
+    var all = [load(BASE + "img/apple-touch-icon.png"), load(BASE + "img/bigd-icon.webp")];
     m.trees.forEach(function (t) { all.push(load(t.bg), load(t.icon)); t.t.forEach(function (x) { all.push(load(x.i)); }); });
-    return Promise.all(all).then(function (r) { var k = 1, out = { logo: r[0], trees: [] };
+    return Promise.all(all).then(function (r) { var k = 2, out = { logo: r[0], bigd: r[1], trees: [] };
       m.trees.forEach(function (t) { var o = { bg: r[k++], icon: r[k++], t: [] }; t.t.forEach(function () { o.t.push(r[k++]); }); out.trees.push(o); }); return out; });
   }
   function ranksAt(m, n) {
@@ -50,6 +50,7 @@
     var y0 = 250 + lines.length * 72 + 6;
     var sums = R.map(function (t) { return t.reduce(function (a, b) { return a + b; }, 0); });
     g.font = "600 32px " + FB; g.fillStyle = MUTED; g.fillText("Split  " + sums.join(" / "), 48, y0);
+    (function () { var N0 = total(m), l0 = n > 0 ? 9 + Math.min(n, N0) : 9; g.textAlign = "right"; g.font = "700 32px " + FB; g.fillStyle = INK; g.fillText(n >= N0 ? "Level 60 · " + N0 + " points" : n ? "Level " + l0 : "Level 10", W - 48, y0); g.textAlign = "left"; })();
     // trees
     var top = y0 + 56, cw = (W - 48 * 2 - 24 * 2) / 3, bottom = top + layoutH(m);
     m.trees.forEach(function (t, ti) {
@@ -79,16 +80,24 @@
     // footer
     var N = total(m), lvl = n > 0 ? 9 + Math.min(n, N) : 9;
     if (H - bottom > 420) { // tall video frame: big level counter and a point bar between trees and footer
-      var mid = bottom + (H - 230 - bottom) / 2;
+      var mid = bottom + (H - 312 - bottom) / 2;
       g.textAlign = "center"; g.font = "600 34px " + FB; g.fillStyle = MUTED; g.fillText("LEVEL", W / 2, mid - 92);
       g.font = "800 150px " + FD; g.fillStyle = n ? GOLD2 : MUTED; g.fillText(String(n ? Math.min(lvl, 60) : 10), W / 2, mid + 10);
       var bw = W - 160, dx = bw / Math.max(N, 1);
       for (var k = 0; k < N; k++) { var sq = m.seq ? m.seq[k] : null; g.fillStyle = k < n ? (["#7fb2ff", "#ff9d5c", "#7ee08f"][sq ? sq.t : 0]) : "rgba(120,128,145,.3)"; g.fillRect(80 + k * dx + 1, mid + 110, Math.max(2, dx - 3), 16); }
       g.textAlign = "left";
     }
-    g.font = "700 40px " + FB; g.fillStyle = INK; g.fillText(n >= N ? "Level 60 · " + N + " points" : n ? "Level " + lvl : "Level 10 – first talent point", 48, H - 168);
-    g.font = "800 46px " + FD; g.fillStyle = GOLD; g.textAlign = "right"; g.fillText("talentsmith.app", W - 48, H - 168); g.textAlign = "left";
-    g.font = "500 28px " + FB; g.fillStyle = MUTED; g.fillText("Free talent calculator and builds for WoW Forever", 48, H - 104);
+    // footer (Nov 23, owner's layout): gold Talentsmith band + BigD strip
+    var by = H - 312, bgr = g.createLinearGradient(0, by, 0, by + 196); bgr.addColorStop(0, "rgba(233,180,76,.17)"); bgr.addColorStop(1, "rgba(233,180,76,.05)");
+    g.fillStyle = bgr; g.fillRect(0, by, W, 196); g.fillStyle = GOLD; g.fillRect(0, by, W, 3);
+    g.textBaseline = "middle"; g.textAlign = "left"; if (A.logo) g.drawImage(A.logo, 48, by + 46, 104, 104);
+    g.font = "800 58px " + FD; g.fillStyle = GOLD2; g.fillText("talentsmith.app", 176, by + 80);
+    g.font = "500 28px " + FB; g.fillStyle = INK; g.fillText("Free talent calculator and builds for WoW Forever", 178, by + 132);
+    var sy = by + 196, cy = sy + (H - sy) / 2; g.fillStyle = "rgba(179,35,27,.22)"; g.fillRect(0, sy, W, H - sy); g.fillStyle = "rgba(229,87,76,.65)"; g.fillRect(0, sy, W, 2);
+    if (A.bigd) g.drawImage(A.bigd, 48, cy - 24, 48, 48);
+    var L1 = "Clipped a big play with this build? Get it featured on", L2 = "bigdforever.com", fs = 29, w1, w2;
+    do { fs--; g.font = "700 " + fs + "px " + FB; w1 = g.measureText(L1 + " ").width; g.font = "800 " + fs + "px " + FB; w2 = g.measureText(L2).width; } while (w1 + w2 > W - 48 - 110 && fs > 18);
+    g.font = "700 " + fs + "px " + FB; g.fillStyle = INK; g.fillText(L1, 110, cy); g.font = "800 " + fs + "px " + FB; g.fillStyle = "#f08f7e"; g.fillText(L2, 110 + w1, cy);
     if (endT != null) { g.fillStyle = "rgba(11,14,21," + (.0 + .35 * endT) + ")"; g.fillRect(0, 0, W, H); }
   }
 
@@ -104,7 +113,7 @@
   }
   function image(m) {
     return (document.fonts && document.fonts.ready || Promise.resolve()).then(function () { return preload(m); }).then(function (A) {
-      var c = canvas(Math.round(headH(m) + layoutH(m) + 250)), g = c.getContext("2d"); draw(g, m, A, total(m), null, null);
+      var c = canvas(Math.round(headH(m) + layoutH(m) + 330)), g = c.getContext("2d"); draw(g, m, A, total(m), null, null);
       return new Promise(function (res) { c.toBlob(function (b) { res(b); }, "image/png"); });
     }).then(function (b) { return deliver(b, fileName(m, "png")); });
   }

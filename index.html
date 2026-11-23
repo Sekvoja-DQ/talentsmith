@@ -493,7 +493,7 @@ const RULES={
    pick(c,"Speeds up kills on hard pulls; 3 min cooldown.","Pre-pop 1–2 sec before the pull or save it for the burn phase.",b.role==="healer"?"Fast heals when your team is being trained.":"Pair with your burst cooldowns for a kill.")],
  "Rapid Regeneration":(b,c)=>[pick(c,b.mana?3:4,0,0),pick(c,"Use between pulls instead of eating: 50% health in 6 sec.","Cancelled by acting – too slow mid-fight.","Cancelled by damage, so rarely usable.")],
  "Regeneration":(b,c)=>[pick(c,b.mana?2:3,0,1),"Passive: faster health regen, some of it in combat."],
- "Beast Slaying":(b,c)=>[pick(c,3,1,1),pick(c,"Many leveling mobs are beasts.","Few beast bosses.","Hunter pets are beasts.")],
+ "Beast Slaying":(b,c)=>[pick(c,3,1,0),pick(c,"Many leveling mobs are beasts.","Few beast bosses.","Not worth anything in PvP.")],
  "Will of the Forsaken":(b,c)=>[b.role==="tank"?pick(c,1,2,5):pick(c,1,1,5),pick(c,"Rarely needed while questing.","Breaks boss fears – handy for tanks.","Breaks Fear, Charm and Sleep. 90 sec cooldown.")],
  "Cannibalize":(b,c)=>[pick(c,b.mana?4:3,0,0),pick(c,"Eat a humanoid or undead corpse: restores health"+(b.mana?" and mana":"")+" without food.","Not useful in instances.","Not useful in PvP.")],
  "Touch of the Grave":(b,c,cls)=>{const hi=["Priest","Mage","Warlock"].includes(cls);
@@ -544,7 +544,8 @@ const OVR={
  "Paladin|prot|lvl":{"Cannibalize":3,"Touch of the Grave":4},
  "Paladin|ret|lvl":{"Touch of the Grave":4,"The Human Spirit":1,"Will to Survive":1},
  "Paladin|holy|pvp":{"Big Game Hunter":0},"Paladin|shock|pvp":{"Big Game Hunter":0},
- "Paladin|prot|pvp":{"Big Game Hunter":0,"The Human Spirit":0},"Paladin|ret|pvp":{"Big Game Hunter":0}
+ "Paladin|prot|pvp":{"Big Game Hunter":0,"The Human Spirit":0},"Paladin|ret|pvp":{"Big Game Hunter":0},
+ "Mage|dps|lvl":{"Berserking":3,"Regeneration":1}
 };
 function racialsFor(race,cls){return race.r.concat(cls==="Priest"?(PRIEST_SPELLS[race.id]||[]):[]);}
 function scoreRace(race,cls,b,ctx){

@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Tue 24 Nov 2026, 18:45";
+const UPDATED="Tue 24 Nov 2026, 19:00";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -150,12 +150,10 @@ const TEST={name:"Build complete bar (calculator)",start:"2026-11-20T15:35:00Z",
   note:"Same length of time before and after (2.5 days). Pictures 9× more (14 from the new bar, 23 from the small button). Nobody copied a link. Early – verdict on Friday."};
 const GOOGLE="Google (7 days to 21 Nov): 1,310 times shown, 10 clicks, average position 30 (page 3). Top searches: warrior best professions, shadow priest, holy priest guide, holy paladin talents, discipline priest, protection paladin. 53 pages indexed, 72 waiting.";
 const STATS=[["354","visitors (167 week before)"],["49%","bounce (55%)"],["2:20","min per visit (1:40)"],["6","from Google"]];
-const WEEK=[["Tue 24","Page headers – waiting for your OK (Decide)"],["Wed–Thu","Test keeps running"],["Fri 27","Test verdict + new numbers",1],["From 28","Spec guides roll out + the other six classes reviewed"]];
+const WEEK=[["Tue 24","Spec guides live for Priest, Paladin, Mage · headers waiting for your OK"],["Wed–Thu","Test keeps running"],["Fri 27","Test verdict + new numbers",1],["Dec 8–15","Check whether Google moves the new guides up"]];
 
 /* ---------- DECIDE ---------- */
 const DEC=[
- {id:"d-spec-guides",t:"Spec guides: pick A, B or C",s:"Holy Priest preview – C is the compact one",
-  b:`<p>Hidden from Google. The guide replaces the existing spec page at the same address – nothing new on the main page. First batch only needs the classes you reviewed: Priest, Paladin, Mage.</p><ul class="plain"><li><b>A</b> – text intro, Classic section, all talents open: <a href="https://talentsmith.app/classes/preview-priest-holy.html" target="_blank">open A</a></li><li><b>B</b> – tiles and bars, all talents open (6 phone screens): <a href="https://talentsmith.app/classes/preview-priest-holy-b.html" target="_blank">open B</a></li><li><b>C</b> – like B, but builds come right after the tiles and talents fold by level (4 screens, builds on screen 1): <a href="https://talentsmith.app/classes/preview-priest-holy-c.html" target="_blank">open C</a></li></ul><p><b>Pick one</b> = I roll it out to Holy, Shadow and Discipline Priest, Holy, Protection and Retribution Paladin and Frost Mage first.</p>`},
  {id:"d-headers",t:"Page headers on Builds, Class guides and Changes",s:"Your three pictures, mockups ready",
   b:`<p>Your pictures cropped to a wide strip (all weapons whole), edges fading into the page, title sitting on the bottom edge. Class guides uses try 2, warmed up to match the other two.</p><figure><img src="shots/hdr-phone.webp" alt="Headers on phone" style="width:100%;border-radius:10px"><figcaption>Phone</figcaption></figure><figure><img src="shots/hdr-desktop.webp" alt="Headers on PC" style="width:100%;border-radius:10px"><figcaption>PC</figcaption></figure><p><b>Approve</b> = live on the three pages (about 35 KB each on phones). <b>Reject</b> or a note = I change it first.</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"On ice – your 23 Nov note: few people care about Classic now",ice:1,
@@ -178,13 +176,13 @@ const DL=[{t:"Talentsmith share card",s:"For Reddit, Discord or forum posts",img
 const TD=[
  {who:"Claude",g:1,t:"Test verdict: Build complete bar",s:"Fri 27 Nov",b:"Read Umami for the full week: pictures saved and links copied, from the bar and from the small button. If the bar takes nearly all picture saves, I'll suggest removing the small button."},
  {who:"You",g:2,t:"Review the other six classes",s:"Warrior, Shaman, Hunter, Warlock, Druid, Rogue",b:"Same as Paladin, Mage and Priest: talents and racial scores, one class at a time. Say “<class> finished” and I put it live."},
- {who:"Claude",g:2,t:"Roll out the spec guides",s:"After you pick A or B",b:"Shadow and Discipline Priest, Holy and Protection Paladin, Warrior first, then the other spec pages."},
+ {who:"Claude",g:2,t:"Spec guides for the other six classes",s:"After each class review",b:"Priest, Paladin and Mage have the new guide. Each other class gets it once you say it is finished."},
  {who:"Claude",g:3,t:"Short Shockadin guide",s:"Proposal with pictures first",b:"Five Shockadin pages are in the top 15. A short guide – when to take what, which weapon, which race – for the people who already come for it."},
  {who:"Claude",g:4,t:"Check whether Google finds the spec pages",s:"Around 8 Dec",b:"The 27 spec pages had almost no visits so far. Check again once Google has had time."}
 ];
 
 /* ---------- DONE ---------- */
-const DONE=[["24 Nov","New Talentsmith podium and stocks on the Changes page"],["23 Nov","Paladin, Mage and Priest: builds and racial scores after your review; Troll Beast Slaying and Dwarf Big Game Hunter 0 in PvP for all"],["23 Nov","Holy Priest guide previews A and B (hidden from Google)"],["23 Nov","Saved pictures and videos: class-colour glow + thin gold frame (option B, stronger for Warrior and Priest); tree names no longer overlap the points"],["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
+const DONE=[["24 Nov","Spec guides (version C) live on all 9 Priest, Paladin and Mage spec pages; spec pages list their own build first"],["24 Nov","New Talentsmith podium and stocks on the Changes page"],["23 Nov","Paladin, Mage and Priest: builds and racial scores after your review; Troll Beast Slaying and Dwarf Big Game Hunter 0 in PvP for all"],["23 Nov","Holy Priest guide previews A and B (hidden from Google)"],["23 Nov","Saved pictures and videos: class-colour glow + thin gold frame (option B, stronger for Warrior and Priest); tree names no longer overlap the points"],["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
 
 /* ---------- render ---------- */
 const $=id=>document.getElementById(id);

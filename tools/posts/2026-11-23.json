@@ -1,0 +1,17 @@
+{
+  "title": "November 23",
+  "kicker": "WoW Forever hotfix",
+  "meta": "Nov 23 hotfix · prepared Nov 24 · only Blizzard-confirmed changes",
+  "winners": [
+    {"who": "Shadow Priest", "cls": "priest", "name": "Dark Inspiration", "icon": "priest-dark-inspiration", "text": "Right Spirit bonus from Mind Flay now"},
+    {"who": "Destruction Warlock", "cls": "warlock", "name": "Intensity", "icon": "warlock-intensity", "text": "Now works on Incinerate"},
+    {"who": "Everyone", "cls": "all", "name": "World buffs", "text": "No longer drop when you change zones"}
+  ],
+  "losers": [],
+  "noNerfsText": "Everything else in this hotfix was bug fixes",
+  "reddit": {
+    "title": "Calculator's updated for the Nov 23 hotfix",
+    "body": "Nov 23 hotfixes are in. Class stuff only:\n\n- **Priest** - Dark Inspiration now gives the right Spirit when Mind Flay triggers it. Dwarf priests can use Chastise in Shadowform.\n- **Warlock** - Intensity works on Incinerate now.\n- **Warrior** - you can't use Mortal Strike anymore without actually having the talent.\n- **Druid** - Feralheart 4pc gives the 4 energy/sec it's supposed to.\n- **Everyone** - world buffs don't drop when you change zones anymore (raids still clear them). Fengus' Ferocity and DMF buffs were giving double, that's fixed.\n\nWinners: Shadow Priest (Dark Inspiration), Destro Warlock (Intensity), everyone with world buffs.\nLosers: nobody, no real nerfs this time. The rest was bug fixes.\n\nNone of the builds needed changing this time. Every hotfix so far is listed here: https://talentsmith.app/changes.html"
+  },
+  "caption": "Nov 23 hotfix: shadow priests and destro locks got fixes, world buffs now survive zoning #wowforever #worldofwarcraft"
+}

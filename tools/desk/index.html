@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Tue 24 Nov 2026, 19:00";
+const UPDATED="Tue 24 Nov 2026, 20:10";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -150,10 +150,12 @@ const TEST={name:"Build complete bar (calculator)",start:"2026-11-20T15:35:00Z",
   note:"Same length of time before and after (2.5 days). Pictures 9× more (14 from the new bar, 23 from the small button). Nobody copied a link. Early – verdict on Friday."};
 const GOOGLE="Google (7 days to 21 Nov): 1,310 times shown, 10 clicks, average position 30 (page 3). Top searches: warrior best professions, shadow priest, holy priest guide, holy paladin talents, discipline priest, protection paladin. 53 pages indexed, 72 waiting.";
 const STATS=[["354","visitors (167 week before)"],["49%","bounce (55%)"],["2:20","min per visit (1:40)"],["6","from Google"]];
-const WEEK=[["Tue 24","Spec guides live for Priest, Paladin, Mage · headers waiting for your OK"],["Wed–Thu","Test keeps running"],["Fri 27","Test verdict + new numbers",1],["Dec 8–15","Check whether Google moves the new guides up"]];
+const WEEK=[["Tue 24","Spec guides live for Priest, Paladin, Mage · headers waiting for your OK"],["Wed–Thu","Test keeps running · try the support prototypes"],["Fri 27","Test verdict + new numbers",1],["Dec 8–15","Check whether Google moves the new guides up"]];
 
 /* ---------- DECIDE ---------- */
 const DEC=[
+ {id:"d-support",t:"Support ideas – prototypes to try",s:"Ships after Friday's test verdict",
+  b:`<p>All three working for real on a hidden page: <a href="https://talentsmith.app/proto/support.html" target="_blank">open the prototype</a> (best on your phone).</p><ul class="plain"><li><b>Thank-you note</b> after a visitor's 3rd visit – once, then never again. Press “Simulate a new visit” three times.</li><li><b>Name on the build picture</b> – optional field, shows “by Dejan”.</li><li><b>Supporter badge</b> – a donor gets a code from you (e.g. FORGE-7K2Q), types it once, gold ★ Supporter on their pictures. Try the demo code <b>FORGE-DEMO</b>.</li><li><b>Sharing</b> – phones already open the share menu (Instagram, WhatsApp, Discord…). The picture is 1080 × 1160, fits Instagram's 4:5; the video is 9:16 for Stories.</li></ul><div class="pair"><figure><img src="shots/proto-thanks.webp" alt="Thank-you note"><figcaption>Thank-you note</figcaption></figure><figure><img src="shots/proto-picture.webp" alt="Picture with name and badge"><figcaption>Name + badge</figcaption></figure></div><p><b>Approve</b> = after Friday I put them on the real site (calculator and pages) and track how many see the note and click.</p>`},
  {id:"d-headers",t:"Page headers on Builds, Class guides and Changes",s:"Your three pictures, mockups ready",
   b:`<p>Your pictures cropped to a wide strip (all weapons whole), edges fading into the page, title sitting on the bottom edge. Class guides uses try 2, warmed up to match the other two.</p><figure><img src="shots/hdr-phone.webp" alt="Headers on phone" style="width:100%;border-radius:10px"><figcaption>Phone</figcaption></figure><figure><img src="shots/hdr-desktop.webp" alt="Headers on PC" style="width:100%;border-radius:10px"><figcaption>PC</figcaption></figure><p><b>Approve</b> = live on the three pages (about 35 KB each on phones). <b>Reject</b> or a note = I change it first.</p>`},
  {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"On ice – your 23 Nov note: few people care about Classic now",ice:1,

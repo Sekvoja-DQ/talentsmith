@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Wed 25 Nov 2026, 01:10";
+const UPDATED="Wed 25 Nov 2026, 01:15";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -169,24 +169,26 @@ const DEC=[
 /* ---------- PROMPTS ---------- */
 const TAIL="The edges fade smoothly to almost black (#0b0e15) on all sides.";
 const PR=[
- {id:"supporter-badge",t:"Supporter badge – 10 ideas on one sheet",f:"supporter-badges.png",where:"shots/proto-picture.webp",
-  p:`Use the attached Alliance shield picture as the style reference: painted, semi-realistic, worn gold and steel, real metal texture, warm forge light. Not cartoon, not flat vector.
+ {id:"supporter-badge",t:"Supporter badge – 10 ideas on one sheet (clean style)",f:"supporter-badges.png",where:"shots/proto-picture.webp",
+  p:`One sheet with 10 different small badge designs for “Talentsmith”, a fan site for World of Warcraft talent builds (a forge theme: anvil, hammer, sparks, talents).
 
-One sheet with 10 different small badge designs for “Talentsmith” supporters (a WoW talent-build forge). Lay them out in a neat grid of 5 × 2 on a plain transparent background, evenly spaced, each badge fully visible with empty space around it. Each badge must read clearly when shrunk to 48 pixels: one bold shape, thick outline, strong silhouette, no tiny details, no text or letters anywhere.
+Style: clean and polished, like a premium game achievement icon. Smooth metal with soft gradients and one clear highlight, crisp clean edges, very little texture – no scratches, no grime, no rough painterly strokes. Rich warm gold as the only metal colour; small accents of ember orange are fine.
+
+Lay them out in a neat grid of 5 × 2 on a plain transparent background, evenly spaced, each badge fully visible with empty space around it. Each badge must read clearly when shrunk to 48 pixels: one bold, simple shape, strong silhouette, no tiny details, no text or letters anywhere.
 
 The 10 ideas, one per badge:
-1. a small gold anvil with a single bright spark above it
-2. a red wax seal pressed with an anvil mark
-3. a round gold coin stamped with a hammer and anvil
-4. a square talent icon frame in gold with a glowing ember inside, like a maxed talent
+1. a small anvil with a single bright spark above it
+2. a round wax-style seal pressed with an anvil mark
+3. a round coin stamped with a hammer and anvil
+4. a square talent icon frame with a glowing ember inside, like a maxed-out talent
 5. two crossed smith hammers over a small shield
-6. a glowing orange ember held in a black iron ring
-7. a small gold medal with a hammer, hanging from a short dark-red ribbon
-8. a carved rune stone with a glowing anvil rune
-9. a star forged from gold metal, still glowing hot at the edges
-10. a tiny tree of three linked gold talent nodes, like a talent tree branch
+6. a glowing ember held inside a ring
+7. a small medal with a hammer, hanging from a short dark-red ribbon
+8. a smooth stone with a glowing anvil rune
+9. a forged star glowing hot at the edges
+10. three linked talent nodes, like a small branch of a talent tree
 
-Edges soft and clean so each badge can be cut out. No background scene, no text, no logos.`}
+No background scene, no text, no logos.`}
 ];
 const REF={src:"ref/alliance-crest.webp",name:"Alliance crest – style reference"};
 

@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Tue 24 Nov 2026, 08:05";
+const UPDATED="Tue 24 Nov 2026, 13:30";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -150,48 +150,25 @@ const TEST={name:"Build complete bar (calculator)",start:"2026-11-20T15:35:00Z",
   note:"Same length of time before and after (2.5 days). Pictures 9× more (14 from the new bar, 23 from the small button). Nobody copied a link. Early – verdict on Friday."};
 const GOOGLE="Google (7 days to 21 Nov): 1,310 times shown, 10 clicks, average position 30 (page 3). Top searches: warrior best professions, shadow priest, holy priest guide, holy paladin talents, discipline priest, protection paladin. 53 pages indexed, 72 waiting.";
 const STATS=[["354","visitors (167 week before)"],["49%","bounce (55%)"],["2:20","min per visit (1:40)"],["6","from Google"]];
-const WEEK=[["Mon 23","Night scan for hotfixes (puts Blizzard-confirmed ones live)"],["Tue–Thu","Test keeps running, no site changes"],["Fri 27","Test verdict + new numbers",1],["From 28","To-do below starts"]];
+const WEEK=[["Tue 24","Page headers – waiting for your OK (Decide)"],["Wed–Thu","Test keeps running"],["Fri 27","Test verdict + new numbers",1],["From 28","Spec guides roll out + the other six classes reviewed"]];
 
 /* ---------- DECIDE ---------- */
 const DEC=[
- {id:"d-spec-guides",t:"Make the spec pages real guides (Google already shows them)",s:"Priest, Paladin, Warrior first",
-  b:`<p>Google shows our spec pages 1,310 times a week for searches like <b>holy priest guide</b>, <b>shadow priest</b>, <b>holy paladin talents</b>, <b>discipline priest</b> and <b>protection paladin</b> – but on page 3, so almost nobody clicks. The pages are thin (about 400 words: a few key talents, best race, builds).</p>
-<p><b>Plan, per spec page:</b></p><ul class="plain"><li>A short intro: what the spec does in WoW Forever and which build to start with.</li><li><b>What's new in Forever vs Classic</b> for that spec – the new and changed talents (unique: nobody else has this).</li><li>Every talent in the tree with its live text, not just five.</li><li>A small FAQ answered from our own data (best race, best leveling build, PvP build).</li></ul>
-<p>Order: Holy, Shadow and Discipline Priest; Holy and Protection Paladin; then Warrior; then the rest. Only confirmed facts, as always. Google takes 2–4 weeks to react.</p>
-<p><b>Holy Priest preview is built (Nov 23) – two versions, both hidden from Google:</b></p><ul class="plain"><li><b>A</b> (my first take): <a href="https://talentsmith.app/classes/preview-priest-holy.html" target="_blank">open A</a> – text intro, What's new vs Classic, all talents, FAQ.</li><li><b>B</b> (after your notes): <a href="https://talentsmith.app/classes/preview-priest-holy-b.html" target="_blank">open B</a> – stat tiles, points bars, key-talent chips, no Classic section, 4-question FAQ.</li></ul><p><b>Pick A or B</b> (or mix) = I roll that shape out to Shadow, Discipline, Holy/Prot Paladin, Warrior, then the rest.</p>`},
- {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"Prototype, live but hidden",
+ {id:"d-spec-guides",t:"Spec guides: pick A or B",s:"Holy Priest preview, two versions",
+  b:`<p>Both are live but hidden from Google. The guide replaces the existing spec page at the same address – nothing new on the main page.</p><ul class="plain"><li><b>A</b> (my first take): <a href="https://talentsmith.app/classes/preview-priest-holy.html" target="_blank">open A</a> – text intro, Classic section, all talents, FAQ.</li><li><b>B</b> (after your notes): <a href="https://talentsmith.app/classes/preview-priest-holy-b.html" target="_blank">open B</a> – tiles, points bars, key-talent chips, no Classic section, 4-question FAQ.</li></ul><p>Both lead with the spec's own build (Holy healer first). <b>Pick one</b> = I roll that shape out to Shadow and Discipline Priest, Holy and Protection Paladin and Warrior, then the rest.</p>`},
+ {id:"d-headers",t:"Page headers on Builds, Class guides and Changes",s:"Your three pictures, mockups ready",
+  b:`<p>Your pictures cropped to a wide strip (all weapons whole), edges fading into the page, title sitting on the bottom edge. Class guides uses try 2, warmed up to match the other two.</p><figure><img src="shots/hdr-phone.webp" alt="Headers on phone" style="width:100%;border-radius:10px"><figcaption>Phone</figcaption></figure><figure><img src="shots/hdr-desktop.webp" alt="Headers on PC" style="width:100%;border-radius:10px"><figcaption>PC</figcaption></figure><p><b>Approve</b> = live on the three pages (about 35 KB each on phones). <b>Reject</b> or a note = I change it first.</p>`},
+ {id:"d-vs-classic",t:"“Forever vs Classic talents” page",s:"On ice – your 23 Nov note: few people care about Classic now",ice:1,
   b:`<p>Class by class: 149 new talents, 135 moved or re-ranked, 114 Classic talents that are gone. Classic players coming back search for exactly this.</p><p>Try it: <a href="https://talentsmith.app/vs-classic.html">talentsmith.app/vs-classic.html</a></p><p><b>If approved</b> (after the test week): Google can find it, it goes in the sitemap, and the Changes page links to it.</p>`},
  {id:"d-talents-az",t:"“Every talent A–Z” search page",s:"On ice since 19 Nov",
   b:`<p>All 467 talents in one list with a search box. Small gain, almost no cost. You put it on ice; it stays hidden until you say otherwise.</p><p>Try it: <a href="https://talentsmith.app/talents.html">talentsmith.app/talents.html</a></p>`,ice:1},
- {id:"d-podium-stocks",t:"Your new podium and stocks on the Changes page",s:"New art in the library",
-  b:`<div class="pair"><figure><img src="art/cur-podium.webp" alt="Current podium"><figcaption>Now (same as BigD)</figcaption></figure><figure><img src="art/new-podium.webp" alt="New Talentsmith podium"><figcaption>New</figcaption></figure><figure><img src="art/cur-stocks.webp" alt="Current stocks"><figcaption>Now (same as BigD)</figcaption></figure><figure><img src="art/new-stocks.webp" alt="New Talentsmith stocks"><figcaption>New</figcaption></figure></div><p><b>If approved:</b> after the test week I swap them in (same size and place) and show you phone and PC pictures first.</p>`},
  {id:"d-winter",t:"Winter set – is it for Talentsmith?",s:"Snow, icicles, holly in the library",
   b:`<div class="trio"><img src="art/winter-snow-cap.webp" alt="Snow cap"><img src="art/winter-icicles.webp" alt="Icicles"><img src="art/winter-holly.webp" alt="Holly"></div><p><b>Approve</b> = a light December touch on Talentsmith (snow on the top bar, holly on the hotfix banner), shown to you first. <b>Reject</b> = it's for BigD, I leave it alone.</p>`}
 ];
 
 /* ---------- PROMPTS ---------- */
 const TAIL="The edges fade smoothly to almost black (#0b0e15) on all sides.";
-const PR=[
- {id:"header-builds",t:"Builds page header",f:"header-builds.png",where:"shots/where-builds.webp",
-  p:`Same painted, semi-realistic style and warm lighting as the attached picture. A wide 4:1 image, 1600×400 or larger, not transparent. A war table seen from directly above: open parchment scrolls with talent-tree sketches, quills, red wax seals, a few gold coins, a dagger pinning down a map, candle light. ${TAIL} Keep the main objects in the middle 60%. No text, letters or logos anywhere.`},
- {id:"header-classes",t:"Class guides header – try 2 (crest style)",f:"header-classes.png",where:"shots/where-classes.webp",
-  p:`Use the attached Alliance shield picture as the style reference: the same painted, semi-realistic look, weathered steel with scratches and nicks, worn gold trim with rivets, dark leather wraps, faded deep-blue cloth, sharp detail and real material textures. Not cartoon, not toy-like, no faces on any object.
-
-A wide landscape image (3:2), not transparent. Nine class weapons hang side by side in one straight row on a dark stone wall, evenly spaced, all the same height, each one shown whole from tip to end:
-1. a heavy two-handed longsword (warrior)
-2. a flanged mace with a gold head (paladin)
-3. a recurve hunting bow with its string
-4. two crossed daggers (rogue)
-5. a mage staff topped with a glowing pale-blue crystal
-6. a carved wooden shaman totem staff with small feathers, no face
-7. a slim priest staff with a white-gold glowing orb
-8. a warlock staff with a horned skull and faint green glow
-9. a druid staff of twisted living wood with a few green leaves
-
-Lighting: soft cool light from above with small warm candle glints on the metal, so the steel and gold read clearly, not everything orange. Keep all nine weapons inside the middle horizontal band of the picture; the top and bottom quarter are only plain dark wall. ${TAIL} No torches, no text, letters or logos anywhere.`},
- {id:"header-changes",t:"Changes page header",f:"header-changes.png",where:"shots/where-changes.webp",
-  p:`Same painted, semi-realistic style and warm lighting as the attached picture. A wide 4:1 image, 1600×400 or larger, not transparent. A wooden town notice board with parchment notes nailed to it, a war horn hanging from a hook on its side, a small lantern glowing, and a black crow sitting on top. ${TAIL} Keep the board in the middle 60%. The notes must have no readable text, letters or logos.`}
-];
+const PR=[];
 const REF={src:"ref/alliance-crest.webp",name:"Alliance crest – style reference"};
 
 /* ---------- DOWNLOADS ---------- */
@@ -200,14 +177,14 @@ const DL=[{t:"Talentsmith share card",s:"For Reddit, Discord or forum posts",img
 /* ---------- TO-DO ---------- */
 const TD=[
  {who:"Claude",g:1,t:"Test verdict: Build complete bar",s:"Fri 27 Nov",b:"Read Umami for the full week: pictures saved and links copied, from the bar and from the small button. If the bar takes nearly all picture saves, I'll suggest removing the small button."},
- {who:"You",g:2,t:"Make the 3 header pictures",s:"Prompts section above",b:"Builds, Class guides and Changes headers. Put them in the asset library; I'll show you the result on phone and PC before anything goes live."},
+ {who:"You",g:2,t:"Review the other six classes",s:"Warrior, Shaman, Hunter, Warlock, Druid, Rogue",b:"Same as Paladin, Mage and Priest: talents and racial scores, one class at a time. Say “<class> finished” and I put it live."},
+ {who:"Claude",g:2,t:"Roll out the spec guides",s:"After you pick A or B",b:"Shadow and Discipline Priest, Holy and Protection Paladin, Warrior first, then the other spec pages."},
  {who:"Claude",g:3,t:"Short Shockadin guide",s:"Proposal with pictures first",b:"Five Shockadin pages are in the top 15. A short guide – when to take what, which weapon, which race – for the people who already come for it."},
- {who:"Claude",g:3,t:"New art on the site",s:"Waiting on headers + your podium/stocks decision",b:"Headers on Builds, Class guides and Changes; your new podium and stocks if approved."},
  {who:"Claude",g:4,t:"Check whether Google finds the spec pages",s:"Around 8 Dec",b:"The 27 spec pages had almost no visits so far. Check again once Google has had time."}
 ];
 
 /* ---------- DONE ---------- */
-const DONE=[["23 Nov","Saved pictures and videos: class-colour glow + thin gold frame (option B, stronger for Warrior and Priest); tree names no longer overlap the points"],["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
+const DONE=[["24 Nov","New Talentsmith podium and stocks on the Changes page"],["23 Nov","Paladin, Mage and Priest: builds and racial scores after your review; Troll Beast Slaying and Dwarf Big Game Hunter 0 in PvP for all"],["23 Nov","Holy Priest guide previews A and B (hidden from Google)"],["23 Nov","Saved pictures and videos: class-colour glow + thin gold frame (option B, stronger for Warrior and Priest); tree names no longer overlap the points"],["23 Nov","Saved build pictures and videos: clean bottom – small talentsmith.app left, bigdforever.com right"],["20 Nov","Build complete bar in the calculator (test running)"],["20–21 Nov","Hotfixes 19 and 20 Nov put live by the night scan"],["19 Nov","Best race on every build page"],["19 Nov","Shorter page titles for Google"],["19 Nov","Lighter pages on phones (home 1004 → 811 KB)"],["19 Nov","Tidy-ups: phone tables, tap sizes, talent lists, footer, 3×3 class grid and more"],["19 Nov","New war horn, 3-step seal animation, compare-page banners and VS medallion"],["19 Nov","Race picker faction banners"],["19 Nov","Dark send-a-build window"]];
 
 /* ---------- render ---------- */
 const $=id=>document.getElementById(id);

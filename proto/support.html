@@ -53,7 +53,7 @@ table.races{width:auto;min-width:0}table.races th,table.races td{padding-right:2
 <section class="pz"><h2>2 · Your name and supporter badge on the build picture</h2>
 <p class="old">Both optional. The picture is the same one the calculator saves today.</p>
 <div class="pzrow"><input class="pzin" id="pzName" maxlength="24" placeholder="Your name on the picture (optional)"></div>
-<div class="pzrow" id="codeRow" hidden><input class="pzin" id="pzCode" maxlength="20" placeholder="Supporter code, e.g. FORGE-7K2Q-M9XD" autocapitalize="characters"><button class="pzbtn" id="pzCheck">Add badge</button></div>
+<div class="pzrow" id="codeRow" hidden><input class="pzin" id="pzCode" maxlength="20" placeholder="FORGE-XXXX-XXXX" autocapitalize="characters"><button class="pzbtn" id="pzCheck">Add badge</button></div>
 <div class="pzrow"><button class="pzlink" id="pzHave">Have a supporter code?</button><span id="pzCodeMsg"></span></div>
 <div class="pzrow"><button class="pzbtn gold" id="pzSave">Save picture</button><span class="old" id="pzInfo" style="margin:0"></span></div>
 <img id="pzImg" alt="Build picture preview" hidden></section>
@@ -80,7 +80,7 @@ const done=()=>{localStorage[S]="1";$("thx").classList.remove("on");};$("thxX").
 const SK="tsProtoSup";let sup=localStorage[SK]||false;if(sup==="1")sup=false;
 const hash=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
 const supMsg=()=>{if(sup){$("pzCodeMsg").innerHTML='<span class="pzok">✓ '+({bronze:'Bronze',silver:'Silver',gold:'Gold'}[sup])+' supporter badge on</span> <button class="pzlink" id="pzOff">remove</button>';$("codeRow").hidden=true;$("pzHave").hidden=true;$("pzOff").onclick=()=>{sup=false;localStorage.removeItem(SK);$("pzHave").hidden=false;$("pzCodeMsg").textContent="";render();};}};
-$("pzHave").onclick=()=>{$("codeRow").hidden=false;$("pzCode").focus();};
+$("pzHave").onclick=()=>{$("codeRow").hidden=false;$("pzHave").hidden=true;$("pzCode").focus();};
 $("pzCheck").onclick=async()=>{const r=$("pzCode").value.toUpperCase().replace(/[^A-Z0-9]/g,""),c=/^FORGE[A-Z0-9]{8}$/.test(r)?"FORGE-"+r.slice(5,9)+"-"+r.slice(9):$("pzCode").value.trim().toUpperCase(),x=await hash(c),t=Object.keys(H).find(k=>H[k].includes(x));if(t){sup=t;localStorage[SK]=t;supMsg();render();}else $("pzCodeMsg").innerHTML='<span class="pzbad">That code doesn\'t match – check the letters.</span>';};
 let blob=null;const render=()=>{const m=Object.assign({},M,{by:$("pzName").value.trim(),sup});return TSMedia.imageBlob(m).then(b=>{blob=b;const u=URL.createObjectURL(b),im=$("pzImg");im.onload=()=>{$("pzSize").textContent="This picture is "+im.naturalWidth+" × "+im.naturalHeight+" px. Instagram posts show up to 4:5 (1080 × 1350) – "+(im.naturalHeight>1350?"taller pictures get cropped there, so a 4:5 version would be worth adding.":"this fits.")+" The build video is 1080 × 1920 – ready for Stories and TikTok.";};im.src=u;im.hidden=false;});};
 let t=null;$("pzName").oninput=()=>{clearTimeout(t);t=setTimeout(render,400);};

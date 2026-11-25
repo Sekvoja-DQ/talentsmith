@@ -52,7 +52,7 @@
     // PROTOTYPE (Nov 24): optional name + supporter badge, right side of the class line
     if (m.by || m.sup) { g.textAlign = "right"; var xr = W - 48;
       if (m.by) { g.font = "600 30px " + FB; g.fillStyle = GOLD2; var bt = "by " + String(m.by).slice(0, 24); g.fillText(bt, xr, 176); xr -= g.measureText(bt).width + 18; }
-      if (m.sup) { g.font = "800 22px " + FB; var st = "\u2605 SUPPORTER", sw = g.measureText(st).width + 28; rr(g, xr - sw, 156, sw, 40, 20); g.fillStyle = "rgba(233,180,76,.16)"; g.fill(); g.strokeStyle = "rgba(233,180,76,.75)"; g.lineWidth = 2; g.stroke(); g.fillStyle = GOLD2; g.textAlign = "center"; g.fillText(st, xr - sw / 2, 177); }
+      if (m.sup) { var TC = { bronze: ["#e0a070", "rgba(205,127,50,", "1"], silver: ["#e6ebf2", "rgba(200,210,225,", "2"], gold: ["#f6d68e", "rgba(233,180,76,", "3"] }[m.sup] || ["#f6d68e", "rgba(233,180,76,", "3"]; g.font = "800 22px " + FB; var st = "\u2605 SUPPORTER \u00b7 " + TC[2] + "/3", sw = g.measureText(st).width + 28; rr(g, xr - sw, 156, sw, 40, 20); g.fillStyle = TC[1] + ".16)"; g.fill(); g.strokeStyle = TC[1] + ".8)"; g.lineWidth = 2; g.stroke(); g.fillStyle = TC[0]; g.textAlign = "center"; g.fillText(st, xr - sw / 2, 177); }
       g.textAlign = "left"; }
     g.font = "700 62px " + FD; g.fillStyle = INK; var lines = wrap(g, m.title || "", W - 96).slice(0, 2);
     lines.forEach(function (l, i) { g.fillText(l, 48, 250 + i * 72); });

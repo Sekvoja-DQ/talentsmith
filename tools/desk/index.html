@@ -141,7 +141,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
 
 <script>
 {
-const UPDATED="Wed 25 Nov 2026, 01:15";
+const UPDATED="Wed 25 Nov 2026, 01:45";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- NOW ---------- */
@@ -234,7 +234,7 @@ function rerenderDec(){const o=keepOpen();renderDec();o.forEach(id=>{const x=$(i
 
 $("prList").innerHTML=PR.map(p=>`<details class="it g2" id="pr-${p.id}"><summary><span class="tt"><b>${esc(p.t)}</b><small>Save as <code>${esc(p.f)}</code></small></span><span class="pill p-wait">Waiting for you</span><span class="chev"></span></summary>
 <div class="ib"><pre id="pt-${p.id}">${esc(p.p)}</pre><div class="btns"><button type="button" class="pri" data-copy="${p.id}">Copy prompt</button><span class="msg" data-cm="${p.id}" aria-live="polite"></span></div>
-<div class="ref"><img src="${REF.src}" alt="Style reference: Alliance crest"><div class="rb"><b>${esc(REF.name)}</b><span>Attach this in ChatGPT.</span><div class="btns"><button type="button" data-img="${REF.src}" data-im="${p.id}">Copy picture</button><a class="btn" href="${REF.src}" target="_blank" rel="noopener">Open full size</a></div><span class="msg" data-imm="${p.id}" aria-live="polite"></span></div></div>
+${p.ref?`<div class="ref"><img src="${REF.src}" alt="Style reference: Alliance crest"><div class="rb"><b>${esc(REF.name)}</b><span>Attach this in ChatGPT.</span><div class="btns"><button type="button" data-img="${REF.src}" data-im="${p.id}">Copy picture</button><a class="btn" href="${REF.src}" target="_blank" rel="noopener">Open full size</a></div><span class="msg" data-imm="${p.id}" aria-live="polite"></span></div></div>`:`<p style="font-size:15px;color:var(--muted);margin:10px 0 0"><b>No reference picture</b> – paste the prompt alone.</p>`}
 <p style="font-size:15px;color:var(--muted)">Where it goes (dashed box):</p><img class="shot" src="${p.where}" alt="Where the picture goes on the page" loading="lazy"></div></details>`).join("");
 $("prN").textContent=PR.length+" waiting";
 

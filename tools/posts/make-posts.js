@@ -23,9 +23,10 @@ const row = it => `<div class="row" style="--cc:${COL[it.cls] || COL.all}">${ico
 const winners = D.winners || [], losers = (D.losers && D.losers.length) ? D.losers : [{ cls: 'none', name: 'No nerfs this time', text: D.noNerfsText || 'Everything else was bug fixes' }];
 const items = [...winners.map(x => ['win', x]), ...losers.map(x => ['lose', x])];
 const PER = 6, pages = []; for (let i = 0; i < items.length; i += PER) pages.push(items.slice(i, i + PER));
-const head = k => k === 'win' ? `<h2><img src="${fileUrl(path.join(IMG, 'art/podium.webp'))}" alt="">Winners</h2>` : `<h2><img src="${fileUrl(path.join(IMG, 'art/stocks.webp'))}" alt="">Losers</h2>`;
+const PLAIN = !!process.env.PLAIN; // Nov 26: r/wowforever bans AI art – PLAIN=1 uses only in-game icons
+const head = k => PLAIN ? `<h2>${k === 'win' ? 'Winners' : 'Losers'}</h2>` : k === 'win' ? `<h2><img src="${fileUrl(path.join(IMG, 'art/podium.webp'))}" alt="">Winners</h2>` : `<h2><img src="${fileUrl(path.join(IMG, 'art/stocks.webp'))}" alt="">Losers</h2>`;
 const CSS = `*{box-sizing:border-box}html,body{margin:0}
-body{width:1080px;height:1350px;overflow:hidden;background:#0b0e15 url(${fileUrl(path.join(IMG, 'bg-horde.webp'))}) center/cover;color:#ede4d3;font-family:"Fira Sans","Alegreya Sans",sans-serif;position:relative}
+body{width:1080px;height:1350px;overflow:hidden;background:#0b0e15 ${PLAIN ? '' : `url(${fileUrl(path.join(IMG, 'bg-horde.webp'))}) center/cover`};color:#ede4d3;font-family:"Fira Sans","Alegreya Sans",sans-serif;position:relative}
 body::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,21,.82),rgba(11,14,21,.94) 30%,rgba(11,14,21,.97))}
 .in{position:relative;padding:64px 64px 0;display:flex;flex-direction:column;gap:30px;height:100%}
 .kick{font:600 26px "Fira Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#a39886}

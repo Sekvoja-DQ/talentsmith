@@ -1,0 +1,42 @@
+{
+  "title": "November 25",
+  "kicker": "WoW Forever hotfix",
+  "meta": "Nov 25 hotfix · prepared Nov 26 · only Blizzard-confirmed changes",
+  "winners": [
+    {
+      "who": "Balance Druid",
+      "cls": "druid",
+      "name": "Moonkin Form",
+      "icon": "druid-moonkin-form",
+      "text": "+10% Arcane and Nature damage"
+    },
+    {
+      "who": "Balance Druid",
+      "cls": "druid",
+      "name": "Eclipse",
+      "icon": "druid-eclipse",
+      "text": "Wrath +7/13/20% crit, always on"
+    },
+    {
+      "who": "Balance Druid",
+      "cls": "druid",
+      "name": "Starlight Wrath",
+      "icon": "druid-starlight-wrath",
+      "text": "Also Starfire up to 0.5 sec faster"
+    },
+    {
+      "who": "BM Hunter",
+      "cls": "hunter",
+      "name": "Summon Hawk",
+      "icon": "hunter-summon-hawk",
+      "text": "Hawks get their full crit back"
+    }
+  ],
+  "losers": [],
+  "noNerfsText": "Moonfury's 10% moved into Moonkin Form, the rest was bug fixes",
+  "reddit": {
+    "title": "Calculator's updated for the Nov 25 hotfix",
+    "body": "Nov 25 hotfixes are in and boomkins got a proper rework. Class stuff:\n\n- **Druid** - Improved Wrath is now Starlight Wrath and also takes 0.1-0.5 sec off Starfire. Improved Moonfire is now Moon and Stars, 50/100% chance Starfire doesn't get pushed back. Improved Starfire is only 2 points now (8/15%). Eclipse also gives Wrath +7/13/20% crit all the time. Moonfury is gone, Dreamstate replaces it (Innervate someone else and you get 20-100% of it too). Moonkin Form gives +10% Arcane and Nature damage. If you had 3+ points in Improved Starfire your talents got reset.\n- **Hunter** - pet melee crit was 0%, fixed. BM hawks were missing about 5% crit, fixed, and they follow your target properly now.\n- **Paladin** - Exorcism can crit again, Judgements refresh from your attacks again. Oath of Light lasts 60 min.\n- **Warlock** - pet melee crit fixed. Succubus/Incubus had 5% too much crit, fixed.\n- **Shaman** - Chain Lightning eats Clearcasting now when you also have 5 Maelstrom stacks.\n- **Rogue** - Poised drops properly when you Sap or Distract. Poisons and Blinding Powder are BoP for now while they fix a bug.\n- **Warrior** - Weaponmaster comes back after dying in BGs.\n\nWinners: Balance Druid (Moonkin Form, Eclipse, Starlight Wrath, Moon and Stars), BM Hunter hawks, Holy Paladin (Oath of Light).\nLosers: nobody really. Moonfury's 10% just moved into Moonkin Form.\n\nThe two Balance builds got the 3 free points (Reflection on the Moonkin, Eclipse on leveling) and are marked for review. Everything else didn't need changing.\n\nhttps://talentsmith.app/changes.html"
+  },
+  "caption": "Nov 25 hotfix: boomkins got reworked, +10% in Moonkin Form and Wrath crit on Eclipse #wowforever #worldofwarcraft"
+}

@@ -1087,7 +1087,7 @@ function fallback(url){const w=document.getElementById("copyWrap"),b=document.ge
 window.addEventListener("resize",()=>requestAnimationFrame(drawLinks));
 setClass("paladin"); load(); render(); renderMine();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --><script>/* ---- class expert mode ---- */
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "87a25da520924d508c47601156b61bcc"}'></script><script defer src="https://cloud.umami.is/script.js" data-website-id="514e18a2-39d1-4a61-b429-dae9f1b6f5bc"></script><script defer src="js/thanks.js"></script><script>document.addEventListener("click",e=>{const t=e.target.closest("a,button");if(!t||!window.umami)return;const h=t.getAttribute("href")||"";const n=t.id==="share"?"build-link-copied":t.id==="reset"?"reset":t.dataset.cls?"class-opened":/ko-fi\.com/.test(h)?"tip-click":/bigdforever\.com/.test(h)?"bigd-click":"";if(n)umami.track(n,t.dataset.cls?{class:t.dataset.cls.toLowerCase()}:undefined)},true);</script><!-- End Cloudflare Web Analytics --><script>/* ---- class expert mode ---- */
 (()=>{const $=id=>document.getElementById(id),FORM="zEybbg",F=["xName","xWho","xRole","xGroup","xNotes"];
  const home=document.createComment("cls");$("cls").before(home);
  const on=v=>{document.body.classList.toggle("expert",v);if(v)$("xcls").appendChild($("cls"));else home.after($("cls"));try{sessionStorage.setItem("tsExpert",v?"1":"")}catch(e){}if(v)check();};
@@ -1118,6 +1118,6 @@ setClass("paladin"); load(); render(); renderMine();
 </script><script src="js/build-media.js"></script><script>(()=>{const sb=document.getElementById("saveImg");if(!window.TSMedia||!sb){if(sb)sb.hidden=true;return;}TSMedia.css();
 TSMedia.twoTap(sb,()=>{const n=pts.reduce((a,t)=>a+t.reduce((b,x)=>b+x,0),0);if(!n){if(typeof toast==="function")toast("Spend some points first");return;}
  const m={cls,clsName:CLASSES[cls].name,title:"My "+CLASSES[cls].name+" build",ranks:pts,trees:TREES.map(tr=>({name:tr.name,bg:"img/trees/"+treeBg(tr.name)+".webp",icon:"img/specs/"+cls+"-"+slug(tr.name)+".webp",t:tr.t.map(x=>({n:x[0],m:x[1],r:x[2],c:x[3],i:"img/talents/"+icon(x[0])+".webp"}))}))};
- TSMedia.image(m);});})();</script>
+ TSMedia.image(m);});TSMedia.meButton(document.getElementById("doneImg"));})();</script>
 </body>
 </html>

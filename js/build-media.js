@@ -17,10 +17,19 @@
     if (cache[src]) return cache[src];
     return (cache[src] = new Promise(function (res) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = function () { res(null); }; im.src = src; }));
   }
+  /* ---- visitor's own name + supporter badge (kept only in this browser) ---- */
+  var RANKS = { bronze: "Bronze", silver: "Silver", gold: "Gold", platinum: "Platinum" };
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ""; if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return ""; } }
+  function mine(m) { // fill name/badge from this browser unless the model sets them
+    if (m.by === undefined) m.by = ls("ts_name").slice(0, 24);
+    if (m.sup === undefined) { var r = ls("ts_sup"); m.sup = RANKS[r] ? r : ""; }
+    return m;
+  }
   function preload(m) {
-    var all = [load(BASE + "img/apple-touch-icon.png"), load(BASE + "img/bigd-icon.webp")];
+    mine(m);
+    var all = [load(BASE + "img/apple-touch-icon.png"), load(BASE + "img/bigd-icon.webp"), load(m.sup ? BASE + "img/badges/" + m.sup + ".webp" : null)];
     m.trees.forEach(function (t) { all.push(load(t.bg), load(t.icon)); t.t.forEach(function (x) { all.push(load(x.i)); }); });
-    return Promise.all(all).then(function (r) { var k = 2, out = { logo: r[0], bigd: r[1], trees: [] };
+    return Promise.all(all).then(function (r) { var k = 3, out = { logo: r[0], bigd: r[1], badge: r[2], trees: [] };
       m.trees.forEach(function (t) { var o = { bg: r[k++], icon: r[k++], t: [] }; t.t.forEach(function () { o.t.push(r[k++]); }); out.trees.push(o); }); return out; });
   }
   function ranksAt(m, n) {
@@ -49,6 +58,11 @@
     g.font = "700 34px " + FD; g.fillStyle = GOLD2; g.textBaseline = "middle"; g.fillText("Talentsmith", 128, 86);
     g.textAlign = "right"; g.font = "600 26px " + FB; g.fillStyle = MUTED; g.fillText("WoW Forever talent builds", W - 48, 86); g.textAlign = "left";
     g.font = "800 30px " + FB; g.fillStyle = col; g.fillText(String(m.clsName || m.cls || "").toUpperCase(), 48, 176);
+    // optional name + supporter badge (Desk d-support, Nov 27), right side of the class line
+    if (m.by || (m.sup && A.badge)) { g.textAlign = "right"; var xr = W - 48;
+      if (m.by) { g.font = "600 30px " + FB; g.fillStyle = GOLD2; var bt = "by " + String(m.by).slice(0, 24); g.fillText(bt, xr, 176); xr -= g.measureText(bt).width + 18; }
+      if (m.sup && A.badge) { var bh = 64, bw = A.badge.width * bh / A.badge.height; g.drawImage(A.badge, xr - bw, 176 - bh / 2 - 2, bw, bh); }
+      g.textAlign = "left"; }
     g.font = "700 62px " + FD; g.fillStyle = INK; var lines = wrap(g, m.title || "", W - 96).slice(0, 2);
     lines.forEach(function (l, i) { g.fillText(l, 48, 250 + i * 72); });
     var y0 = 250 + lines.length * 72 + 6;
@@ -154,7 +168,9 @@
     + ".tsm-tip b{color:#f6d68e}@media(hover:hover){.tsm-btn:hover .tsm-tip{opacity:1}}.tsm-btn.armed .tsm-tip{opacity:1}"
     + ".tsm-modal{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(5,7,12,.72);padding:18px}.tsm-card{max-width:360px;width:100%;background:#151a26;border:1px solid #e9b44c;border-radius:14px;padding:18px 18px 16px;color:#ede4d3;font:500 15px/1.5 Inter,system-ui,sans-serif}"
     + ".tsm-card h3{margin:0 0 6px;font:700 19px Cinzel,Georgia,serif;color:#f6d68e}.tsm-card p{margin:0 0 14px;color:#cfc6b4}.tsm-row{display:flex;gap:10px;justify-content:flex-end}.tsm-row button{font:700 15px Inter,system-ui,sans-serif;padding:10px 18px;border-radius:10px;cursor:pointer;border:1px solid rgba(233,180,76,.5);background:none;color:#e9b44c}.tsm-row .yes{background:linear-gradient(180deg,#f2c565,#d79a2b);color:#1a1205;border:0}"
-    + ".tsm-bar{height:6px;border-radius:3px;background:#262c3a;overflow:hidden;margin:4px 0 12px}.tsm-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3fd585,#e9b44c)}";
+    + ".tsm-bar{height:6px;border-radius:3px;background:#262c3a;overflow:hidden;margin:4px 0 12px}.tsm-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3fd585,#e9b44c)}"
+    + ".tsm-me{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;border-radius:11px;border:1px solid rgba(233,180,76,.35);background:none;color:#cfc6b4;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;vertical-align:middle;max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.tsm-me:hover{border-color:#e9b44c;color:#f6d68e}.tsm-me img{height:24px;width:auto;flex:none}"
+    + ".tsm-card label{display:block;font-weight:700;color:#f6d68e;margin:0 0 6px}.tsm-in{box-sizing:border-box;width:100%;font:500 16px Inter,system-ui,sans-serif;padding:10px 12px;border-radius:10px;border:1px solid #3a4152;background:#0f131c;color:#ede4d3;margin:0 0 12px}.tsm-lnk{background:none;border:0;padding:0;color:#e9b44c;text-decoration:underline;font:inherit;cursor:pointer}.tsm-ok{color:#7fd08a;font-weight:700}.tsm-bad{color:#e98a6b}.tsm-card .tsm-small{font-size:13.5px;color:#9a917f;margin:0 0 12px}.tsm-crow{display:flex;gap:8px}.tsm-crow .tsm-in{flex:1;min-width:0}.tsm-crow button{flex:none;height:44px}";
   function css() { if (document.getElementById("tsm-css")) return; var s = document.createElement("style"); s.id = "tsm-css"; s.textContent = CSS; document.head.appendChild(s); }
   var touch = function () { return matchMedia("(hover:none)").matches; };
   function fit(btn) { // keep a shown bubble inside the screen (narrow phones, wrapped button rows)
@@ -182,5 +198,63 @@
     d.querySelector(".yes").onclick = function () { yes(d, close); };
     return d;
   }
-  window.TSMedia = { image: image, video: video, canVideo: function () { return !!videoType(); }, css: css, twoTap: twoTap, confirm: confirmBox, draw: draw, preload: preload };
+
+  /* "Your name" button next to the save-picture button: name + supporter code, both optional */
+  var TESTH = ["23e28200c7220cb78fa1ed0e6dc41f6b5c0475967faf386cfe3e0ef49adfc64a", "85104c049ba9071d4f6524e46681cf2855e1027fec2f52011bcedfe0bcb34a9b", "20706209bed5c2d76edc28f1b47747d27b057f5f84ae3bcc20df993013c46db5", "5713d4f2b488d0cec56b0ae1fee11309c91ff6f3b9636736ca608eda88438bfd"];
+  var hashes = null;
+  function sha(t) { return crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)).then(function (b) { return Array.prototype.map.call(new Uint8Array(b), function (x) { return x.toString(16).padStart(2, "0"); }).join(""); }); }
+  function checkCode(raw) {
+    var r = String(raw).toUpperCase().replace(/[^A-Z0-9]/g, ""), c = /^FORGE[A-Z0-9]{8}$/.test(r) ? "FORGE-" + r.slice(5, 9) + "-" + r.slice(9) : String(raw).trim().toUpperCase();
+    if (!window.crypto || !crypto.subtle) return Promise.resolve("");
+    return Promise.all([sha(c), hashes || (hashes = fetch(BASE + "js/supporter-hashes.json").then(function (x) { return x.json(); }).catch(function () { hashes = null; return {}; }))]).then(function (a) {
+      var x = a[0], H = a[1] || {};
+      if (TESTH.indexOf(x) >= 0 && !document.documentElement.classList.contains("pv")) return ""; // test codes only in preview mode
+      return Object.keys(RANKS).filter(function (k) { return (H[k] || []).indexOf(x) >= 0; })[0] || "";
+    });
+  }
+  function track(n, d) { try { if (window.umami) umami.track(n, d); } catch (e) {} }
+  function meLabel(b) {
+    var n = ls("ts_name"), r = ls("ts_sup"); b.innerHTML = "";
+    if (RANKS[r]) { var im = document.createElement("img"); im.src = BASE + "img/badges/" + r + ".webp"; im.alt = RANKS[r] + " supporter"; b.appendChild(im); }
+    b.appendChild(document.createTextNode(n ? "by " + n : "Your name"));
+    b.title = "Your name and supporter badge on saved pictures and videos";
+  }
+  function meButton(anchor) {
+    if (!anchor || !anchor.parentNode) return null; css();
+    var b = document.createElement("button"); b.type = "button"; b.className = "tsm-me"; meLabel(b);
+    anchor.parentNode.insertBefore(b, anchor.nextSibling);
+    b.addEventListener("click", function () { meBox(function () { meLabel(b); }); });
+    return b;
+  }
+  function meBox(after) {
+    css(); var d = document.createElement("div"); d.className = "tsm-modal";
+    d.innerHTML = '<div class="tsm-card" role="dialog" aria-modal="true" aria-labelledby="tsmMeH"><h3 id="tsmMeH">Your name on the picture</h3>'
+      + '<p class="tsm-small">Optional. Shows as “by …” on the pictures and videos you save. Kept only in this browser.</p>'
+      + '<label for="tsmName">Name</label><input class="tsm-in" id="tsmName" maxlength="24" autocomplete="nickname" placeholder="e.g. your character name">'
+      + '<div id="tsmSup"></div><div class="tsm-row" style="margin-top:6px"><button type="button" class="no">Close</button><button type="button" class="yes">Save</button></div></div>';
+    document.body.appendChild(d);
+    var q = function (s) { return d.querySelector(s); }, nm = q("#tsmName"), box = q("#tsmSup"), close = function () { d.remove(); after && after(); };
+    nm.value = ls("ts_name");
+    function sup() {
+      var r = ls("ts_sup");
+      if (RANKS[r]) { box.innerHTML = '<p class="tsm-small" style="color:#cfc6b4"><span class="tsm-ok">✓ ' + RANKS[r] + ' supporter badge on</span> – thank you! <button type="button" class="tsm-lnk" id="tsmOff">remove</button></p>';
+        q("#tsmOff").onclick = function () { ls("ts_sup", null); sup(); }; return; }
+      box.innerHTML = '<p class="tsm-small"><button type="button" class="tsm-lnk" id="tsmHave">Have a supporter code?</button></p>';
+      q("#tsmHave").onclick = function () {
+        box.innerHTML = '<label for="tsmCode">Supporter code</label><div class="tsm-crow"><input class="tsm-in" id="tsmCode" maxlength="20" placeholder="FORGE-XXXX-XXXX" autocapitalize="characters" autocomplete="off" spellcheck="false"><button type="button" class="tsm-lnk" id="tsmAdd" style="text-decoration:none;font-weight:700;border:1px solid rgba(233,180,76,.5);border-radius:10px;padding:0 14px">Add badge</button></div><p class="tsm-small" id="tsmMsg" aria-live="polite">Supporters on <a href="https://ko-fi.com/bigdforever" rel="noopener" style="color:#e9b44c">Ko-fi</a> get a code by email.</p>';
+        var ci = q("#tsmCode"); ci.focus();
+        var add = function () { if (!ci.value.trim()) return; q("#tsmAdd").disabled = true;
+          checkCode(ci.value).then(function (r) { q("#tsmAdd").disabled = false;
+            if (r) { ls("ts_sup", r); track("supporter-code", { rank: r }); sup(); }
+            else { q("#tsmMsg").innerHTML = '<span class="tsm-bad">That code doesn\'t match – check the letters.</span>'; track("supporter-code-wrong"); } }); };
+        q("#tsmAdd").onclick = add; ci.addEventListener("keydown", function (e) { if (e.key === "Enter") add(); });
+      };
+    }
+    sup();
+    q(".no").onclick = close; d.addEventListener("click", function (e) { if (e.target === d) close(); });
+    q(".yes").onclick = function () { var v = nm.value.replace(/\s+/g, " ").trim().slice(0, 24), had = ls("ts_name"); ls("ts_name", v || null); if (v && v !== had) track("picture-name"); close(); };
+    nm.addEventListener("keydown", function (e) { if (e.key === "Enter") q(".yes").click(); });
+    setTimeout(function () { nm.focus(); }, 30);
+  }
+  window.TSMedia = { image: image, video: video, canVideo: function () { return !!videoType(); }, css: css, twoTap: twoTap, confirm: confirmBox, draw: draw, preload: preload, meButton: meButton, meBox: meBox };
 })();
